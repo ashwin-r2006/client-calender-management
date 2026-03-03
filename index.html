@@ -45,13 +45,17 @@
   .btn-signout { padding:7px 14px; border:1.5px solid var(--border); background:white; border-radius:8px; font-size:0.82rem; font-weight:600; cursor:pointer; color:var(--muted); transition:all 0.2s; }
   .btn-signout:hover { border-color:var(--danger); color:var(--danger); }
   .app-body { display:flex; flex:1; }
-  .sidebar { width:320px; min-width:300px; background:white; border-right:1px solid var(--border); padding:24px 20px; display:flex; flex-direction:column; gap:20px; height:calc(100vh - 60px); overflow-y:auto; position:sticky; top:60px; }
+  .sidebar { width:320px; min-width:300px; background:white; border-right:1px solid var(--border); padding:24px 20px; display:flex; flex-direction:column; gap:16px; height:calc(100vh - 60px); overflow-y:auto; position:sticky; top:60px; }
   .sidebar h2 { font-size:1rem; font-weight:700; }
-  .form-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .form-row-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; }
   .field-label { font-size:0.75rem; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:5px; }
   .field-input { width:100%; padding:9px 12px; border:1.5px solid var(--border); border-radius:9px; font-size:0.9rem; outline:none; transition:border 0.2s; background:var(--bg); }
   .field-input:focus { border-color:var(--primary); background:white; }
   select.field-input { cursor:pointer; }
+  .day-preview { display:none; align-items:center; gap:8px; background:var(--primary-light); border-radius:10px; padding:10px 14px; }
+  .day-preview.visible { display:flex; }
+  .day-preview-label { font-size:0.82rem; color:var(--muted); font-weight:600; }
+  .day-preview-value { font-size:0.95rem; font-weight:800; color:var(--primary); }
   .time-row { display:flex; gap:8px; align-items:flex-end; }
   .time-row .field-group { flex:1; }
   .time-display { padding:9px 12px; background:var(--primary-light); color:var(--primary); border-radius:9px; font-weight:700; font-size:0.9rem; white-space:nowrap; }
@@ -86,7 +90,7 @@
   .cal-day.empty { cursor:default; }
   .meeting-detail { margin-top:24px; background:white; border-radius:16px; box-shadow:var(--shadow); padding:20px 24px; max-width:700px; }
   .meeting-detail h3 { font-size:1rem; font-weight:700; margin-bottom:14px; }
-  .meeting-card { display:flex; align-items:center; gap:14px; padding:12px 14px; border-radius:10px; border:1.5px solid var(--border); margin-bottom:8px; transition:all 0.2s; }
+  .meeting-card { display:flex; align-items:center; gap:14px; padding:12px 14px; border-radius:10px; border:1.5px solid var(--border); margin-bottom:8px; }
   .meeting-card:hover { border-color:var(--primary); }
   .meeting-dot { width:10px; height:10px; border-radius:50%; background:var(--primary); flex-shrink:0; }
   .meeting-info { flex:1; }
@@ -127,7 +131,6 @@
     <div class="forgot" id="forgot-row"><a href="#">Forgot password?</a></div>
     <button class="btn-primary" id="auth-btn" onclick="handleAuth()">Sign In</button>
     <div class="divider">OR</div>
-
     <div id="g_id_onload"
          data-client_id="922684760909-16mv3l7qoskp4eaqplcj9h4mr3ddnseh.apps.googleusercontent.com"
          data-callback="handleGoogleCredential"
@@ -135,13 +138,9 @@
     </div>
     <div class="google-btn-wrap">
       <div class="g_id_signin"
-           data-type="standard"
-           data-shape="rectangular"
-           data-theme="outline"
-           data-text="continue_with"
-           data-size="large"
-           data-logo_alignment="left"
-           data-width="308">
+           data-type="standard" data-shape="rectangular" data-theme="outline"
+           data-text="continue_with" data-size="large"
+           data-logo_alignment="left" data-width="308">
       </div>
     </div>
   </div>
@@ -163,25 +162,16 @@
         <div class="field-label">Client Name</div>
         <input class="field-input" id="client-name" placeholder="e.g. John Doe" />
       </div>
-      <div class="form-row">
-        <div>
-          <div class="field-label">Day</div>
-          <select class="field-input" id="meet-day">
-            <option value="">Day</option>
-            <option>Monday</option><option>Tuesday</option><option>Wednesday</option>
-            <option>Thursday</option><option>Friday</option><option>Saturday</option><option>Sunday</option>
-          </select>
-        </div>
+      <!-- Date / Month / Year — no Day field -->
+      <div class="form-row-3">
         <div>
           <div class="field-label">Date</div>
-          <input class="field-input" id="meet-date" type="number" min="1" max="31" placeholder="1–31" />
+          <input class="field-input" id="meet-date" type="number" min="1" max="31" placeholder="DD" oninput="updateDayPreview()" />
         </div>
-      </div>
-      <div class="form-row">
         <div>
           <div class="field-label">Month</div>
-          <select class="field-input" id="meet-month">
-            <option value="">Month</option>
+          <select class="field-input" id="meet-month" onchange="updateDayPreview()">
+            <option value="">MM</option>
             <option value="1">Jan</option><option value="2">Feb</option><option value="3">Mar</option>
             <option value="4">Apr</option><option value="5">May</option><option value="6">Jun</option>
             <option value="7">Jul</option><option value="8">Aug</option><option value="9">Sep</option>
@@ -190,18 +180,25 @@
         </div>
         <div>
           <div class="field-label">Year</div>
-          <input class="field-input" id="meet-year" type="number" placeholder="2026" value="2026" />
+          <input class="field-input" id="meet-year" type="number" placeholder="YYYY" value="2026" oninput="updateDayPreview()" />
         </div>
       </div>
+      <!-- Auto day preview -->
+      <div class="day-preview" id="day-preview">
+        <span>📅</span>
+        <span class="day-preview-label">Falls on</span>
+        <span class="day-preview-value" id="day-preview-value">—</span>
+      </div>
+      <!-- Time -->
       <div>
         <div class="field-label">Time</div>
         <div class="time-row">
           <div class="field-group">
-            <input class="field-input" id="meet-hour" type="number" min="0" max="23" placeholder="HH" />
+            <input class="field-input" id="meet-hour" type="number" min="0" max="23" placeholder="HH" oninput="updateTimePreview()" />
           </div>
           <span style="font-weight:700;color:var(--muted);padding-bottom:9px">:</span>
           <div class="field-group">
-            <input class="field-input" id="meet-min" type="number" min="0" max="59" placeholder="MM" />
+            <input class="field-input" id="meet-min" type="number" min="0" max="59" placeholder="MM" oninput="updateTimePreview()" />
           </div>
           <div class="time-display" id="time-preview">--:--</div>
         </div>
@@ -237,148 +234,169 @@
 <div id="toast"></div>
 
 <script>
-let currentUser = null, meetings = [], calYear = new Date().getFullYear(), calMonth = new Date().getMonth(), selectedDay = null;
-const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-let accounts = JSON.parse(localStorage.getItem('md_accounts') || '{}');
-let authMode = 'signin';
+let currentUser=null,meetings=[],calYear=new Date().getFullYear(),calMonth=new Date().getMonth(),selectedDay=null;
+const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+const DAYS_FULL=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const DAYS_SHORT=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+let accounts=JSON.parse(localStorage.getItem('md_accounts')||'{}');
+let authMode='signin';
 
-function switchTab(mode) {
-  authMode = mode;
-  document.querySelectorAll('.auth-tab').forEach((t,i) => t.classList.toggle('active',(mode==='signin'?0:1)===i));
-  document.getElementById('auth-btn').textContent = mode==='signin'?'Sign In':'Create Account';
-  document.getElementById('forgot-row').style.display = mode==='signin'?'':'none';
+// Auto-calculate day from date+month+year
+function updateDayPreview() {
+  const date=parseInt(document.getElementById('meet-date').value);
+  const month=parseInt(document.getElementById('meet-month').value);
+  const year=parseInt(document.getElementById('meet-year').value);
+  const preview=document.getElementById('day-preview');
+  if(date&&month&&year&&!isNaN(date)&&!isNaN(month)&&!isNaN(year)){
+    const d=new Date(year,month-1,date);
+    if(d.getDate()===date&&d.getMonth()===month-1){
+      document.getElementById('day-preview-value').textContent=DAYS_FULL[d.getDay()];
+      preview.classList.add('visible'); return;
+    }
+  }
+  preview.classList.remove('visible');
+}
+
+function updateTimePreview(){
+  const h=document.getElementById('meet-hour').value,m=document.getElementById('meet-min').value;
+  document.getElementById('time-preview').textContent=(h!==''&&m!=='')?`${String(parseInt(h)).padStart(2,'0')}:${String(parseInt(m)).padStart(2,'0')}`:'--:--';
+}
+
+function switchTab(mode){
+  authMode=mode;
+  document.querySelectorAll('.auth-tab').forEach((t,i)=>t.classList.toggle('active',(mode==='signin'?0:1)===i));
+  document.getElementById('auth-btn').textContent=mode==='signin'?'Sign In':'Create Account';
+  document.getElementById('forgot-row').style.display=mode==='signin'?'':'none';
   hideAuthError();
 }
-function showAuthError(msg) { const e=document.getElementById('auth-error'); e.textContent=msg; e.style.display='block'; }
-function hideAuthError() { document.getElementById('auth-error').style.display='none'; }
+function showAuthError(msg){const e=document.getElementById('auth-error');e.textContent=msg;e.style.display='block';}
+function hideAuthError(){document.getElementById('auth-error').style.display='none';}
 
-function handleAuth() {
+function handleAuth(){
   const email=document.getElementById('auth-email').value.trim();
   const pw=document.getElementById('auth-password').value;
-  if (!email||!pw) { showAuthError('Please enter email and password.'); return; }
-  if (!email.includes('@')) { showAuthError('Enter a valid email address.'); return; }
-  if (authMode==='signup') {
-    if (accounts[email]) { showAuthError('Account already exists. Please sign in.'); return; }
-    if (pw.length<6) { showAuthError('Password must be at least 6 characters.'); return; }
+  if(!email||!pw){showAuthError('Please enter email and password.');return;}
+  if(!email.includes('@')){showAuthError('Enter a valid email address.');return;}
+  if(authMode==='signup'){
+    if(accounts[email]){showAuthError('Account already exists. Please sign in.');return;}
+    if(pw.length<6){showAuthError('Password must be at least 6 characters.');return;}
     accounts[email]={pw,meetings:[]};
     localStorage.setItem('md_accounts',JSON.stringify(accounts));
     loginAs(email,null);
   } else {
-    if (!accounts[email]||accounts[email].pw!==pw) { showAuthError('Invalid email or password.'); return; }
+    if(!accounts[email]||accounts[email].pw!==pw){showAuthError('Invalid email or password.');return;}
     loginAs(email,null);
   }
 }
 
-function handleGoogleCredential(response) {
-  try {
-    const payload = JSON.parse(atob(response.credential.split('.')[1]));
-    const email = payload.email;
-    const displayName = payload.given_name || payload.name || email.split('@')[0];
-    if (!accounts[email]) accounts[email] = { pw:'__google__', meetings:[], googleName:displayName };
-    else accounts[email].googleName = displayName;
-    localStorage.setItem('md_accounts', JSON.stringify(accounts));
-    loginAs(email, displayName);
-  } catch(e) {
-    showAuthError('Google sign-in failed. Please try again.');
-  }
+function handleGoogleCredential(response){
+  try{
+    const payload=JSON.parse(atob(response.credential.split('.')[1]));
+    const email=payload.email;
+    const displayName=payload.given_name||payload.name||email.split('@')[0];
+    if(!accounts[email]) accounts[email]={pw:'__google__',meetings:[],googleName:displayName};
+    else accounts[email].googleName=displayName;
+    localStorage.setItem('md_accounts',JSON.stringify(accounts));
+    loginAs(email,displayName);
+  }catch(e){showAuthError('Google sign-in failed. Please try again.');}
 }
 
-function loginAs(email, displayName) {
-  currentUser = email;
-  meetings = (accounts[email].meetings||[]).map(m=>({...m}));
-  const name = displayName || accounts[email].googleName || email.split('@')[0];
-  document.getElementById('user-avatar').textContent = name[0].toUpperCase();
-  document.getElementById('user-name').textContent = name.charAt(0).toUpperCase()+name.slice(1);
-  document.getElementById('auth-screen').style.display = 'none';
-  const app = document.getElementById('app-screen');
-  app.style.display = 'flex'; app.style.flexDirection = 'column';
+function loginAs(email,displayName){
+  currentUser=email;
+  meetings=(accounts[email].meetings||[]).map(m=>({...m}));
+  const name=displayName||accounts[email].googleName||email.split('@')[0];
+  document.getElementById('user-avatar').textContent=name[0].toUpperCase();
+  document.getElementById('user-name').textContent=name.charAt(0).toUpperCase()+name.slice(1);
+  document.getElementById('auth-screen').style.display='none';
+  const app=document.getElementById('app-screen');
+  app.style.display='flex';app.style.flexDirection='column';
   renderAll();
   toast('Welcome, '+name+'! 👋','success');
 }
 
-function signOut() {
-  currentUser=null; meetings=[];
+function signOut(){
+  currentUser=null;meetings=[];
   document.getElementById('auth-screen').style.display='flex';
   document.getElementById('app-screen').style.display='none';
   document.getElementById('auth-password').value='';
 }
 
-function saveMeetings() { accounts[currentUser].meetings=meetings; localStorage.setItem('md_accounts',JSON.stringify(accounts)); }
+function saveMeetings(){accounts[currentUser].meetings=meetings;localStorage.setItem('md_accounts',JSON.stringify(accounts));}
 
-['meet-hour','meet-min'].forEach(id => document.getElementById(id).addEventListener('input', () => {
-  const h=document.getElementById('meet-hour').value, m=document.getElementById('meet-min').value;
-  document.getElementById('time-preview').textContent = (h!==''&&m!=='')?`${String(parseInt(h)).padStart(2,'0')}:${String(parseInt(m)).padStart(2,'0')}`:'--:--';
-}));
-
-function addMeeting() {
+function addMeeting(){
   document.getElementById('add-error').style.display='none';
   const name=document.getElementById('client-name').value.trim();
-  const day=document.getElementById('meet-day').value;
   const date=parseInt(document.getElementById('meet-date').value);
   const month=parseInt(document.getElementById('meet-month').value);
   const year=parseInt(document.getElementById('meet-year').value);
   const hour=document.getElementById('meet-hour').value;
   const min=document.getElementById('meet-min').value;
-  if (!name) { showAddError('Please enter a client name.'); return; }
-  if (!day) { showAddError('Please select a day.'); return; }
-  if (!date||isNaN(date)||date<1||date>31) { showAddError('Please enter a valid date (1–31).'); return; }
-  if (!month||isNaN(month)) { showAddError('Please select a month.'); return; }
-  if (!year||isNaN(year)||year<2020||year>2100) { showAddError('Please enter a valid year.'); return; }
-  if (hour==='') { showAddError('Please enter the hour (0–23).'); return; }
-  if (min==='') { showAddError('Please enter the minutes (0–59).'); return; }
-  if (parseInt(hour)<0||parseInt(hour)>23) { showAddError('Hour must be 0–23.'); return; }
-  if (parseInt(min)<0||parseInt(min)>59) { showAddError('Minutes must be 0–59.'); return; }
-  const hh=String(parseInt(hour)).padStart(2,'0'), mm=String(parseInt(min)).padStart(2,'0');
-  meetings.push({id:Date.now(),name,day,date,month,year,time:`${hh}:${mm}`});
+  if(!name){showAddError('Please enter a client name.');return;}
+  if(!date||isNaN(date)||date<1||date>31){showAddError('Please enter a valid date (1–31).');return;}
+  if(!month||isNaN(month)){showAddError('Please select a month.');return;}
+  if(!year||isNaN(year)||year<2020||year>2100){showAddError('Please enter a valid year.');return;}
+  // Validate date actually exists
+  const testDate=new Date(year,month-1,date);
+  if(testDate.getDate()!==date||testDate.getMonth()!==month-1){
+    showAddError(`${date} ${MONTHS[month-1]} ${year} is not a valid date.`);return;
+  }
+  if(hour===''){showAddError('Please enter the hour (0–23).');return;}
+  if(min===''){showAddError('Please enter the minutes (0–59).');return;}
+  if(parseInt(hour)<0||parseInt(hour)>23){showAddError('Hour must be 0–23.');return;}
+  if(parseInt(min)<0||parseInt(min)>59){showAddError('Minutes must be 0–59.');return;}
+  const dayName=DAYS_FULL[testDate.getDay()];
+  const hh=String(parseInt(hour)).padStart(2,'0'),mm=String(parseInt(min)).padStart(2,'0');
+  meetings.push({id:Date.now(),name,day:dayName,date,month,year,time:`${hh}:${mm}`});
   meetings.sort((a,b)=>new Date(a.year,a.month-1,a.date,...a.time.split(':').map(Number))-new Date(b.year,b.month-1,b.date,...b.time.split(':').map(Number)));
-  saveMeetings(); clearForm();
-  calYear=year; calMonth=month-1; selectedDay=date;
-  renderAll(); toast(`Meeting with ${name} scheduled! ✅`,'success');
+  saveMeetings();clearForm();
+  calYear=year;calMonth=month-1;selectedDay=date;
+  renderAll();
+  toast(`Meeting with ${name} scheduled for ${dayName}! ✅`,'success');
 }
 
-function showAddError(msg) { const e=document.getElementById('add-error'); e.textContent=msg; e.style.display='block'; }
-function clearForm() {
+function showAddError(msg){const e=document.getElementById('add-error');e.textContent=msg;e.style.display='block';}
+function clearForm(){
   ['client-name','meet-date','meet-hour','meet-min'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('meet-day').value='';
   document.getElementById('meet-month').value='';
   document.getElementById('meet-year').value='2026';
   document.getElementById('time-preview').textContent='--:--';
   document.getElementById('add-error').style.display='none';
+  document.getElementById('day-preview').classList.remove('visible');
 }
-function deleteMeeting(id) { meetings=meetings.filter(m=>m.id!==id); saveMeetings(); renderAll(); toast('Meeting removed.',''); }
-function renderAll() { renderClientList(); renderCalendar(); renderDetail(); }
-function renderClientList() {
+function deleteMeeting(id){meetings=meetings.filter(m=>m.id!==id);saveMeetings();renderAll();toast('Meeting removed.','');}
+function renderAll(){renderClientList();renderCalendar();renderDetail();}
+function renderClientList(){
   const list=document.getElementById('client-list');
-  if (!meetings.length) { list.innerHTML='<div class="empty-clients">No meetings yet.</div>'; return; }
+  if(!meetings.length){list.innerHTML='<div class="empty-clients">No meetings yet.</div>';return;}
   list.innerHTML=meetings.map(m=>`<div class="client-item" onclick="jumpToMeeting(${m.id})"><div><div class="client-name">${escHtml(m.name)}</div><div class="client-time">${m.day}, ${m.date} ${MONTHS[m.month-1].slice(0,3)} ${m.year} · ${m.time}</div></div><button class="client-del" onclick="event.stopPropagation();deleteMeeting(${m.id})">✕</button></div>`).join('');
 }
-function jumpToMeeting(id) { const m=meetings.find(x=>x.id===id); if(!m)return; calYear=m.year; calMonth=m.month-1; selectedDay=m.date; renderCalendar(); renderDetail(); }
-function renderCalendar() {
+function jumpToMeeting(id){const m=meetings.find(x=>x.id===id);if(!m)return;calYear=m.year;calMonth=m.month-1;selectedDay=m.date;renderCalendar();renderDetail();}
+function renderCalendar(){
   document.getElementById('cal-title').textContent=`${MONTHS[calMonth]} ${calYear}`;
   const grid=document.getElementById('cal-grid');
-  let html=DAYS.map(d=>`<div class="cal-dow">${d}</div>`).join('');
+  let html=DAYS_SHORT.map(d=>`<div class="cal-dow">${d}</div>`).join('');
   const firstDay=new Date(calYear,calMonth,1).getDay();
   const dim=new Date(calYear,calMonth+1,0).getDate();
   const today=new Date();
   const mdays=new Set(meetings.filter(m=>m.year===calYear&&m.month===calMonth+1).map(m=>m.date));
   for(let i=0;i<firstDay;i++) html+=`<div class="cal-day empty"></div>`;
-  for(let d=1;d<=dim;d++) {
+  for(let d=1;d<=dim;d++){
     const isT=d===today.getDate()&&calMonth===today.getMonth()&&calYear===today.getFullYear();
     const cls=['cal-day',isT?'today':'',mdays.has(d)?'has-meeting':'',d===selectedDay?'selected-day':''].filter(Boolean).join(' ');
     html+=`<div class="${cls}" onclick="selectDay(${d})">${d}</div>`;
   }
   grid.innerHTML=html;
 }
-function selectDay(d) { selectedDay=d; renderCalendar(); renderDetail(); }
-function renderDetail() {
-  const t=document.getElementById('detail-title'), b=document.getElementById('detail-body');
+function selectDay(d){selectedDay=d;renderCalendar();renderDetail();}
+function renderDetail(){
+  const t=document.getElementById('detail-title'),b=document.getElementById('detail-body');
   if(!selectedDay){t.textContent='🗓️ Your calendar awaits';b.innerHTML='<div class="no-meetings-day"><div class="big">🗓️</div>Add a client meeting to get started.</div>';return;}
   const dm=meetings.filter(m=>m.year===calYear&&m.month===calMonth+1&&m.date===selectedDay);
-  t.textContent=`📅 ${DAYS[new Date(calYear,calMonth,selectedDay).getDay()]}, ${selectedDay} ${MONTHS[calMonth]} ${calYear}`;
+  const dayName=DAYS_FULL[new Date(calYear,calMonth,selectedDay).getDay()];
+  t.textContent=`📅 ${dayName}, ${selectedDay} ${MONTHS[calMonth]} ${calYear}`;
   b.innerHTML=dm.length?dm.map(m=>`<div class="meeting-card"><div class="meeting-dot"></div><div class="meeting-info"><div class="meeting-client">${escHtml(m.name)}</div><div class="meeting-meta">${m.day}</div></div><div class="meeting-time-badge">🕐 ${m.time}</div><button class="client-del" onclick="deleteMeeting(${m.id})">✕</button></div>`).join(''):'<div class="no-meetings-day"><div class="big">☕</div>No meetings on this day.</div>';
 }
-function changeMonth(dir) { calMonth+=dir; if(calMonth<0){calMonth=11;calYear--;}if(calMonth>11){calMonth=0;calYear++;} selectedDay=null; renderCalendar(); renderDetail(); }
+function changeMonth(dir){calMonth+=dir;if(calMonth<0){calMonth=11;calYear--;}if(calMonth>11){calMonth=0;calYear++;}selectedDay=null;renderCalendar();renderDetail();}
 function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function toast(msg,type=''){const e=document.getElementById('toast');e.textContent=msg;e.className='show'+(type?' '+type:'');setTimeout(()=>{e.className='';},3000);}
 renderCalendar();
