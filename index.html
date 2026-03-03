@@ -4,173 +4,106 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>MeetingDesk</title>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
   :root {
-    --primary: #4f46e5;
-    --primary-dark: #3730a3;
-    --primary-light: #e0e7ff;
-    --accent: #06b6d4;
-    --success: #10b981;
-    --danger: #ef4444;
-    --warning: #f59e0b;
-    --bg: #f8fafc;
-    --card: #ffffff;
-    --text: #1e293b;
-    --muted: #64748b;
-    --border: #e2e8f0;
+    --primary: #4f46e5; --primary-dark: #3730a3; --primary-light: #e0e7ff;
+    --accent: #06b6d4; --success: #10b981; --danger: #ef4444;
+    --bg: #f8fafc; --text: #1e293b; --muted: #64748b; --border: #e2e8f0;
     --shadow: 0 4px 24px rgba(79,70,229,0.08);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
-
-  /* AUTH */
-  #auth-screen {
-    min-height: 100vh; display: flex; align-items: center; justify-content: center;
-    background: linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%);
-  }
-  .auth-card {
-    background: white; border-radius: 20px; padding: 40px 36px; width: 380px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.18);
-  }
-  .auth-logo { text-align: center; margin-bottom: 28px; }
-  .auth-logo .icon { font-size: 2.4rem; }
-  .auth-logo h1 { font-size: 1.6rem; font-weight: 800; color: var(--primary); margin-top: 6px; }
-  .auth-logo p { color: var(--muted); font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; margin-top: 2px; }
-  .auth-tabs { display: flex; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); margin-bottom: 24px; }
-  .auth-tab { flex: 1; padding: 10px; text-align: center; cursor: pointer; font-weight: 600; font-size: 0.9rem; background: var(--bg); color: var(--muted); transition: all 0.2s; }
-  .auth-tab.active { background: var(--primary); color: white; }
-  .form-group { margin-bottom: 16px; }
-  .form-group label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.05em; }
-  .form-group input { width: 100%; padding: 11px 14px; border: 1.5px solid var(--border); border-radius: 10px; font-size: 0.95rem; outline: none; transition: border 0.2s; }
-  .form-group input:focus { border-color: var(--primary); }
-  .btn-primary { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 10px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background 0.2s; margin-top: 4px; }
-  .btn-primary:hover { background: var(--primary-dark); }
-  .divider { text-align: center; color: var(--muted); margin: 14px 0; font-size: 0.85rem; position: relative; }
-  .divider::before, .divider::after { content:''; position:absolute; top:50%; width:42%; height:1px; background:var(--border); }
+  #auth-screen { min-height:100vh; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg,#4f46e5,#06b6d4); }
+  .auth-card { background:white; border-radius:20px; padding:40px 36px; width:380px; box-shadow:0 20px 60px rgba(0,0,0,0.18); }
+  .auth-logo { text-align:center; margin-bottom:28px; }
+  .auth-logo .icon { font-size:2.4rem; }
+  .auth-logo h1 { font-size:1.6rem; font-weight:800; color:var(--primary); margin-top:6px; }
+  .auth-logo p { color:var(--muted); font-size:0.82rem; letter-spacing:0.08em; text-transform:uppercase; }
+  .auth-tabs { display:flex; border-radius:10px; overflow:hidden; border:1px solid var(--border); margin-bottom:24px; }
+  .auth-tab { flex:1; padding:10px; text-align:center; cursor:pointer; font-weight:600; font-size:0.9rem; background:var(--bg); color:var(--muted); transition:all 0.2s; }
+  .auth-tab.active { background:var(--primary); color:white; }
+  .form-group { margin-bottom:16px; }
+  .form-group label { display:block; font-size:0.8rem; font-weight:600; color:var(--muted); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.05em; }
+  .form-group input { width:100%; padding:11px 14px; border:1.5px solid var(--border); border-radius:10px; font-size:0.95rem; outline:none; transition:border 0.2s; }
+  .form-group input:focus { border-color:var(--primary); }
+  .btn-primary { width:100%; padding:12px; background:var(--primary); color:white; border:none; border-radius:10px; font-size:1rem; font-weight:700; cursor:pointer; transition:background 0.2s; }
+  .btn-primary:hover { background:var(--primary-dark); }
+  .divider { text-align:center; color:var(--muted); margin:16px 0; font-size:0.85rem; position:relative; }
+  .divider::before,.divider::after { content:''; position:absolute; top:50%; width:42%; height:1px; background:var(--border); }
   .divider::before { left:0; } .divider::after { right:0; }
-  .btn-google { width: 100%; padding: 11px; background: white; border: 1.5px solid var(--border); border-radius: 10px; font-size: 0.95rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: background 0.2s; }
-  .btn-google:hover { background: var(--bg); }
-  .forgot { text-align: right; margin-top: -8px; margin-bottom: 14px; }
-  .forgot a { font-size: 0.82rem; color: var(--primary); text-decoration: none; }
-  .error-msg { background: #fef2f2; color: var(--danger); border-radius: 8px; padding: 10px 14px; font-size: 0.875rem; margin-bottom: 14px; display: none; }
-
-  /* APP */
-  #app-screen { display: none; min-height: 100vh; flex-direction: column; }
-  header {
-    background: white; border-bottom: 1px solid var(--border);
-    padding: 0 28px; height: 60px; display: flex; align-items: center; justify-content: space-between;
-    box-shadow: 0 1px 8px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100;
-  }
-  .header-brand { display: flex; align-items: center; gap: 10px; font-size: 1.15rem; font-weight: 800; color: var(--primary); }
-  .header-user { display: flex; align-items: center; gap: 12px; }
-  .avatar { width: 34px; height: 34px; border-radius: 50%; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem; }
-  .username { font-weight: 600; font-size: 0.9rem; }
-  .btn-signout { padding: 7px 14px; border: 1.5px solid var(--border); background: white; border-radius: 8px; font-size: 0.82rem; font-weight: 600; cursor: pointer; color: var(--muted); transition: all 0.2s; }
-  .btn-signout:hover { border-color: var(--danger); color: var(--danger); }
-
-  .app-body { display: flex; flex: 1; gap: 0; }
-
-  /* SIDEBAR */
-  .sidebar {
-    width: 320px; min-width: 300px; background: white; border-right: 1px solid var(--border);
-    padding: 24px 20px; display: flex; flex-direction: column; gap: 20px; height: calc(100vh - 60px);
-    overflow-y: auto; position: sticky; top: 60px;
-  }
-  .sidebar h2 { font-size: 1rem; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 8px; }
-  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .field-label { font-size: 0.75rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 5px; }
-  .field-input { width: 100%; padding: 9px 12px; border: 1.5px solid var(--border); border-radius: 9px; font-size: 0.9rem; outline: none; transition: border 0.2s; background: var(--bg); }
-  .field-input:focus { border-color: var(--primary); background: white; }
-  select.field-input { cursor: pointer; }
-  .time-row { display: flex; gap: 8px; align-items: flex-end; }
-  .time-row .field-group { flex: 1; }
-  .time-display { padding: 9px 12px; background: var(--primary-light); color: var(--primary); border-radius: 9px; font-weight: 700; font-size: 0.9rem; white-space: nowrap; }
-  .btn-add { width: 100%; padding: 12px; background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; border: none; border-radius: 10px; font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: opacity 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
-  .btn-add:hover { opacity: 0.9; }
-  .add-error { color: var(--danger); font-size: 0.82rem; background: #fef2f2; padding: 8px 12px; border-radius: 8px; display: none; }
-
-  /* CLIENT LIST */
-  .client-section { flex: 1; }
-  .client-section h3 { font-size: 0.82rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px; }
-  .client-list { display: flex; flex-direction: column; gap: 6px; }
-  .client-item {
-    padding: 10px 12px; border-radius: 10px; border: 1.5px solid var(--border);
-    cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: space-between;
-  }
-  .client-item:hover { border-color: var(--primary); background: var(--primary-light); }
-  .client-item.selected { border-color: var(--primary); background: var(--primary-light); }
-  .client-name { font-weight: 600; font-size: 0.9rem; }
-  .client-time { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
-  .client-del { width: 24px; height: 24px; border-radius: 6px; border: none; background: transparent; cursor: pointer; color: var(--muted); font-size: 1rem; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
-  .client-del:hover { background: #fef2f2; color: var(--danger); }
-  .empty-clients { color: var(--muted); font-size: 0.88rem; text-align: center; padding: 20px 0; }
-
-  /* MAIN */
-  .main { flex: 1; padding: 28px; overflow-y: auto; }
-
-  /* CALENDAR */
-  .calendar-card { background: white; border-radius: 16px; box-shadow: var(--shadow); padding: 24px; max-width: 700px; }
-  .cal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
-  .cal-title { font-size: 1.2rem; font-weight: 800; color: var(--text); }
-  .cal-nav { background: var(--bg); border: 1.5px solid var(--border); border-radius: 8px; width: 34px; height: 34px; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
-  .cal-nav:hover { background: var(--primary-light); border-color: var(--primary); }
-  .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
-  .cal-dow { text-align: center; font-size: 0.72rem; font-weight: 700; color: var(--muted); text-transform: uppercase; padding: 6px 0; }
-  .cal-day {
-    aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
-    border-radius: 10px; font-size: 0.88rem; cursor: pointer; position: relative;
-    transition: all 0.18s; font-weight: 500;
-  }
-  .cal-day:hover:not(.empty) { background: var(--primary-light); color: var(--primary); }
-  .cal-day.today { font-weight: 800; color: var(--primary); }
+  .google-btn-wrap { display:flex; justify-content:center; margin-top:4px; }
+  .forgot { text-align:right; margin-top:-8px; margin-bottom:14px; }
+  .forgot a { font-size:0.82rem; color:var(--primary); text-decoration:none; }
+  .error-msg { background:#fef2f2; color:var(--danger); border-radius:8px; padding:10px 14px; font-size:0.875rem; margin-bottom:14px; display:none; }
+  #app-screen { display:none; min-height:100vh; flex-direction:column; }
+  header { background:white; border-bottom:1px solid var(--border); padding:0 28px; height:60px; display:flex; align-items:center; justify-content:space-between; box-shadow:0 1px 8px rgba(0,0,0,0.05); position:sticky; top:0; z-index:100; }
+  .header-brand { font-size:1.15rem; font-weight:800; color:var(--primary); }
+  .header-user { display:flex; align-items:center; gap:12px; }
+  .avatar { width:34px; height:34px; border-radius:50%; background:var(--primary); color:white; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.9rem; }
+  .username { font-weight:600; font-size:0.9rem; }
+  .btn-signout { padding:7px 14px; border:1.5px solid var(--border); background:white; border-radius:8px; font-size:0.82rem; font-weight:600; cursor:pointer; color:var(--muted); transition:all 0.2s; }
+  .btn-signout:hover { border-color:var(--danger); color:var(--danger); }
+  .app-body { display:flex; flex:1; }
+  .sidebar { width:320px; min-width:300px; background:white; border-right:1px solid var(--border); padding:24px 20px; display:flex; flex-direction:column; gap:20px; height:calc(100vh - 60px); overflow-y:auto; position:sticky; top:60px; }
+  .sidebar h2 { font-size:1rem; font-weight:700; }
+  .form-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .field-label { font-size:0.75rem; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:5px; }
+  .field-input { width:100%; padding:9px 12px; border:1.5px solid var(--border); border-radius:9px; font-size:0.9rem; outline:none; transition:border 0.2s; background:var(--bg); }
+  .field-input:focus { border-color:var(--primary); background:white; }
+  select.field-input { cursor:pointer; }
+  .time-row { display:flex; gap:8px; align-items:flex-end; }
+  .time-row .field-group { flex:1; }
+  .time-display { padding:9px 12px; background:var(--primary-light); color:var(--primary); border-radius:9px; font-weight:700; font-size:0.9rem; white-space:nowrap; }
+  .btn-add { width:100%; padding:12px; background:linear-gradient(135deg,var(--primary),var(--accent)); color:white; border:none; border-radius:10px; font-size:0.95rem; font-weight:700; cursor:pointer; transition:opacity 0.2s; }
+  .btn-add:hover { opacity:0.9; }
+  .add-error { color:var(--danger); font-size:0.82rem; background:#fef2f2; padding:8px 12px; border-radius:8px; display:none; }
+  .client-section h3 { font-size:0.82rem; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:10px; }
+  .client-list { display:flex; flex-direction:column; gap:6px; }
+  .client-item { padding:10px 12px; border-radius:10px; border:1.5px solid var(--border); cursor:pointer; transition:all 0.2s; display:flex; align-items:center; justify-content:space-between; }
+  .client-item:hover { border-color:var(--primary); background:var(--primary-light); }
+  .client-name { font-weight:600; font-size:0.9rem; }
+  .client-time { font-size:0.78rem; color:var(--muted); margin-top:2px; }
+  .client-del { width:24px; height:24px; border-radius:6px; border:none; background:transparent; cursor:pointer; color:var(--muted); font-size:1rem; display:flex; align-items:center; justify-content:center; transition:all 0.2s; }
+  .client-del:hover { background:#fef2f2; color:var(--danger); }
+  .empty-clients { color:var(--muted); font-size:0.88rem; text-align:center; padding:20px 0; }
+  .main { flex:1; padding:28px; overflow-y:auto; }
+  .calendar-card { background:white; border-radius:16px; box-shadow:var(--shadow); padding:24px; max-width:700px; }
+  .cal-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; }
+  .cal-title { font-size:1.2rem; font-weight:800; }
+  .cal-nav { background:var(--bg); border:1.5px solid var(--border); border-radius:8px; width:34px; height:34px; cursor:pointer; font-size:1rem; display:flex; align-items:center; justify-content:center; transition:all 0.2s; }
+  .cal-nav:hover { background:var(--primary-light); border-color:var(--primary); }
+  .cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:4px; }
+  .cal-dow { text-align:center; font-size:0.72rem; font-weight:700; color:var(--muted); text-transform:uppercase; padding:6px 0; }
+  .cal-day { aspect-ratio:1; display:flex; align-items:center; justify-content:center; border-radius:10px; font-size:0.88rem; cursor:pointer; position:relative; transition:all 0.18s; font-weight:500; }
+  .cal-day:hover:not(.empty) { background:var(--primary-light); color:var(--primary); }
+  .cal-day.today { font-weight:800; color:var(--primary); }
   .cal-day.today::after { content:''; position:absolute; bottom:4px; left:50%; transform:translateX(-50%); width:5px; height:5px; border-radius:50%; background:var(--primary); }
-  .cal-day.has-meeting { background: var(--primary-light); color: var(--primary); font-weight: 700; }
-  .cal-day.has-meeting::before { content:''; position:absolute; top:4px; right:5px; width:6px; height:6px; border-radius:50%; background: var(--accent); }
-  .cal-day.selected-day { background: var(--primary) !important; color: white !important; }
-  .cal-day.selected-day::after { background: white; }
-  .cal-day.empty { cursor: default; }
-  .cal-day.other-month { color: #cbd5e1; }
-
-  /* MEETING DETAIL */
-  .meeting-detail { margin-top: 24px; background: white; border-radius: 16px; box-shadow: var(--shadow); padding: 20px 24px; max-width: 700px; }
-  .meeting-detail h3 { font-size: 1rem; font-weight: 700; margin-bottom: 14px; color: var(--text); }
-  .meeting-card {
-    display: flex; align-items: center; gap: 14px;
-    padding: 12px 14px; border-radius: 10px; border: 1.5px solid var(--border);
-    margin-bottom: 8px; transition: all 0.2s;
-  }
-  .meeting-card:hover { border-color: var(--primary); }
-  .meeting-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--primary); flex-shrink: 0; }
-  .meeting-info { flex: 1; }
-  .meeting-client { font-weight: 700; font-size: 0.95rem; }
-  .meeting-meta { font-size: 0.8rem; color: var(--muted); margin-top: 2px; }
-  .meeting-time-badge { background: var(--primary-light); color: var(--primary); border-radius: 8px; padding: 5px 10px; font-weight: 700; font-size: 0.82rem; }
-  .no-meetings-day { text-align: center; padding: 28px; color: var(--muted); }
-  .no-meetings-day .big { font-size: 2rem; margin-bottom: 8px; }
-  .all-meetings-section { margin-top: 24px; max-width: 700px; }
-  .all-meetings-section h3 { font-size: 0.85rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px; }
-
-  /* TOAST */
-  #toast {
-    position: fixed; bottom: 28px; right: 28px; background: #1e293b; color: white;
-    padding: 13px 20px; border-radius: 12px; font-size: 0.9rem; font-weight: 600;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.2); z-index: 9999;
-    transform: translateY(80px); opacity: 0; transition: all 0.3s; pointer-events: none;
-  }
-  #toast.show { transform: translateY(0); opacity: 1; }
-  #toast.success { background: var(--success); }
-  #toast.error { background: var(--danger); }
-
-  @media (max-width: 700px) {
-    .app-body { flex-direction: column; }
-    .sidebar { width: 100%; height: auto; position: static; }
-    .main { padding: 16px; }
-  }
+  .cal-day.has-meeting { background:var(--primary-light); color:var(--primary); font-weight:700; }
+  .cal-day.has-meeting::before { content:''; position:absolute; top:4px; right:5px; width:6px; height:6px; border-radius:50%; background:var(--accent); }
+  .cal-day.selected-day { background:var(--primary)!important; color:white!important; }
+  .cal-day.selected-day::after { background:white; }
+  .cal-day.empty { cursor:default; }
+  .meeting-detail { margin-top:24px; background:white; border-radius:16px; box-shadow:var(--shadow); padding:20px 24px; max-width:700px; }
+  .meeting-detail h3 { font-size:1rem; font-weight:700; margin-bottom:14px; }
+  .meeting-card { display:flex; align-items:center; gap:14px; padding:12px 14px; border-radius:10px; border:1.5px solid var(--border); margin-bottom:8px; transition:all 0.2s; }
+  .meeting-card:hover { border-color:var(--primary); }
+  .meeting-dot { width:10px; height:10px; border-radius:50%; background:var(--primary); flex-shrink:0; }
+  .meeting-info { flex:1; }
+  .meeting-client { font-weight:700; font-size:0.95rem; }
+  .meeting-meta { font-size:0.8rem; color:var(--muted); margin-top:2px; }
+  .meeting-time-badge { background:var(--primary-light); color:var(--primary); border-radius:8px; padding:5px 10px; font-weight:700; font-size:0.82rem; }
+  .no-meetings-day { text-align:center; padding:28px; color:var(--muted); }
+  .no-meetings-day .big { font-size:2rem; margin-bottom:8px; }
+  #toast { position:fixed; bottom:28px; right:28px; background:#1e293b; color:white; padding:13px 20px; border-radius:12px; font-size:0.9rem; font-weight:600; box-shadow:0 8px 30px rgba(0,0,0,0.2); z-index:9999; transform:translateY(80px); opacity:0; transition:all 0.3s; pointer-events:none; }
+  #toast.show { transform:translateY(0); opacity:1; }
+  #toast.success { background:var(--success); }
+  #toast.error { background:var(--danger); }
+  @media(max-width:700px) { .app-body{flex-direction:column} .sidebar{width:100%;height:auto;position:static} .main{padding:16px} }
 </style>
 </head>
 <body>
 
-<!-- AUTH SCREEN -->
 <div id="auth-screen">
   <div class="auth-card">
     <div class="auth-logo">
@@ -182,7 +115,7 @@
       <div class="auth-tab active" onclick="switchTab('signin')">Sign In</div>
       <div class="auth-tab" onclick="switchTab('signup')">Create Account</div>
     </div>
-    <div class="error-msg" id="auth-error">Something went wrong. Please try again.</div>
+    <div class="error-msg" id="auth-error"></div>
     <div class="form-group">
       <label>Email</label>
       <input type="email" id="auth-email" placeholder="you@example.com" />
@@ -194,14 +127,26 @@
     <div class="forgot" id="forgot-row"><a href="#">Forgot password?</a></div>
     <button class="btn-primary" id="auth-btn" onclick="handleAuth()">Sign In</button>
     <div class="divider">OR</div>
-    <button class="btn-google" onclick="googleSignIn()">
-      <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
-      Continue with Google
-    </button>
+
+    <div id="g_id_onload"
+         data-client_id="922684760909-16mv3l7qoskp4eaqplcj9h4mr3ddnseh.apps.googleusercontent.com"
+         data-callback="handleGoogleCredential"
+         data-auto_prompt="false">
+    </div>
+    <div class="google-btn-wrap">
+      <div class="g_id_signin"
+           data-type="standard"
+           data-shape="rectangular"
+           data-theme="outline"
+           data-text="continue_with"
+           data-size="large"
+           data-logo_alignment="left"
+           data-width="308">
+      </div>
+    </div>
   </div>
 </div>
 
-<!-- APP SCREEN -->
 <div id="app-screen">
   <header>
     <div class="header-brand">📅 MeetingDesk</div>
@@ -212,10 +157,9 @@
     </div>
   </header>
   <div class="app-body">
-    <!-- SIDEBAR -->
     <aside class="sidebar">
       <h2>➕ Add Meeting</h2>
-      <div class="form-group" style="margin-bottom:0">
+      <div>
         <div class="field-label">Client Name</div>
         <input class="field-input" id="client-name" placeholder="e.g. John Doe" />
       </div>
@@ -264,7 +208,6 @@
       </div>
       <div class="add-error" id="add-error"></div>
       <button class="btn-add" onclick="addMeeting()">+ Schedule Meeting</button>
-
       <div class="client-section">
         <h3>Clients</h3>
         <div class="client-list" id="client-list">
@@ -272,25 +215,19 @@
         </div>
       </div>
     </aside>
-
-    <!-- MAIN -->
     <main class="main">
       <div class="calendar-card">
         <div class="cal-header">
           <button class="cal-nav" onclick="changeMonth(-1)">←</button>
-          <div class="cal-title" id="cal-title">March 2026</div>
+          <div class="cal-title" id="cal-title"></div>
           <button class="cal-nav" onclick="changeMonth(1)">→</button>
         </div>
         <div class="cal-grid" id="cal-grid"></div>
       </div>
-
-      <div class="meeting-detail" id="meeting-detail">
+      <div class="meeting-detail">
         <h3 id="detail-title">🗓️ Your calendar awaits</h3>
         <div id="detail-body">
-          <div class="no-meetings-day">
-            <div class="big">🗓️</div>
-            Add a client meeting to get started.
-          </div>
+          <div class="no-meetings-day"><div class="big">🗓️</div>Add a client meeting to get started.</div>
         </div>
       </div>
     </main>
@@ -300,282 +237,151 @@
 <div id="toast"></div>
 
 <script>
-// ── STATE ──
-let currentUser = null;
-let meetings = [];
-let calYear = new Date().getFullYear();
-let calMonth = new Date().getMonth(); // 0-indexed
-let selectedDay = null;
+let currentUser = null, meetings = [], calYear = new Date().getFullYear(), calMonth = new Date().getMonth(), selectedDay = null;
 const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-
-// ── AUTH ──
-let authMode = 'signin';
 let accounts = JSON.parse(localStorage.getItem('md_accounts') || '{}');
+let authMode = 'signin';
 
 function switchTab(mode) {
   authMode = mode;
-  document.querySelectorAll('.auth-tab').forEach((t,i) => t.classList.toggle('active', (mode==='signin'?0:1)===i));
-  document.getElementById('auth-btn').textContent = mode === 'signin' ? 'Sign In' : 'Create Account';
-  document.getElementById('forgot-row').style.display = mode === 'signin' ? '' : 'none';
+  document.querySelectorAll('.auth-tab').forEach((t,i) => t.classList.toggle('active',(mode==='signin'?0:1)===i));
+  document.getElementById('auth-btn').textContent = mode==='signin'?'Sign In':'Create Account';
+  document.getElementById('forgot-row').style.display = mode==='signin'?'':'none';
   hideAuthError();
 }
-
-function showAuthError(msg) {
-  const el = document.getElementById('auth-error');
-  el.textContent = msg; el.style.display = 'block';
-}
-function hideAuthError() { document.getElementById('auth-error').style.display = 'none'; }
+function showAuthError(msg) { const e=document.getElementById('auth-error'); e.textContent=msg; e.style.display='block'; }
+function hideAuthError() { document.getElementById('auth-error').style.display='none'; }
 
 function handleAuth() {
-  const email = document.getElementById('auth-email').value.trim();
-  const pw = document.getElementById('auth-password').value;
-  if (!email || !pw) { showAuthError('Please enter email and password.'); return; }
+  const email=document.getElementById('auth-email').value.trim();
+  const pw=document.getElementById('auth-password').value;
+  if (!email||!pw) { showAuthError('Please enter email and password.'); return; }
   if (!email.includes('@')) { showAuthError('Enter a valid email address.'); return; }
-
-  if (authMode === 'signup') {
+  if (authMode==='signup') {
     if (accounts[email]) { showAuthError('Account already exists. Please sign in.'); return; }
-    if (pw.length < 6) { showAuthError('Password must be at least 6 characters.'); return; }
-    accounts[email] = { pw, meetings: [] };
-    localStorage.setItem('md_accounts', JSON.stringify(accounts));
-    loginAs(email);
+    if (pw.length<6) { showAuthError('Password must be at least 6 characters.'); return; }
+    accounts[email]={pw,meetings:[]};
+    localStorage.setItem('md_accounts',JSON.stringify(accounts));
+    loginAs(email,null);
   } else {
-    if (!accounts[email] || accounts[email].pw !== pw) { showAuthError('Invalid email or password.'); return; }
-    loginAs(email);
+    if (!accounts[email]||accounts[email].pw!==pw) { showAuthError('Invalid email or password.'); return; }
+    loginAs(email,null);
   }
 }
 
-function googleSignIn() {
-  const email = 'demo@gmail.com';
-  if (!accounts[email]) accounts[email] = { pw: '__google__', meetings: [] };
-  localStorage.setItem('md_accounts', JSON.stringify(accounts));
-  loginAs(email);
+function handleGoogleCredential(response) {
+  try {
+    const payload = JSON.parse(atob(response.credential.split('.')[1]));
+    const email = payload.email;
+    const displayName = payload.given_name || payload.name || email.split('@')[0];
+    if (!accounts[email]) accounts[email] = { pw:'__google__', meetings:[], googleName:displayName };
+    else accounts[email].googleName = displayName;
+    localStorage.setItem('md_accounts', JSON.stringify(accounts));
+    loginAs(email, displayName);
+  } catch(e) {
+    showAuthError('Google sign-in failed. Please try again.');
+  }
 }
 
-function loginAs(email) {
+function loginAs(email, displayName) {
   currentUser = email;
-  meetings = (accounts[email].meetings || []).map(m => ({...m}));
-  const name = email.split('@')[0];
+  meetings = (accounts[email].meetings||[]).map(m=>({...m}));
+  const name = displayName || accounts[email].googleName || email.split('@')[0];
   document.getElementById('user-avatar').textContent = name[0].toUpperCase();
-  document.getElementById('user-name').textContent = name.charAt(0).toUpperCase() + name.slice(1);
+  document.getElementById('user-name').textContent = name.charAt(0).toUpperCase()+name.slice(1);
   document.getElementById('auth-screen').style.display = 'none';
-  document.getElementById('app-screen').style.display = 'flex';
-  document.getElementById('app-screen').style.flexDirection = 'column';
+  const app = document.getElementById('app-screen');
+  app.style.display = 'flex'; app.style.flexDirection = 'column';
   renderAll();
-  toast('Welcome back! 👋', 'success');
+  toast('Welcome, '+name+'! 👋','success');
 }
 
 function signOut() {
-  currentUser = null; meetings = [];
-  document.getElementById('auth-screen').style.display = 'flex';
-  document.getElementById('app-screen').style.display = 'none';
-  document.getElementById('auth-password').value = '';
+  currentUser=null; meetings=[];
+  document.getElementById('auth-screen').style.display='flex';
+  document.getElementById('app-screen').style.display='none';
+  document.getElementById('auth-password').value='';
 }
 
-function saveMeetings() {
-  accounts[currentUser].meetings = meetings;
-  localStorage.setItem('md_accounts', JSON.stringify(accounts));
-}
+function saveMeetings() { accounts[currentUser].meetings=meetings; localStorage.setItem('md_accounts',JSON.stringify(accounts)); }
 
-// ── TIME PREVIEW ──
-['meet-hour','meet-min'].forEach(id => {
-  document.getElementById(id).addEventListener('input', updateTimePreview);
-});
-function updateTimePreview() {
-  const h = document.getElementById('meet-hour').value;
-  const m = document.getElementById('meet-min').value;
-  if (h !== '' && m !== '') {
-    const hh = String(parseInt(h)).padStart(2,'0');
-    const mm = String(parseInt(m)).padStart(2,'0');
-    document.getElementById('time-preview').textContent = `${hh}:${mm}`;
-  } else {
-    document.getElementById('time-preview').textContent = '--:--';
-  }
-}
+['meet-hour','meet-min'].forEach(id => document.getElementById(id).addEventListener('input', () => {
+  const h=document.getElementById('meet-hour').value, m=document.getElementById('meet-min').value;
+  document.getElementById('time-preview').textContent = (h!==''&&m!=='')?`${String(parseInt(h)).padStart(2,'0')}:${String(parseInt(m)).padStart(2,'0')}`:'--:--';
+}));
 
-// ── ADD MEETING ──
 function addMeeting() {
-  const errEl = document.getElementById('add-error');
-  errEl.style.display = 'none';
-
-  const name = document.getElementById('client-name').value.trim();
-  const day = document.getElementById('meet-day').value;
-  const date = parseInt(document.getElementById('meet-date').value);
-  const month = parseInt(document.getElementById('meet-month').value);
-  const year = parseInt(document.getElementById('meet-year').value);
-  const hour = document.getElementById('meet-hour').value;
-  const min = document.getElementById('meet-min').value;
-
-  // VALIDATION
+  document.getElementById('add-error').style.display='none';
+  const name=document.getElementById('client-name').value.trim();
+  const day=document.getElementById('meet-day').value;
+  const date=parseInt(document.getElementById('meet-date').value);
+  const month=parseInt(document.getElementById('meet-month').value);
+  const year=parseInt(document.getElementById('meet-year').value);
+  const hour=document.getElementById('meet-hour').value;
+  const min=document.getElementById('meet-min').value;
   if (!name) { showAddError('Please enter a client name.'); return; }
   if (!day) { showAddError('Please select a day.'); return; }
-  if (!date || isNaN(date) || date < 1 || date > 31) { showAddError('Please enter a valid date (1–31).'); return; }
-  if (!month || isNaN(month)) { showAddError('Please select a month.'); return; }
-  if (!year || isNaN(year) || year < 2020 || year > 2100) { showAddError('Please enter a valid year.'); return; }
-  if (hour === '' || hour === null) { showAddError('Please enter meeting hour (0–23).'); return; }
-  if (min === '' || min === null) { showAddError('Please enter meeting minutes (0–59).'); return; }
-  if (parseInt(hour) < 0 || parseInt(hour) > 23) { showAddError('Hour must be between 0 and 23.'); return; }
-  if (parseInt(min) < 0 || parseInt(min) > 59) { showAddError('Minutes must be between 0 and 59.'); return; }
-
-  const hh = String(parseInt(hour)).padStart(2,'0');
-  const mm = String(parseInt(min)).padStart(2,'0');
-
-  const meeting = {
-    id: Date.now(),
-    name, day,
-    date, month, year,
-    time: `${hh}:${mm}`
-  };
-  meetings.push(meeting);
-  meetings.sort((a,b) => {
-    const da = new Date(a.year, a.month-1, a.date, ...a.time.split(':').map(Number));
-    const db = new Date(b.year, b.month-1, b.date, ...b.time.split(':').map(Number));
-    return da - db;
-  });
-  saveMeetings();
-  clearForm();
-  renderAll();
-  // Navigate calendar to that month
-  calYear = year; calMonth = month - 1;
-  selectedDay = date;
-  renderCalendar();
-  renderDetail();
-  toast(`Meeting with ${name} scheduled! ✅`, 'success');
+  if (!date||isNaN(date)||date<1||date>31) { showAddError('Please enter a valid date (1–31).'); return; }
+  if (!month||isNaN(month)) { showAddError('Please select a month.'); return; }
+  if (!year||isNaN(year)||year<2020||year>2100) { showAddError('Please enter a valid year.'); return; }
+  if (hour==='') { showAddError('Please enter the hour (0–23).'); return; }
+  if (min==='') { showAddError('Please enter the minutes (0–59).'); return; }
+  if (parseInt(hour)<0||parseInt(hour)>23) { showAddError('Hour must be 0–23.'); return; }
+  if (parseInt(min)<0||parseInt(min)>59) { showAddError('Minutes must be 0–59.'); return; }
+  const hh=String(parseInt(hour)).padStart(2,'0'), mm=String(parseInt(min)).padStart(2,'0');
+  meetings.push({id:Date.now(),name,day,date,month,year,time:`${hh}:${mm}`});
+  meetings.sort((a,b)=>new Date(a.year,a.month-1,a.date,...a.time.split(':').map(Number))-new Date(b.year,b.month-1,b.date,...b.time.split(':').map(Number)));
+  saveMeetings(); clearForm();
+  calYear=year; calMonth=month-1; selectedDay=date;
+  renderAll(); toast(`Meeting with ${name} scheduled! ✅`,'success');
 }
 
-function showAddError(msg) {
-  const el = document.getElementById('add-error');
-  el.textContent = msg; el.style.display = 'block';
-}
-
+function showAddError(msg) { const e=document.getElementById('add-error'); e.textContent=msg; e.style.display='block'; }
 function clearForm() {
-  ['client-name','meet-date','meet-hour','meet-min'].forEach(id => document.getElementById(id).value = '');
-  document.getElementById('meet-day').value = '';
-  document.getElementById('meet-month').value = '';
-  document.getElementById('meet-year').value = '2026';
-  document.getElementById('time-preview').textContent = '--:--';
-  document.getElementById('add-error').style.display = 'none';
+  ['client-name','meet-date','meet-hour','meet-min'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('meet-day').value='';
+  document.getElementById('meet-month').value='';
+  document.getElementById('meet-year').value='2026';
+  document.getElementById('time-preview').textContent='--:--';
+  document.getElementById('add-error').style.display='none';
 }
-
-function deleteMeeting(id) {
-  meetings = meetings.filter(m => m.id !== id);
-  saveMeetings();
-  renderAll();
-  toast('Meeting removed.', '');
-}
-
-// ── RENDER ──
-function renderAll() {
-  renderClientList();
-  renderCalendar();
-  renderDetail();
-}
-
+function deleteMeeting(id) { meetings=meetings.filter(m=>m.id!==id); saveMeetings(); renderAll(); toast('Meeting removed.',''); }
+function renderAll() { renderClientList(); renderCalendar(); renderDetail(); }
 function renderClientList() {
-  const list = document.getElementById('client-list');
-  if (meetings.length === 0) { list.innerHTML = '<div class="empty-clients">No meetings yet.</div>'; return; }
-  list.innerHTML = meetings.map(m => `
-    <div class="client-item" onclick="jumpToMeeting(${m.id})">
-      <div>
-        <div class="client-name">${escHtml(m.name)}</div>
-        <div class="client-time">${m.day}, ${pad(m.date)} ${MONTHS[m.month-1].slice(0,3)} ${m.year} · ${m.time}</div>
-      </div>
-      <button class="client-del" onclick="event.stopPropagation();deleteMeeting(${m.id})" title="Delete">✕</button>
-    </div>
-  `).join('');
+  const list=document.getElementById('client-list');
+  if (!meetings.length) { list.innerHTML='<div class="empty-clients">No meetings yet.</div>'; return; }
+  list.innerHTML=meetings.map(m=>`<div class="client-item" onclick="jumpToMeeting(${m.id})"><div><div class="client-name">${escHtml(m.name)}</div><div class="client-time">${m.day}, ${m.date} ${MONTHS[m.month-1].slice(0,3)} ${m.year} · ${m.time}</div></div><button class="client-del" onclick="event.stopPropagation();deleteMeeting(${m.id})">✕</button></div>`).join('');
 }
-
-function jumpToMeeting(id) {
-  const m = meetings.find(x => x.id === id);
-  if (!m) return;
-  calYear = m.year; calMonth = m.month - 1; selectedDay = m.date;
-  renderCalendar(); renderDetail();
-}
-
+function jumpToMeeting(id) { const m=meetings.find(x=>x.id===id); if(!m)return; calYear=m.year; calMonth=m.month-1; selectedDay=m.date; renderCalendar(); renderDetail(); }
 function renderCalendar() {
-  document.getElementById('cal-title').textContent = `${MONTHS[calMonth]} ${calYear}`;
-  const grid = document.getElementById('cal-grid');
-  let html = DAYS.map(d => `<div class="cal-dow">${d}</div>`).join('');
-  const firstDay = new Date(calYear, calMonth, 1).getDay();
-  const daysInMonth = new Date(calYear, calMonth+1, 0).getDate();
-  const today = new Date();
-
-  const meetingDays = new Set(
-    meetings.filter(m => m.year === calYear && m.month === calMonth+1).map(m => m.date)
-  );
-
-  for (let i = 0; i < firstDay; i++) html += `<div class="cal-day empty"></div>`;
-  for (let d = 1; d <= daysInMonth; d++) {
-    const isToday = d === today.getDate() && calMonth === today.getMonth() && calYear === today.getFullYear();
-    const hasMeeting = meetingDays.has(d);
-    const isSelected = d === selectedDay;
-    const cls = ['cal-day', isToday?'today':'', hasMeeting?'has-meeting':'', isSelected?'selected-day':''].filter(Boolean).join(' ');
-    html += `<div class="${cls}" onclick="selectDay(${d})">${d}</div>`;
+  document.getElementById('cal-title').textContent=`${MONTHS[calMonth]} ${calYear}`;
+  const grid=document.getElementById('cal-grid');
+  let html=DAYS.map(d=>`<div class="cal-dow">${d}</div>`).join('');
+  const firstDay=new Date(calYear,calMonth,1).getDay();
+  const dim=new Date(calYear,calMonth+1,0).getDate();
+  const today=new Date();
+  const mdays=new Set(meetings.filter(m=>m.year===calYear&&m.month===calMonth+1).map(m=>m.date));
+  for(let i=0;i<firstDay;i++) html+=`<div class="cal-day empty"></div>`;
+  for(let d=1;d<=dim;d++) {
+    const isT=d===today.getDate()&&calMonth===today.getMonth()&&calYear===today.getFullYear();
+    const cls=['cal-day',isT?'today':'',mdays.has(d)?'has-meeting':'',d===selectedDay?'selected-day':''].filter(Boolean).join(' ');
+    html+=`<div class="${cls}" onclick="selectDay(${d})">${d}</div>`;
   }
-  grid.innerHTML = html;
+  grid.innerHTML=html;
 }
-
-function selectDay(d) {
-  selectedDay = d;
-  renderCalendar();
-  renderDetail();
-}
-
+function selectDay(d) { selectedDay=d; renderCalendar(); renderDetail(); }
 function renderDetail() {
-  const titleEl = document.getElementById('detail-title');
-  const bodyEl = document.getElementById('detail-body');
-
-  if (!selectedDay) {
-    titleEl.textContent = '🗓️ Your calendar awaits';
-    bodyEl.innerHTML = `<div class="no-meetings-day"><div class="big">🗓️</div>Add a client meeting to get started.</div>`;
-    return;
-  }
-
-  const dayMeetings = meetings.filter(m => m.year === calYear && m.month === calMonth+1 && m.date === selectedDay);
-  const dateStr = `${DAYS[new Date(calYear,calMonth,selectedDay).getDay()]}, ${selectedDay} ${MONTHS[calMonth]} ${calYear}`;
-  titleEl.textContent = `📅 ${dateStr}`;
-
-  if (dayMeetings.length === 0) {
-    bodyEl.innerHTML = `<div class="no-meetings-day"><div class="big">☕</div>No meetings on this day.</div>`;
-    return;
-  }
-  bodyEl.innerHTML = dayMeetings.map(m => `
-    <div class="meeting-card">
-      <div class="meeting-dot"></div>
-      <div class="meeting-info">
-        <div class="meeting-client">${escHtml(m.name)}</div>
-        <div class="meeting-meta">${m.day}</div>
-      </div>
-      <div class="meeting-time-badge">🕐 ${m.time}</div>
-      <button class="client-del" onclick="deleteMeeting(${m.id})" title="Delete">✕</button>
-    </div>
-  `).join('');
+  const t=document.getElementById('detail-title'), b=document.getElementById('detail-body');
+  if(!selectedDay){t.textContent='🗓️ Your calendar awaits';b.innerHTML='<div class="no-meetings-day"><div class="big">🗓️</div>Add a client meeting to get started.</div>';return;}
+  const dm=meetings.filter(m=>m.year===calYear&&m.month===calMonth+1&&m.date===selectedDay);
+  t.textContent=`📅 ${DAYS[new Date(calYear,calMonth,selectedDay).getDay()]}, ${selectedDay} ${MONTHS[calMonth]} ${calYear}`;
+  b.innerHTML=dm.length?dm.map(m=>`<div class="meeting-card"><div class="meeting-dot"></div><div class="meeting-info"><div class="meeting-client">${escHtml(m.name)}</div><div class="meeting-meta">${m.day}</div></div><div class="meeting-time-badge">🕐 ${m.time}</div><button class="client-del" onclick="deleteMeeting(${m.id})">✕</button></div>`).join(''):'<div class="no-meetings-day"><div class="big">☕</div>No meetings on this day.</div>';
 }
-
-function changeMonth(dir) {
-  calMonth += dir;
-  if (calMonth < 0) { calMonth = 11; calYear--; }
-  if (calMonth > 11) { calMonth = 0; calYear++; }
-  selectedDay = null;
-  renderCalendar(); renderDetail();
-}
-
-// ── UTILS ──
-function pad(n) { return String(n).padStart(2,'0'); }
-function escHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
-function toast(msg, type='') {
-  const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.className = 'show' + (type ? ' ' + type : '');
-  setTimeout(() => { el.className = ''; }, 3000);
-}
-
-// Init calendar to current month
-calYear = new Date().getFullYear();
-calMonth = new Date().getMonth();
+function changeMonth(dir) { calMonth+=dir; if(calMonth<0){calMonth=11;calYear--;}if(calMonth>11){calMonth=0;calYear++;} selectedDay=null; renderCalendar(); renderDetail(); }
+function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function toast(msg,type=''){const e=document.getElementById('toast');e.textContent=msg;e.className='show'+(type?' '+type:'');setTimeout(()=>{e.className='';},3000);}
 renderCalendar();
 </script>
 </body>
 </html>
-
