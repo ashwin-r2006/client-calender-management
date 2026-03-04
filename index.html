@@ -746,7 +746,7 @@ function closeConfirm(){pendingDeleteId=null;document.getElementById('confirm-ov
 async function confirmDelete(){
   if(pendingDeleteId===null)return;
   const id=pendingDeleteId;
-  meetings=meetings.filter(m=>m.id!==id);
+  meetings=meetings.filter(m=>m.id!=id);
   pendingDeleteId=null;
   document.getElementById('confirm-overlay').classList.remove('show');
   renderAll();
@@ -770,8 +770,9 @@ function makeMeetingButtons(id,safeName){
 
 function attachMeetingButtons(container){
   container.querySelectorAll('.meeting-action-btns').forEach(function(wrap){
-    var id=parseInt(wrap.dataset.id);
+    var id=Number(wrap.dataset.id);
     var name=wrap.dataset.name;
+    // find meeting by id
     wrap.querySelectorAll('button[data-fn]').forEach(function(btn){
       btn.addEventListener('click',function(e){
         e.stopPropagation();
@@ -799,7 +800,7 @@ function renderClientList(){
 }
 
 function jumpToMeeting(id){
-  const m=meetings.find(x=>x.id===id);
+  const m=meetings.find(x=>x.id==id);
   if(!m)return;
   calYear=m.year;calMonth=m.month-1;selectedDay=m.date;
   saveCalState();renderCalendar();renderDetail();
@@ -829,8 +830,9 @@ function renderCalendar(){
 
 function selectDay(d){
   selectedDay=d;saveCalState();renderCalendar();renderDetail();
-  // Open quick-add popup when clicking a day
-  openQuick(d);
+  // Only open quick-add popup if no meetings on that day
+  const hasM=meetings.some(m=>m.year===calYear&&m.month===calMonth+1&&m.date===d);
+  if(!hasM) openQuick(d);
 }
 
 function renderDetail(){
@@ -980,7 +982,7 @@ function updateRescheduleDay(){
 
 function openReschedule(id,name){
   pendingRescheduleId=id;
-  const m=meetings.find(x=>x.id===id);
+  const m=meetings.find(x=>x.id==id);
   if(!m)return;
   document.getElementById('reschedule-client-label').textContent='👤 '+name;
   document.getElementById('reschedule-date').value=m.date;
@@ -1056,7 +1058,7 @@ function addEditGuestRow(val=''){
 
 function openEditGuests(id,name){
   pendingEditGuestsId=id;
-  const m=meetings.find(x=>x.id===id);
+  const m=meetings.find(x=>x.id==id);
   if(!m)return;
   document.getElementById('editguests-client-label').textContent='Meeting with '+name;
   document.getElementById('editguests-rows').innerHTML='';
@@ -1091,7 +1093,7 @@ document.getElementById('editguests-overlay').addEventListener('click',function(
 let pendingNotesId=null;
 function openNotes(id,name){
   pendingNotesId=id;
-  const m=meetings.find(x=>x.id===id);
+  const m=meetings.find(x=>x.id==id);
   if(!m)return;
   document.getElementById('notes-meeting-label').textContent='Meeting with '+name;
   const ta=document.getElementById('notes-textarea');
@@ -1132,7 +1134,7 @@ function addLinkRow(label='',url=''){
 }
 function openLinks(id,name){
   pendingLinksId=id;
-  const m=meetings.find(x=>x.id===id);
+  const m=meetings.find(x=>x.id==id);
   if(!m)return;
   document.getElementById('links-meeting-label').textContent='Meeting with '+name;
   document.getElementById('links-rows').innerHTML='';
