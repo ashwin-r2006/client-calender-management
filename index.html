@@ -93,6 +93,21 @@ select.field-input{cursor:pointer;}
 .btn-delete-meeting:hover{background:#dc2626;color:white;}
 .btn-reschedule-meeting{display:block;width:100%;padding:7px 12px;background:#eff6ff;color:#2563eb;border:none;border-top:1px solid #bfdbfe;font-size:0.78rem;font-weight:700;cursor:pointer;text-align:center;transition:all 0.2s;min-width:0;}
 .btn-reschedule-meeting:hover{background:#2563eb;color:white;}
+.btn-edit-guests{display:block;width:100%;padding:7px 12px;background:#f0fdf4;color:#16a34a;border:none;border-top:1px solid #bbf7d0;font-size:0.78rem;font-weight:700;cursor:pointer;text-align:center;transition:all 0.2s;min-width:0;}
+.btn-edit-guests:hover{background:#16a34a;color:white;}
+.guests-section{margin-top:2px;}
+.guests-label{font-size:0.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;}
+.guest-row{display:flex;align-items:center;gap:6px;margin-bottom:6px;}
+.guest-row input{flex:1;padding:8px 9px;border:1.5px solid var(--border);border-radius:9px;font-size:0.84rem;outline:none;background:var(--bg);transition:border 0.2s;}
+.guest-row input:focus{border-color:var(--primary);background:white;}
+.btn-remove-guest{width:28px;height:28px;border-radius:7px;border:1.5px solid #fecaca;background:#fef2f2;color:#dc2626;font-size:0.9rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s;font-weight:700;padding:0;}
+.btn-remove-guest:hover{background:#dc2626;color:white;border-color:#dc2626;}
+.btn-add-guest{width:100%;padding:7px;border:1.5px dashed var(--border);background:transparent;border-radius:9px;color:var(--muted);font-size:0.8rem;font-weight:600;cursor:pointer;transition:all 0.2s;margin-top:2px;}
+.btn-add-guest:hover{border-color:var(--primary);color:var(--primary);background:var(--primary-light);}
+.guest-tag{display:inline-flex;align-items:center;gap:5px;background:var(--primary-light);color:var(--primary);border-radius:20px;padding:3px 10px;font-size:0.78rem;font-weight:600;margin:2px 3px 2px 0;}
+.guest-tag .remove-tag{background:none;border:none;color:var(--primary);cursor:pointer;font-size:0.85rem;padding:0;line-height:1;opacity:0.6;}
+.guest-tag .remove-tag:hover{opacity:1;}
+.guests-display{display:flex;flex-wrap:wrap;margin-top:4px;}
 .empty-clients{color:var(--muted);font-size:0.84rem;text-align:center;padding:18px 0;}
 .main{flex:1;padding:24px;overflow-y:auto;}
 .calendar-card{background:white;border-radius:16px;box-shadow:var(--shadow);padding:20px;max-width:680px;}
@@ -160,6 +175,17 @@ select.field-input{cursor:pointer;}
 .btn-reschedule-cancel:hover{background:var(--border);}
 .btn-reschedule-save{background:linear-gradient(135deg,#2563eb,var(--accent));color:white;}
 .btn-reschedule-save:hover{opacity:0.9;}
+.editguests-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:200;display:none;align-items:center;justify-content:center;padding:20px;}
+.editguests-overlay.show{display:flex;}
+.editguests-box{background:white;border-radius:20px;padding:28px 24px 22px;width:100%;max-width:360px;box-shadow:0 20px 50px rgba(0,0,0,0.2);}
+.editguests-box h4{font-size:1.05rem;font-weight:800;color:#16a34a;margin-bottom:4px;}
+.editguests-client-label{font-size:0.88rem;font-weight:700;color:var(--text);margin-bottom:18px;padding:10px 12px;background:#f0fdf4;border-radius:10px;}
+.editguests-btns{display:flex;gap:10px;margin-top:14px;}
+.editguests-btns button{flex:1;padding:11px;border-radius:10px;font-size:0.92rem;font-weight:700;cursor:pointer;border:none;transition:all 0.2s;}
+.btn-editguests-cancel{background:var(--bg);color:var(--text);border:1.5px solid var(--border)!important;}
+.btn-editguests-cancel:hover{background:var(--border);}
+.btn-editguests-save{background:linear-gradient(135deg,#16a34a,#06b6d4);color:white;}
+.btn-editguests-save:hover{opacity:0.9;}
 .quick-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:200;display:none;align-items:center;justify-content:center;padding:20px;}
 .quick-overlay.show{display:flex;}
 .quick-box{background:white;border-radius:20px;padding:28px 24px 22px;width:100%;max-width:360px;box-shadow:0 20px 50px rgba(0,0,0,0.2);}
@@ -252,6 +278,11 @@ select.field-input{cursor:pointer;}
         <div class="field-label">Client Name</div>
         <input class="field-input" id="client-name" placeholder="e.g. John Doe"/>
       </div>
+      <div class="guests-section">
+        <div class="guests-label">Guest Names</div>
+        <div id="guest-rows"></div>
+        <button class="btn-add-guest" onclick="addGuestRow()">+ Add Guest</button>
+      </div>
       <div class="form-row-3">
         <div>
           <div class="field-label">Date</div>
@@ -319,6 +350,20 @@ select.field-input{cursor:pointer;}
   </div>
 </div>
 
+<div class="editguests-overlay" id="editguests-overlay">
+  <div class="editguests-box">
+    <h4>👥 Edit Guests</h4>
+    <div class="editguests-client-label" id="editguests-client-label">👤 Client Name</div>
+    <div class="guests-label">Guest Names</div>
+    <div id="editguests-rows"></div>
+    <button class="btn-add-guest" onclick="addEditGuestRow()">+ Add Guest</button>
+    <div class="editguests-btns">
+      <button class="btn-editguests-cancel" onclick="closeEditGuests()">Cancel</button>
+      <button class="btn-editguests-save" onclick="saveEditGuests()">Save Guests</button>
+    </div>
+  </div>
+</div>
+
 <div class="reschedule-overlay" id="reschedule-overlay">
   <div class="reschedule-box">
     <h4>🔄 Reschedule Meeting</h4>
@@ -356,6 +401,11 @@ select.field-input{cursor:pointer;}
         <input type="number" id="reschedule-min" min="0" max="59" placeholder="MM"/>
       </div>
     </div>
+    <div class="guests-section" style="margin-bottom:14px;">
+      <div class="guests-label">Guests</div>
+      <div id="reschedule-guest-rows"></div>
+      <button class="btn-add-guest" onclick="addRescheduleGuestRow()">+ Add Guest</button>
+    </div>
     <div class="reschedule-error" id="reschedule-error"></div>
     <div class="reschedule-btns">
       <button class="btn-reschedule-cancel" onclick="closeReschedule()">Cancel</button>
@@ -379,6 +429,11 @@ select.field-input{cursor:pointer;}
         <span>:</span>
         <input type="number" id="quick-min" min="0" max="59" placeholder="MM"/>
       </div>
+    </div>
+    <div class="guests-section" style="margin-bottom:14px;">
+      <div class="guests-label">Guest Names</div>
+      <div id="quick-guest-rows"></div>
+      <button class="btn-add-guest" onclick="addQuickGuestRow()">+ Add Guest</button>
     </div>
     <div class="quick-error" id="quick-error"></div>
     <div class="quick-btns">
@@ -589,7 +644,8 @@ async function addMeeting(){
   const dayName=DAYS_FULL[testDate.getDay()];
   const hh=String(parseInt(hour)).padStart(2,'0');
   const mm=String(parseInt(min)).padStart(2,'0');
-  const meeting={id:Date.now(),userEmail:currentUser,name,day:dayName,date,month,year,time:hh+':'+mm};
+  const guests=getGuests();
+  const meeting={id:Date.now(),userEmail:currentUser,name,day:dayName,date,month,year,time:hh+':'+mm,guests};
   meetings.push(meeting);
   meetings.sort((a,b)=>new Date(a.year,a.month-1,a.date,...a.time.split(':').map(Number))-new Date(b.year,b.month-1,b.date,...b.time.split(':').map(Number)));
   clearForm();
@@ -605,6 +661,7 @@ function clearForm(){
   document.getElementById('meet-year').value='2026';
   document.getElementById('time-preview').textContent='--:--';
   document.getElementById('day-preview').classList.remove('visible');
+  clearGuestRows();
   clearAddError();
   ['client-name','meet-date','meet-month','meet-year','meet-hour','meet-min'].forEach(id=>markField(id,false));
 }
@@ -639,10 +696,12 @@ function renderClientList(){
         <div class="client-info">
           <div class="client-name">${escHtml(m.name)}</div>
           <div class="client-time">${m.day}, ${m.date} ${MONTHS[m.month-1].slice(0,3)} ${m.year} &middot; ${m.time}</div>
+          ${m.guests&&m.guests.length?'<div class="guests-display">'+m.guests.map(g=>`<span class="guest-tag">👤 ${escHtml(g)}</span>`).join('')+'</div>':''}
         </div>
       </div>
       <div style="display:flex;border-top:1px solid #e2e8f0;">
         <button class="btn-reschedule-meeting" style="flex:1;border-top:none;border-right:1px solid #bfdbfe;" onclick="openReschedule(${m.id},'${safeName}')">🔄 Reschedule</button>
+        <button class="btn-edit-guests" style="flex:1;border-top:none;border-right:1px solid #bbf7d0;" onclick="openEditGuests(${m.id},'${safeName}')">👥 Guests</button>
         <button class="btn-delete-meeting" style="flex:1;border-top:none;" onclick="askDelete(${m.id},'${safeName}')">Delete</button>
       </div>
     </div>`;
@@ -693,11 +752,13 @@ function renderDetail(){
         <div class="meeting-info">
           <div class="meeting-client">${escHtml(m.name)}</div>
           <div class="meeting-meta">${m.day}</div>
+          ${m.guests&&m.guests.length?'<div class="guests-display" style="margin-top:4px;">'+m.guests.map(g=>`<span class="guest-tag">👤 ${escHtml(g)}</span>`).join('')+'</div>':''}
         </div>
         <div class="meeting-time-badge">🕐 ${m.time}</div>
       </div>
       <div style="display:flex;border-top:1px solid #e2e8f0;">
         <button class="btn-reschedule-meeting" style="flex:1;border-top:none;border-right:1px solid #bfdbfe;" onclick="openReschedule(${m.id},'${safeName}')">🔄 Reschedule</button>
+        <button class="btn-edit-guests" style="flex:1;border-top:none;border-right:1px solid #bbf7d0;" onclick="openEditGuests(${m.id},'${safeName}')">👥 Guests</button>
         <button class="btn-delete-meeting" style="flex:1;border-top:none;" onclick="askDelete(${m.id},'${safeName}')">Delete</button>
       </div>
     </div>`;
@@ -712,12 +773,41 @@ function changeMonth(dir){
   selectedDay=null;saveCalState();renderCalendar();renderDetail();
 }
 
+// ── GUEST HELPERS ──
+function addGuestRow(val=''){
+  const container=document.getElementById('guest-rows');
+  const row=document.createElement('div');
+  row.className='guest-row';
+  row.innerHTML=`<input type="text" placeholder="Guest name" value="${escHtml(val)}"/><button class="btn-remove-guest" onclick="this.parentElement.remove()">✕</button>`;
+  container.appendChild(row);
+  row.querySelector('input').focus();
+}
+function getGuests(){
+  return Array.from(document.querySelectorAll('#guest-rows .guest-row input')).map(i=>i.value.trim()).filter(Boolean);
+}
+function clearGuestRows(){
+  document.getElementById('guest-rows').innerHTML='';
+}
+
+function addQuickGuestRow(val=''){
+  const container=document.getElementById('quick-guest-rows');
+  const row=document.createElement('div');
+  row.className='guest-row';
+  row.innerHTML=`<input type="text" placeholder="Guest name" value="${escHtml(val)}"/><button class="btn-remove-guest" onclick="this.parentElement.remove()">✕</button>`;
+  container.appendChild(row);
+  row.querySelector('input').focus();
+}
+function getQuickGuests(){
+  return Array.from(document.querySelectorAll('#quick-guest-rows .guest-row input')).map(i=>i.value.trim()).filter(Boolean);
+}
+
 function openQuick(d){
   const dayName=DAYS_FULL[new Date(calYear,calMonth,d).getDay()];
   document.getElementById('quick-date-label').textContent=dayName+', '+d+' '+MONTHS[calMonth]+' '+calYear;
   document.getElementById('quick-name').value='';
   document.getElementById('quick-hour').value='';
   document.getElementById('quick-min').value='';
+  document.getElementById('quick-guest-rows').innerHTML='';
   document.getElementById('quick-error').textContent='';
   document.getElementById('quick-error').classList.remove('show');
   document.getElementById('quick-name').classList.remove('error-field');
@@ -749,7 +839,8 @@ async function saveQuick(){
   const dayName=DAYS_FULL[new Date(calYear,calMonth,selectedDay).getDay()];
   const hh=String(parseInt(hour)).padStart(2,'0');
   const mm=String(parseInt(min)).padStart(2,'0');
-  const meeting={id:Date.now(),userEmail:currentUser,name,day:dayName,date:selectedDay,month:calMonth+1,year:calYear,time:hh+':'+mm};
+  const guests=getQuickGuests();
+  const meeting={id:Date.now(),userEmail:currentUser,name,day:dayName,date:selectedDay,month:calMonth+1,year:calYear,time:hh+':'+mm,guests};
   meetings.push(meeting);
   meetings.sort((a,b)=>new Date(a.year,a.month-1,a.date,...a.time.split(':').map(Number))-new Date(b.year,b.month-1,b.date,...b.time.split(':').map(Number)));
   closeQuick();
@@ -765,6 +856,17 @@ document.addEventListener('keydown',function(e){
 });
 
 let pendingRescheduleId=null;
+
+function addRescheduleGuestRow(val=''){
+  const container=document.getElementById('reschedule-guest-rows');
+  const row=document.createElement('div');
+  row.className='guest-row';
+  row.innerHTML=`<input type="text" placeholder="Guest name" value="${escHtml(val)}"/><button class="btn-remove-guest" onclick="this.parentElement.remove()">✕</button>`;
+  container.appendChild(row);
+}
+function getRescheduleGuests(){
+  return Array.from(document.querySelectorAll('#reschedule-guest-rows .guest-row input')).map(i=>i.value.trim()).filter(Boolean);
+}
 
 function updateRescheduleDay(){
   const date=parseInt(document.getElementById('reschedule-date').value);
@@ -793,6 +895,9 @@ function openReschedule(id,name){
   document.getElementById('reschedule-min').value=parseInt(m.time.split(':')[1]);
   document.getElementById('reschedule-error').classList.remove('show');
   ['reschedule-date','reschedule-month','reschedule-year','reschedule-hour','reschedule-min'].forEach(id=>document.getElementById(id).classList.remove('error-field'));
+  // Pre-fill existing guests
+  document.getElementById('reschedule-guest-rows').innerHTML='';
+  if(m.guests&&m.guests.length) m.guests.forEach(g=>addRescheduleGuestRow(g));
   updateRescheduleDay();
   document.getElementById('reschedule-overlay').classList.add('show');
 }
@@ -831,7 +936,8 @@ async function saveReschedule(){
   const mm=String(parseInt(min)).padStart(2,'0');
   const idx=meetings.findIndex(x=>x.id===pendingRescheduleId);
   if(idx===-1)return;
-  meetings[idx]={...meetings[idx],day:dayName,date,month,year,time:hh+':'+mm};
+  const guests=getRescheduleGuests();
+  meetings[idx]={...meetings[idx],day:dayName,date,month,year,time:hh+':'+mm,guests};
   meetings.sort((a,b)=>new Date(a.year,a.month-1,a.date,...a.time.split(':').map(Number))-new Date(b.year,b.month-1,b.date,...b.time.split(':').map(Number)));
   const updated=meetings[meetings.findIndex(x=>x.id===pendingRescheduleId)];
   calYear=year;calMonth=month-1;selectedDay=date;
@@ -842,6 +948,49 @@ async function saveReschedule(){
   toast('Meeting rescheduled to '+dayName+', '+date+' '+MONTHS[month-1]+' '+year+'!','success');
 }
 document.getElementById('reschedule-overlay').addEventListener('click',function(e){if(e.target===this)closeReschedule();});
+
+let pendingEditGuestsId=null;
+
+function addEditGuestRow(val=''){
+  const container=document.getElementById('editguests-rows');
+  const row=document.createElement('div');
+  row.className='guest-row';
+  row.innerHTML=`<input type="text" placeholder="Guest name" value="${escHtml(val)}"/><button class="btn-remove-guest" onclick="this.parentElement.remove()">✕</button>`;
+  container.appendChild(row);
+}
+
+function openEditGuests(id,name){
+  pendingEditGuestsId=id;
+  const m=meetings.find(x=>x.id===id);
+  if(!m)return;
+  document.getElementById('editguests-client-label').textContent='Meeting with '+name;
+  document.getElementById('editguests-rows').innerHTML='';
+  if(m.guests&&m.guests.length) m.guests.forEach(g=>addEditGuestRow(g));
+  document.getElementById('editguests-overlay').classList.add('show');
+  setTimeout(()=>{
+    const first=document.querySelector('#editguests-rows .guest-row input');
+    if(first) first.focus();
+  },100);
+}
+
+function closeEditGuests(){
+  pendingEditGuestsId=null;
+  document.getElementById('editguests-overlay').classList.remove('show');
+}
+
+async function saveEditGuests(){
+  if(pendingEditGuestsId===null)return;
+  const guests=Array.from(document.querySelectorAll('#editguests-rows .guest-row input')).map(i=>i.value.trim()).filter(Boolean);
+  const idx=meetings.findIndex(x=>x.id===pendingEditGuestsId);
+  if(idx===-1)return;
+  meetings[idx]={...meetings[idx],guests};
+  const updated=meetings[idx];
+  closeEditGuests();
+  renderAll();
+  await saveMeetingToFirebase(updated);
+  toast('Guests updated!','success');
+}
+document.getElementById('editguests-overlay').addEventListener('click',function(e){if(e.target===this)closeEditGuests();});
 
 function saveCalState(){
   localStorage.setItem('md_calstate',JSON.stringify({calYear,calMonth,selectedDay}));
