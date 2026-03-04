@@ -640,7 +640,10 @@ function renderClientList(){
           <div class="client-time">${m.day}, ${m.date} ${MONTHS[m.month-1].slice(0,3)} ${m.year} &middot; ${m.time}</div>
         </div>
       </div>
-      <button class="btn-delete-meeting" onclick="askDelete(${m.id},'${escHtml(m.name).replace(/'/g,"\\'")}')">Delete</button>
+      <div style="display:flex;">
+        <button class="btn-reschedule-meeting" style="flex:1;border-right:1px solid #bfdbfe;" onclick="openReschedule(${m.id},'${escHtml(m.name).replace(/'/g,"\\'")}')">🔄 Reschedule</button>
+        <button class="btn-delete-meeting" style="flex:1;" onclick="askDelete(${m.id},'${escHtml(m.name).replace(/'/g,"\\'")}')">Delete</button>
+      </div>
     </div>`).join('');
 }
 
@@ -690,7 +693,10 @@ function renderDetail(){
         </div>
         <div class="meeting-time-badge">🕐 ${m.time}</div>
       </div>
-      <button class="btn-delete-meeting" onclick="askDelete(${m.id},'${escHtml(m.name).replace(/'/g,"\\'")}')">Delete</button>
+      <div style="display:flex;">
+        <button class="btn-reschedule-meeting" style="flex:1;border-right:1px solid #bfdbfe;" onclick="openReschedule(${m.id},'${escHtml(m.name).replace(/'/g,"\\'")}')">🔄 Reschedule</button>
+        <button class="btn-delete-meeting" style="flex:1;" onclick="askDelete(${m.id},'${escHtml(m.name).replace(/'/g,"\\'")}')">Delete</button>
+      </div>
     </div>`).join('')
   :'<div class="no-meetings-day"><div class="big">☕</div>No meetings on this day.</div>';
 }
