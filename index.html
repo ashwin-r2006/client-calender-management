@@ -830,9 +830,7 @@ function renderCalendar(){
 
 function selectDay(d){
   selectedDay=d;saveCalState();renderCalendar();renderDetail();
-  // Only open quick-add popup if no meetings on that day
-  const hasM=meetings.some(m=>m.year===calYear&&m.month===calMonth+1&&m.date===d);
-  if(!hasM) openQuick(d);
+  openQuick(d);
 }
 
 function renderDetail(){
