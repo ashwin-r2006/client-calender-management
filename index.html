@@ -208,6 +208,9 @@ select.field-input{cursor:pointer;}
 .report-link-chip{display:inline-flex;align-items:center;gap:4px;background:#f5f3ff;color:#7c3aed;border-radius:20px;padding:3px 10px;font-size:0.78rem;font-weight:600;text-decoration:none;border:1px solid #ddd6fe;transition:all 0.2s;margin:2px;}
 .report-link-chip:hover{background:#7c3aed;color:white;}
 .no-clients-msg{text-align:center;color:var(--muted);font-size:0.88rem;padding:20px 0;}
+.cr-total-badge{background:var(--primary-light);color:var(--primary);border-radius:20px;padding:2px 9px;font-size:0.75rem;font-weight:800;flex-shrink:0;}
+.client-report-item.active .cr-total-badge{background:rgba(255,255,255,0.25);color:white;}
+
 
 /* ── OVERLAYS ── */
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:200;display:none;align-items:center;justify-content:center;padding:20px;}
@@ -1131,10 +1134,13 @@ async function saveDeadline(){
 function renderReportsList(){
   const search=(document.getElementById('reports-search').value||'').trim().toLowerCase();
   const clientMap={};
+  const now=new Date();
   meetings.forEach(function(m){
     const key=m.name.toLowerCase();
-    if(!clientMap[key])clientMap[key]={name:m.name,count:0};
-    clientMap[key].count++;
+    if(!clientMap[key])clientMap[key]={name:m.name,total:0,upcoming:0,past:0};
+    clientMap[key].total++;
+    const mDate=new Date(m.year,m.month-1,m.date,parseInt(m.time),parseInt(m.time.split(':')[1]));
+    if(mDate>=now)clientMap[key].upcoming++;else clientMap[key].past++;
   });
   const clients=Object.values(clientMap).filter(function(c){return !search||c.name.toLowerCase().includes(search);});
   clients.sort(function(a,b){return a.name.localeCompare(b.name);});
@@ -1145,8 +1151,10 @@ function renderReportsList(){
     const item=document.createElement('div');
     const isActive=activeReportClient&&activeReportClient.toLowerCase()===c.name.toLowerCase();
     item.className='client-report-item'+(isActive?' active':'');
-    item.innerHTML='<div class="cr-name">'+escHtml(c.name)+'</div>'
-      +'<div class="cr-count">'+c.count+' meeting'+(c.count!==1?'s':'')+'</div>';
+    item.innerHTML='<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">'
+      +'<div class="cr-name">'+escHtml(c.name)+'</div>'
+      +'<div class="cr-total-badge">'+c.total+'</div>'
+      +'</div>';
     item.addEventListener('click',function(){showClientReport(c.name);});
     list.appendChild(item);
   });
