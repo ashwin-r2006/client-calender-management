@@ -132,6 +132,29 @@ select.field-input{cursor:pointer;}
 .btn-cancel-confirm:hover{background:var(--border);}
 .btn-delete-confirm{background:var(--danger);color:white;}
 .btn-delete-confirm:hover{background:#dc2626;}
+.quick-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:200;display:none;align-items:center;justify-content:center;padding:20px;}
+.quick-overlay.show{display:flex;}
+.quick-box{background:white;border-radius:20px;padding:28px 24px 22px;width:100%;max-width:360px;box-shadow:0 20px 50px rgba(0,0,0,0.2);}
+.quick-box h4{font-size:1.05rem;font-weight:800;color:var(--primary);margin-bottom:4px;}
+.quick-date-label{font-size:0.82rem;color:var(--muted);margin-bottom:18px;}
+.quick-field{margin-bottom:14px;}
+.quick-field label{display:block;font-size:0.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:5px;}
+.quick-field input{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:0.95rem;outline:none;transition:border 0.2s;background:var(--bg);}
+.quick-field input:focus{border-color:var(--primary);background:white;}
+.quick-field input.error-field{border-color:var(--danger)!important;background:#fff5f5;}
+.quick-time-row{display:flex;align-items:center;gap:8px;}
+.quick-time-row input{flex:1;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:0.95rem;outline:none;transition:border 0.2s;background:var(--bg);}
+.quick-time-row input:focus{border-color:var(--primary);background:white;}
+.quick-time-row input.error-field{border-color:var(--danger)!important;background:#fff5f5;}
+.quick-time-row span{font-weight:800;color:var(--muted);font-size:1.1rem;}
+.quick-error{color:#b91c1c;font-size:0.8rem;background:#fef2f2;border:1px solid #fca5a5;padding:7px 11px;border-radius:8px;display:none;line-height:1.4;margin-bottom:12px;}
+.quick-error.show{display:block!important;}
+.quick-btns{display:flex;gap:10px;margin-top:6px;}
+.quick-btns button{flex:1;padding:11px;border-radius:10px;font-size:0.92rem;font-weight:700;cursor:pointer;border:none;transition:all 0.2s;}
+.btn-quick-cancel{background:var(--bg);color:var(--text);border:1.5px solid var(--border)!important;}
+.btn-quick-cancel:hover{background:var(--border);}
+.btn-quick-save{background:linear-gradient(135deg,var(--primary),var(--accent));color:white;}
+.btn-quick-save:hover{opacity:0.9;}
 #toast{position:fixed;bottom:24px;right:16px;left:16px;max-width:360px;margin:0 auto;background:#1e293b;color:white;padding:12px 18px;border-radius:12px;font-size:0.88rem;font-weight:600;box-shadow:0 8px 30px rgba(0,0,0,0.2);z-index:9999;transform:translateY(80px);opacity:0;transition:all 0.3s;pointer-events:none;text-align:center;}
 #toast.show{transform:translateY(0);opacity:1;}
 #toast.success{background:var(--success);}
@@ -265,6 +288,30 @@ select.field-input{cursor:pointer;}
         </div>
       </div>
     </main>
+  </div>
+</div>
+
+<div class="quick-overlay" id="quick-overlay">
+  <div class="quick-box">
+    <h4>📅 Quick Add Meeting</h4>
+    <div class="quick-date-label" id="quick-date-label">Monday, 1 January 2026</div>
+    <div class="quick-field">
+      <label>Client Name</label>
+      <input type="text" id="quick-name" placeholder="e.g. John Doe"/>
+    </div>
+    <div class="quick-field">
+      <label>Time</label>
+      <div class="quick-time-row">
+        <input type="number" id="quick-hour" min="0" max="23" placeholder="HH"/>
+        <span>:</span>
+        <input type="number" id="quick-min" min="0" max="59" placeholder="MM"/>
+      </div>
+    </div>
+    <div class="quick-error" id="quick-error"></div>
+    <div class="quick-btns">
+      <button class="btn-quick-cancel" onclick="closeQuick()">Cancel</button>
+      <button class="btn-quick-save" onclick="saveQuick()">Schedule</button>
+    </div>
   </div>
 </div>
 
@@ -548,7 +595,11 @@ function renderCalendar(){
   grid.innerHTML=html;
 }
 
-function selectDay(d){selectedDay=d;saveCalState();renderCalendar();renderDetail();}
+function selectDay(d){
+  selectedDay=d;saveCalState();renderCalendar();renderDetail();
+  // Open quick-add popup when clicking a day
+  openQuick(d);
+}
 
 function renderDetail(){
   const t=document.getElementById('detail-title'),b=document.getElementById('detail-body');
@@ -577,6 +628,58 @@ function changeMonth(dir){
   if(calMonth>11){calMonth=0;calYear++;}
   selectedDay=null;saveCalState();renderCalendar();renderDetail();
 }
+
+function openQuick(d){
+  const dayName=DAYS_FULL[new Date(calYear,calMonth,d).getDay()];
+  document.getElementById('quick-date-label').textContent=dayName+', '+d+' '+MONTHS[calMonth]+' '+calYear;
+  document.getElementById('quick-name').value='';
+  document.getElementById('quick-hour').value='';
+  document.getElementById('quick-min').value='';
+  document.getElementById('quick-error').textContent='';
+  document.getElementById('quick-error').classList.remove('show');
+  document.getElementById('quick-name').classList.remove('error-field');
+  document.getElementById('quick-hour').classList.remove('error-field');
+  document.getElementById('quick-min').classList.remove('error-field');
+  document.getElementById('quick-overlay').classList.add('show');
+  setTimeout(()=>document.getElementById('quick-name').focus(),100);
+}
+function closeQuick(){
+  document.getElementById('quick-overlay').classList.remove('show');
+}
+async function saveQuick(){
+  const nameEl=document.getElementById('quick-name');
+  const hourEl=document.getElementById('quick-hour');
+  const minEl=document.getElementById('quick-min');
+  const errEl=document.getElementById('quick-error');
+  const name=nameEl.value.trim();
+  const hour=hourEl.value.trim();
+  const min=minEl.value.trim();
+  nameEl.classList.remove('error-field');
+  hourEl.classList.remove('error-field');
+  minEl.classList.remove('error-field');
+  errEl.classList.remove('show');
+  if(!name){nameEl.classList.add('error-field');errEl.textContent='Please enter the client name.';errEl.classList.add('show');nameEl.focus();return;}
+  if(hour===''){hourEl.classList.add('error-field');errEl.textContent='Please enter the hour (0-23).';errEl.classList.add('show');hourEl.focus();return;}
+  if(parseInt(hour)<0||parseInt(hour)>23){hourEl.classList.add('error-field');errEl.textContent='Hour must be between 0 and 23.';errEl.classList.add('show');hourEl.focus();return;}
+  if(min===''){minEl.classList.add('error-field');errEl.textContent='Please enter the minutes (0-59).';errEl.classList.add('show');minEl.focus();return;}
+  if(parseInt(min)<0||parseInt(min)>59){minEl.classList.add('error-field');errEl.textContent='Minutes must be between 0 and 59.';errEl.classList.add('show');minEl.focus();return;}
+  const dayName=DAYS_FULL[new Date(calYear,calMonth,selectedDay).getDay()];
+  const hh=String(parseInt(hour)).padStart(2,'0');
+  const mm=String(parseInt(min)).padStart(2,'0');
+  const meeting={id:Date.now(),userEmail:currentUser,name,day:dayName,date:selectedDay,month:calMonth+1,year:calYear,time:hh+':'+mm};
+  meetings.push(meeting);
+  meetings.sort((a,b)=>new Date(a.year,a.month-1,a.date,...a.time.split(':').map(Number))-new Date(b.year,b.month-1,b.date,...b.time.split(':').map(Number)));
+  closeQuick();
+  renderAll();
+  await saveMeetingToFirebase(meeting);
+  toast('Meeting with '+name+' scheduled for '+dayName+'!','success');
+}
+document.getElementById('quick-overlay').addEventListener('click',function(e){if(e.target===this)closeQuick();});
+// Allow Enter key to save
+document.addEventListener('keydown',function(e){
+  if(e.key==='Enter'&&document.getElementById('quick-overlay').classList.contains('show')) saveQuick();
+  if(e.key==='Escape'&&document.getElementById('quick-overlay').classList.contains('show')) closeQuick();
+});
 
 function saveCalState(){
   localStorage.setItem('md_calstate',JSON.stringify({calYear,calMonth,selectedDay}));
