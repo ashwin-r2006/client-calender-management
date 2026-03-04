@@ -5,12 +5,28 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>MeetingDesk</title>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, doc, setDoc, deleteDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+const firebaseConfig = {
+  apiKey: "AIzaSyC7Gj6A5kfegHtq2PM1uOjD67V-cLkLXxU",
+  authDomain: "meeting-calender-884f0.firebaseapp.com",
+  projectId: "meeting-calender-884f0",
+  storageBucket: "meeting-calender-884f0.firebasestorage.app",
+  messagingSenderId: "183531008292",
+  appId: "1:183531008292:web:a2ff1ae0198afe20ff43b1"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+window._db = db;
+window._fsLib = { collection, doc, setDoc, deleteDoc, getDocs, query, where };
+window._dbReady = true;
+window.dispatchEvent(new Event('firebase-ready'));
+</script>
 <style>
 :root{--primary:#4f46e5;--primary-dark:#3730a3;--primary-light:#e0e7ff;--accent:#06b6d4;--success:#10b981;--danger:#ef4444;--bg:#f8fafc;--text:#1e293b;--muted:#64748b;--border:#e2e8f0;--shadow:0 4px 24px rgba(79,70,229,0.08);}
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
-
-/* AUTH */
 #auth-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#4f46e5,#06b6d4);}
 .auth-card{background:white;border-radius:20px;padding:40px 36px;width:380px;box-shadow:0 20px 60px rgba(0,0,0,0.18);}
 .auth-logo{text-align:center;margin-bottom:28px;}
@@ -33,127 +49,107 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .forgot{text-align:right;margin-top:-8px;margin-bottom:14px;}
 .forgot a{font-size:0.82rem;color:var(--primary);text-decoration:none;}
 .error-msg{background:#fef2f2;color:var(--danger);border-radius:8px;padding:10px 14px;font-size:0.875rem;margin-bottom:14px;display:none;}
-
-/* APP */
 #app-screen{display:none;min-height:100vh;flex-direction:column;}
-header{background:white;border-bottom:1px solid var(--border);padding:0 28px;height:60px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 1px 8px rgba(0,0,0,0.05);position:sticky;top:0;z-index:100;}
-.header-brand{font-size:1.15rem;font-weight:800;color:var(--primary);}
-.header-user{display:flex;align-items:center;gap:12px;}
-.avatar{width:34px;height:34px;border-radius:50%;background:var(--primary);color:white;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.9rem;}
-.username{font-weight:600;font-size:0.9rem;}
-.btn-signout{padding:7px 14px;border:1.5px solid var(--border);background:white;border-radius:8px;font-size:0.82rem;font-weight:600;cursor:pointer;color:var(--muted);transition:all 0.2s;}
+header{background:white;border-bottom:1px solid var(--border);padding:0 20px;height:60px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 1px 8px rgba(0,0,0,0.05);position:sticky;top:0;z-index:100;}
+.header-brand{font-size:1.1rem;font-weight:800;color:var(--primary);}
+.header-user{display:flex;align-items:center;gap:10px;}
+.avatar{width:32px;height:32px;border-radius:50%;background:var(--primary);color:white;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.85rem;flex-shrink:0;}
+.username{font-weight:600;font-size:0.88rem;}
+.btn-signout{padding:6px 12px;border:1.5px solid var(--border);background:white;border-radius:8px;font-size:0.78rem;font-weight:600;cursor:pointer;color:var(--muted);transition:all 0.2s;}
 .btn-signout:hover{border-color:var(--danger);color:var(--danger);}
 .app-body{display:flex;flex:1;}
-
-/* SIDEBAR */
-.sidebar{width:320px;min-width:300px;background:white;border-right:1px solid var(--border);padding:24px 20px;display:flex;flex-direction:column;gap:14px;height:calc(100vh - 60px);overflow-y:auto;position:sticky;top:60px;}
-.sidebar h2{font-size:1rem;font-weight:700;}
-.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
-.field-label{font-size:0.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;}
-.field-input{width:100%;padding:9px 10px;border:1.5px solid var(--border);border-radius:9px;font-size:0.88rem;outline:none;transition:border 0.2s;background:var(--bg);}
+.sidebar{width:300px;min-width:280px;background:white;border-right:1px solid var(--border);padding:20px 16px;display:flex;flex-direction:column;gap:14px;height:calc(100vh - 60px);overflow-y:auto;position:sticky;top:60px;}
+.sidebar h2{font-size:0.95rem;font-weight:700;}
+.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;}
+.field-label{font-size:0.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;}
+.field-input{width:100%;padding:8px 9px;border:1.5px solid var(--border);border-radius:9px;font-size:0.86rem;outline:none;transition:border 0.2s;background:var(--bg);}
 .field-input:focus{border-color:var(--primary);background:white;}
 .field-input.error-field{border-color:var(--danger)!important;background:#fff5f5;}
 select.field-input{cursor:pointer;}
-.day-preview{display:none;align-items:center;gap:8px;background:var(--primary-light);border-radius:10px;padding:9px 13px;}
+.day-preview{display:none;align-items:center;gap:8px;background:var(--primary-light);border-radius:10px;padding:8px 12px;}
 .day-preview.visible{display:flex;}
-.day-preview-label{font-size:0.8rem;color:var(--muted);font-weight:600;}
-.day-preview-value{font-size:0.92rem;font-weight:800;color:var(--primary);}
-.time-row{display:flex;gap:8px;align-items:flex-end;}
+.day-preview-label{font-size:0.78rem;color:var(--muted);font-weight:600;}
+.day-preview-value{font-size:0.9rem;font-weight:800;color:var(--primary);}
+.time-row{display:flex;gap:7px;align-items:flex-end;}
 .time-row .field-group{flex:1;}
-.time-display{padding:9px 10px;background:var(--primary-light);color:var(--primary);border-radius:9px;font-weight:700;font-size:0.88rem;white-space:nowrap;min-width:52px;text-align:center;}
-.add-error{color:#b91c1c;font-size:0.82rem;background:#fef2f2;border:1px solid #fca5a5;padding:9px 12px;border-radius:8px;display:none;line-height:1.4;}
+.time-display{padding:8px 9px;background:var(--primary-light);color:var(--primary);border-radius:9px;font-weight:700;font-size:0.86rem;white-space:nowrap;min-width:48px;text-align:center;}
+.add-error{color:#b91c1c;font-size:0.8rem;background:#fef2f2;border:1px solid #fca5a5;padding:8px 12px;border-radius:8px;display:none;line-height:1.4;}
 .add-error.show{display:block!important;}
-.btn-add{width:100%;padding:12px;background:linear-gradient(135deg,var(--primary),var(--accent));color:white;border:none;border-radius:10px;font-size:0.95rem;font-weight:700;cursor:pointer;transition:opacity 0.2s;}
+.btn-add{width:100%;padding:11px;background:linear-gradient(135deg,var(--primary),var(--accent));color:white;border:none;border-radius:10px;font-size:0.92rem;font-weight:700;cursor:pointer;transition:opacity 0.2s;}
 .btn-add:hover{opacity:0.9;}
-
-/* Meeting list in sidebar */
-.client-section h3{font-size:0.78rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;}
-.client-list{display:flex;flex-direction:column;gap:8px;}
+.sync-status{font-size:0.75rem;color:var(--muted);text-align:center;display:flex;align-items:center;justify-content:center;gap:6px;min-height:20px;}
+.spinner{display:inline-block;width:12px;height:12px;border:2px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin 0.6s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.client-section h3{font-size:0.75rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;}
+.client-list{display:flex;flex-direction:column;gap:7px;}
 .client-item{border-radius:10px;border:1.5px solid var(--border);overflow:hidden;transition:border-color 0.2s;}
 .client-item:hover{border-color:var(--primary);}
-.client-top{display:flex;align-items:center;padding:10px 12px;gap:8px;cursor:pointer;}
+.client-top{display:flex;align-items:center;padding:9px 11px;gap:8px;cursor:pointer;}
 .client-top:hover{background:var(--primary-light);}
 .client-info{flex:1;min-width:0;}
-.client-name{font-weight:600;font-size:0.88rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.client-time{font-size:0.76rem;color:var(--muted);margin-top:2px;}
-
-/* BIG VISIBLE DELETE BUTTON */
-.btn-delete-meeting{
-  display:block;
-  width:100%;
-  padding:7px 12px;
-  background:#fef2f2;
-  color:#dc2626;
-  border:none;
-  border-top:1px solid #fecaca;
-  font-size:0.8rem;
-  font-weight:700;
-  cursor:pointer;
-  text-align:center;
-  transition:all 0.2s;
-  letter-spacing:0.02em;
-}
+.client-name{font-weight:600;font-size:0.86rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.client-time{font-size:0.74rem;color:var(--muted);margin-top:2px;}
+.btn-delete-meeting{display:block;width:100%;padding:7px 12px;background:#fef2f2;color:#dc2626;border:none;border-top:1px solid #fecaca;font-size:0.78rem;font-weight:700;cursor:pointer;text-align:center;transition:all 0.2s;}
 .btn-delete-meeting:hover{background:#dc2626;color:white;}
-
-.empty-clients{color:var(--muted);font-size:0.86rem;text-align:center;padding:20px 0;}
-
-/* MAIN */
-.main{flex:1;padding:28px;overflow-y:auto;}
-.calendar-card{background:white;border-radius:16px;box-shadow:var(--shadow);padding:24px;max-width:700px;}
-.cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
-.cal-title{font-size:1.2rem;font-weight:800;}
-.cal-nav{background:var(--bg);border:1.5px solid var(--border);border-radius:8px;width:34px;height:34px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
+.empty-clients{color:var(--muted);font-size:0.84rem;text-align:center;padding:18px 0;}
+.main{flex:1;padding:24px;overflow-y:auto;}
+.calendar-card{background:white;border-radius:16px;box-shadow:var(--shadow);padding:20px;max-width:680px;}
+.cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
+.cal-title{font-size:1.1rem;font-weight:800;}
+.cal-nav{background:var(--bg);border:1.5px solid var(--border);border-radius:8px;width:32px;height:32px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
 .cal-nav:hover{background:var(--primary-light);border-color:var(--primary);}
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;}
-.cal-dow{text-align:center;font-size:0.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;padding:6px 0;}
-.cal-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:10px;font-size:0.88rem;cursor:pointer;position:relative;transition:all 0.18s;font-weight:500;}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
+.cal-dow{text-align:center;font-size:0.68rem;font-weight:700;color:var(--muted);text-transform:uppercase;padding:5px 0;}
+.cal-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:9px;font-size:0.85rem;cursor:pointer;position:relative;transition:all 0.18s;font-weight:500;}
 .cal-day:hover:not(.empty){background:var(--primary-light);color:var(--primary);}
 .cal-day.today{font-weight:800;color:var(--primary);}
-.cal-day.today::after{content:'';position:absolute;bottom:4px;left:50%;transform:translateX(-50%);width:5px;height:5px;border-radius:50%;background:var(--primary);}
+.cal-day.today::after{content:'';position:absolute;bottom:3px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:var(--primary);}
 .cal-day.has-meeting{background:var(--primary-light);color:var(--primary);font-weight:700;}
-.cal-day.has-meeting::before{content:'';position:absolute;top:4px;right:5px;width:6px;height:6px;border-radius:50%;background:var(--accent);}
+.cal-day.has-meeting::before{content:'';position:absolute;top:3px;right:4px;width:5px;height:5px;border-radius:50%;background:var(--accent);}
 .cal-day.selected-day{background:var(--primary)!important;color:white!important;}
 .cal-day.selected-day::after{background:white;}
 .cal-day.empty{cursor:default;}
-
-/* Meeting detail */
-.meeting-detail{margin-top:24px;background:white;border-radius:16px;box-shadow:var(--shadow);padding:20px 24px;max-width:700px;}
-.meeting-detail h3{font-size:1rem;font-weight:700;margin-bottom:14px;}
-.meeting-card{border-radius:10px;border:1.5px solid var(--border);margin-bottom:10px;overflow:hidden;transition:border-color 0.2s;}
+.meeting-detail{margin-top:20px;background:white;border-radius:16px;box-shadow:var(--shadow);padding:18px 20px;max-width:680px;}
+.meeting-detail h3{font-size:0.95rem;font-weight:700;margin-bottom:12px;}
+.meeting-card{border-radius:10px;border:1.5px solid var(--border);margin-bottom:9px;overflow:hidden;transition:border-color 0.2s;}
 .meeting-card:hover{border-color:var(--primary);}
-.meeting-card-top{display:flex;align-items:center;gap:12px;padding:12px 14px;}
-.meeting-dot{width:10px;height:10px;border-radius:50%;background:var(--primary);flex-shrink:0;}
+.meeting-card-top{display:flex;align-items:center;gap:11px;padding:11px 13px;}
+.meeting-dot{width:9px;height:9px;border-radius:50%;background:var(--primary);flex-shrink:0;}
 .meeting-info{flex:1;}
-.meeting-client{font-weight:700;font-size:0.95rem;}
-.meeting-meta{font-size:0.8rem;color:var(--muted);margin-top:2px;}
-.meeting-time-badge{background:var(--primary-light);color:var(--primary);border-radius:8px;padding:5px 10px;font-weight:700;font-size:0.82rem;white-space:nowrap;}
-.no-meetings-day{text-align:center;padding:28px;color:var(--muted);}
-.no-meetings-day .big{font-size:2rem;margin-bottom:8px;}
-
-/* Confirm dialog */
-.confirm-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:200;display:none;align-items:center;justify-content:center;}
+.meeting-client{font-weight:700;font-size:0.92rem;}
+.meeting-meta{font-size:0.78rem;color:var(--muted);margin-top:2px;}
+.meeting-time-badge{background:var(--primary-light);color:var(--primary);border-radius:8px;padding:4px 9px;font-weight:700;font-size:0.8rem;white-space:nowrap;}
+.no-meetings-day{text-align:center;padding:24px;color:var(--muted);}
+.no-meetings-day .big{font-size:1.8rem;margin-bottom:8px;}
+.confirm-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:200;display:none;align-items:center;justify-content:center;padding:20px;}
 .confirm-overlay.show{display:flex;}
-.confirm-box{background:white;border-radius:16px;padding:28px 28px 22px;width:320px;box-shadow:0 20px 50px rgba(0,0,0,0.2);}
+.confirm-box{background:white;border-radius:16px;padding:26px 24px 20px;width:100%;max-width:320px;box-shadow:0 20px 50px rgba(0,0,0,0.2);}
 .confirm-box h4{font-size:1rem;font-weight:800;margin-bottom:8px;}
-.confirm-box p{font-size:0.88rem;color:var(--muted);margin-bottom:20px;line-height:1.5;}
+.confirm-box p{font-size:0.86rem;color:var(--muted);margin-bottom:18px;line-height:1.5;}
 .confirm-btns{display:flex;gap:10px;}
-.confirm-btns button{flex:1;padding:10px;border-radius:9px;font-size:0.9rem;font-weight:700;cursor:pointer;border:none;transition:all 0.2s;}
+.confirm-btns button{flex:1;padding:10px;border-radius:9px;font-size:0.88rem;font-weight:700;cursor:pointer;border:none;transition:all 0.2s;}
 .btn-cancel-confirm{background:var(--bg);color:var(--text);border:1.5px solid var(--border)!important;}
 .btn-cancel-confirm:hover{background:var(--border);}
 .btn-delete-confirm{background:var(--danger);color:white;}
 .btn-delete-confirm:hover{background:#dc2626;}
-
-/* Toast */
-#toast{position:fixed;bottom:28px;right:28px;background:#1e293b;color:white;padding:13px 20px;border-radius:12px;font-size:0.9rem;font-weight:600;box-shadow:0 8px 30px rgba(0,0,0,0.2);z-index:9999;transform:translateY(80px);opacity:0;transition:all 0.3s;pointer-events:none;}
+#toast{position:fixed;bottom:24px;right:16px;left:16px;max-width:360px;margin:0 auto;background:#1e293b;color:white;padding:12px 18px;border-radius:12px;font-size:0.88rem;font-weight:600;box-shadow:0 8px 30px rgba(0,0,0,0.2);z-index:9999;transform:translateY(80px);opacity:0;transition:all 0.3s;pointer-events:none;text-align:center;}
 #toast.show{transform:translateY(0);opacity:1;}
 #toast.success{background:var(--success);}
-
-@media(max-width:700px){.app-body{flex-direction:column}.sidebar{width:100%;height:auto;position:static}.main{padding:16px}}
+@media(max-width:768px){
+  .app-body{flex-direction:column;}
+  .sidebar{width:100%;height:auto;position:static;border-right:none;border-bottom:1px solid var(--border);}
+  .main{padding:16px;}
+  .username{display:none;}
+  .auth-card{width:100%;max-width:380px;padding:32px 24px;}
+}
+@media(max-width:400px){
+  .form-row-3{grid-template-columns:1fr 1fr;}
+  .form-row-3>div:last-child{grid-column:span 2;}
+}
 </style>
 </head>
 <body>
 
-<!-- AUTH -->
 <div id="auth-screen">
   <div class="auth-card">
     <div class="auth-logo">
@@ -189,7 +185,6 @@ select.field-input{cursor:pointer;}
   </div>
 </div>
 
-<!-- APP -->
 <div id="app-screen">
   <header>
     <div class="header-brand">📅 MeetingDesk</div>
@@ -246,6 +241,7 @@ select.field-input{cursor:pointer;}
       </div>
       <div class="add-error" id="add-error"></div>
       <button class="btn-add" onclick="addMeeting()">+ Schedule Meeting</button>
+      <div class="sync-status" id="sync-status"></div>
       <div class="client-section">
         <h3>All Meetings</h3>
         <div class="client-list" id="client-list">
@@ -272,7 +268,6 @@ select.field-input{cursor:pointer;}
   </div>
 </div>
 
-<!-- CONFIRM DELETE DIALOG -->
 <div class="confirm-overlay" id="confirm-overlay">
   <div class="confirm-box">
     <h4>🗑️ Delete Meeting?</h4>
@@ -294,6 +289,50 @@ const DAYS_SHORT=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 let accounts=JSON.parse(localStorage.getItem('md_accounts')||'{}');
 let authMode='signin';
 
+function setSyncStatus(msg){
+  const el=document.getElementById('sync-status');
+  el.innerHTML=msg?'<span class="spinner"></span>'+msg:'';
+}
+
+async function loadMeetingsFromFirebase(email){
+  setSyncStatus('Loading meetings...');
+  try{
+    const {collection,getDocs,query,where}=window._fsLib;
+    const q=query(collection(window._db,'meetings'),where('userEmail','==',email));
+    const snap=await getDocs(q);
+    meetings=snap.docs.map(d=>d.data());
+    meetings.sort((a,b)=>new Date(a.year,a.month-1,a.date,...a.time.split(':').map(Number))-new Date(b.year,b.month-1,b.date,...b.time.split(':').map(Number)));
+  }catch(e){
+    console.error(e);
+    toast('Could not load meetings. Check your internet.','');
+  }
+  setSyncStatus('');
+}
+
+async function saveMeetingToFirebase(meeting){
+  setSyncStatus('Saving...');
+  try{
+    const {doc,setDoc,collection}=window._fsLib;
+    await setDoc(doc(collection(window._db,'meetings'),String(meeting.id)),meeting);
+  }catch(e){
+    console.error(e);
+    toast('Could not save meeting. Check your internet.','');
+  }
+  setSyncStatus('');
+}
+
+async function deleteMeetingFromFirebase(id){
+  setSyncStatus('Deleting...');
+  try{
+    const {doc,deleteDoc,collection}=window._fsLib;
+    await deleteDoc(doc(collection(window._db,'meetings'),String(id)));
+  }catch(e){
+    console.error(e);
+    toast('Could not delete. Check your internet.','');
+  }
+  setSyncStatus('');
+}
+
 function updateDayPreview(){
   const date=parseInt(document.getElementById('meet-date').value);
   const month=parseInt(document.getElementById('meet-month').value);
@@ -312,7 +351,7 @@ function updateDayPreview(){
 function updateTimePreview(){
   const h=document.getElementById('meet-hour').value;
   const m=document.getElementById('meet-min').value;
-  document.getElementById('time-preview').textContent=(h!==''&&m!=='')?`${String(parseInt(h)).padStart(2,'0')}:${String(parseInt(m)).padStart(2,'0')}`:'--:--';
+  document.getElementById('time-preview').textContent=(h!==''&&m!=='')?String(parseInt(h)).padStart(2,'0')+':'+String(parseInt(m)).padStart(2,'0'):'--:--';
 }
 
 function switchTab(mode){
@@ -333,10 +372,10 @@ function handleAuth(){
   if(authMode==='signup'){
     if(accounts[email]){showAuthError('Account already exists. Please sign in.');return;}
     if(pw.length<6){showAuthError('Password must be at least 6 characters.');return;}
-    accounts[email]={pw,meetings:[]};
+    accounts[email]={pw};
     localStorage.setItem('md_accounts',JSON.stringify(accounts));
     loginAs(email,null);
-  } else {
+  }else{
     if(!accounts[email]||accounts[email].pw!==pw){showAuthError('Invalid email or password.');return;}
     loginAs(email,null);
   }
@@ -347,24 +386,29 @@ function handleGoogleCredential(response){
     const payload=JSON.parse(atob(response.credential.split('.')[1]));
     const email=payload.email;
     const displayName=payload.given_name||payload.name||email.split('@')[0];
-    if(!accounts[email]) accounts[email]={pw:'__google__',meetings:[],googleName:displayName};
+    if(!accounts[email]) accounts[email]={pw:'__google__',googleName:displayName};
     else accounts[email].googleName=displayName;
     localStorage.setItem('md_accounts',JSON.stringify(accounts));
     loginAs(email,displayName);
   }catch(e){showAuthError('Google sign-in failed. Please try again.');}
 }
 
-function loginAs(email,displayName){
+async function loginAs(email,displayName){
   currentUser=email;
-  meetings=(accounts[email].meetings||[]).map(m=>({...m}));
-  const name=displayName||accounts[email].googleName||email.split('@')[0];
+  const name=displayName||accounts[email]?.googleName||email.split('@')[0];
   document.getElementById('user-avatar').textContent=name[0].toUpperCase();
   document.getElementById('user-name').textContent=name.charAt(0).toUpperCase()+name.slice(1);
   document.getElementById('auth-screen').style.display='none';
   const app=document.getElementById('app-screen');
   app.style.display='flex';app.style.flexDirection='column';
-  renderAll();
-  toast('Welcome, '+name+'! 👋','success');
+  renderCalendar();
+  const doLoad=async()=>{
+    await loadMeetingsFromFirebase(email);
+    renderAll();
+    toast('Welcome, '+name+'! 👋','success');
+  };
+  if(window._dbReady) await doLoad();
+  else window.addEventListener('firebase-ready',doLoad,{once:true});
 }
 
 function signOut(){
@@ -374,17 +418,11 @@ function signOut(){
   document.getElementById('auth-password').value='';
 }
 
-function saveMeetings(){accounts[currentUser].meetings=meetings;localStorage.setItem('md_accounts',JSON.stringify(accounts));}
-
-function showAddError(msg){
-  const e=document.getElementById('add-error');
-  e.textContent=msg;e.classList.add('show');
-  e.scrollIntoView({behavior:'smooth',block:'nearest'});
-}
+function showAddError(msg){const e=document.getElementById('add-error');e.textContent=msg;e.classList.add('show');e.scrollIntoView({behavior:'smooth',block:'nearest'});}
 function clearAddError(){const e=document.getElementById('add-error');e.textContent='';e.classList.remove('show');}
 function markField(id,hasError){const el=document.getElementById(id);if(hasError)el.classList.add('error-field');else el.classList.remove('error-field');}
 
-function addMeeting(){
+async function addMeeting(){
   clearAddError();
   ['client-name','meet-date','meet-month','meet-year','meet-hour','meet-min'].forEach(id=>markField(id,false));
   const nameEl=document.getElementById('client-name');
@@ -399,25 +437,27 @@ function addMeeting(){
   const year=parseInt(yearEl.value);
   const hour=hourEl.value.trim();
   const min=minEl.value.trim();
-  if(!name){markField('client-name',true);showAddError('⚠️ Please enter the client name.');nameEl.focus();return;}
-  if(!dateEl.value||isNaN(date)||date<1||date>31){markField('meet-date',true);showAddError('⚠️ Please enter a valid date (1–31).');dateEl.focus();return;}
-  if(!monthEl.value||isNaN(month)){markField('meet-month',true);showAddError('⚠️ Please select a month.');monthEl.focus();return;}
-  if(!yearEl.value||isNaN(year)||year<2020||year>2100){markField('meet-year',true);showAddError('⚠️ Please enter a valid year (2020–2100).');yearEl.focus();return;}
+  if(!name){markField('client-name',true);showAddError('Please enter the client name.');nameEl.focus();return;}
+  if(!dateEl.value||isNaN(date)||date<1||date>31){markField('meet-date',true);showAddError('Please enter a valid date (1-31).');dateEl.focus();return;}
+  if(!monthEl.value||isNaN(month)){markField('meet-month',true);showAddError('Please select a month.');monthEl.focus();return;}
+  if(!yearEl.value||isNaN(year)||year<2020||year>2100){markField('meet-year',true);showAddError('Please enter a valid year.');yearEl.focus();return;}
   const testDate=new Date(year,month-1,date);
-  if(testDate.getDate()!==date||testDate.getMonth()!==month-1){markField('meet-date',true);markField('meet-month',true);showAddError(`⚠️ ${date} ${MONTHS[month-1]} ${year} is not a valid date.`);return;}
-  if(hour===''){markField('meet-hour',true);showAddError('⚠️ Please enter the hour (0–23).');hourEl.focus();return;}
-  if(parseInt(hour)<0||parseInt(hour)>23){markField('meet-hour',true);showAddError('⚠️ Hour must be between 0 and 23.');hourEl.focus();return;}
-  if(min===''){markField('meet-min',true);showAddError('⚠️ Please enter the minutes (0–59).');minEl.focus();return;}
-  if(parseInt(min)<0||parseInt(min)>59){markField('meet-min',true);showAddError('⚠️ Minutes must be between 0 and 59.');minEl.focus();return;}
+  if(testDate.getDate()!==date||testDate.getMonth()!==month-1){markField('meet-date',true);markField('meet-month',true);showAddError(date+' '+MONTHS[month-1]+' '+year+' is not a valid date.');return;}
+  if(hour===''){markField('meet-hour',true);showAddError('Please enter the hour (0-23).');hourEl.focus();return;}
+  if(parseInt(hour)<0||parseInt(hour)>23){markField('meet-hour',true);showAddError('Hour must be between 0 and 23.');hourEl.focus();return;}
+  if(min===''){markField('meet-min',true);showAddError('Please enter the minutes (0-59).');minEl.focus();return;}
+  if(parseInt(min)<0||parseInt(min)>59){markField('meet-min',true);showAddError('Minutes must be between 0 and 59.');minEl.focus();return;}
   const dayName=DAYS_FULL[testDate.getDay()];
   const hh=String(parseInt(hour)).padStart(2,'0');
   const mm=String(parseInt(min)).padStart(2,'0');
-  meetings.push({id:Date.now(),name,day:dayName,date,month,year,time:`${hh}:${mm}`});
+  const meeting={id:Date.now(),userEmail:currentUser,name,day:dayName,date,month,year,time:hh+':'+mm};
+  meetings.push(meeting);
   meetings.sort((a,b)=>new Date(a.year,a.month-1,a.date,...a.time.split(':').map(Number))-new Date(b.year,b.month-1,b.date,...b.time.split(':').map(Number)));
-  saveMeetings();clearForm();
+  clearForm();
   calYear=year;calMonth=month-1;selectedDay=date;
   renderAll();
-  toast('✅ Meeting with '+name+' scheduled for '+dayName+'!','success');
+  await saveMeetingToFirebase(meeting);
+  toast('Meeting with '+name+' scheduled for '+dayName+'!','success');
 }
 
 function clearForm(){
@@ -436,13 +476,15 @@ function askDelete(id,name){
   document.getElementById('confirm-overlay').classList.add('show');
 }
 function closeConfirm(){pendingDeleteId=null;document.getElementById('confirm-overlay').classList.remove('show');}
-function confirmDelete(){
+async function confirmDelete(){
   if(pendingDeleteId===null)return;
-  meetings=meetings.filter(m=>m.id!==pendingDeleteId);
-  saveMeetings();pendingDeleteId=null;
+  const id=pendingDeleteId;
+  meetings=meetings.filter(m=>m.id!==id);
+  pendingDeleteId=null;
   document.getElementById('confirm-overlay').classList.remove('show');
   renderAll();
-  toast('🗑️ Meeting deleted.','');
+  await deleteMeetingFromFirebase(id);
+  toast('Meeting deleted.','');
 }
 document.getElementById('confirm-overlay').addEventListener('click',function(e){if(e.target===this)closeConfirm();});
 
@@ -459,9 +501,7 @@ function renderClientList(){
           <div class="client-time">${m.day}, ${m.date} ${MONTHS[m.month-1].slice(0,3)} ${m.year} &middot; ${m.time}</div>
         </div>
       </div>
-      <button class="btn-delete-meeting" onclick="askDelete(${m.id},'${escHtml(m.name).replace(/'/g,"\\'")}')">
-        🗑️ Delete This Meeting
-      </button>
+      <button class="btn-delete-meeting" onclick="askDelete(${m.id},'${escHtml(m.name).replace(/'/g,"\\'")}')">Delete</button>
     </div>`).join('');
 }
 
@@ -475,16 +515,16 @@ function jumpToMeeting(id){
 function renderCalendar(){
   document.getElementById('cal-title').textContent=MONTHS[calMonth]+' '+calYear;
   const grid=document.getElementById('cal-grid');
-  let html=DAYS_SHORT.map(d=>`<div class="cal-dow">${d}</div>`).join('');
+  let html=DAYS_SHORT.map(d=>'<div class="cal-dow">'+d+'</div>').join('');
   const firstDay=new Date(calYear,calMonth,1).getDay();
   const dim=new Date(calYear,calMonth+1,0).getDate();
   const today=new Date();
   const mdays=new Set(meetings.filter(m=>m.year===calYear&&m.month===calMonth+1).map(m=>m.date));
-  for(let i=0;i<firstDay;i++) html+=`<div class="cal-day empty"></div>`;
+  for(let i=0;i<firstDay;i++) html+='<div class="cal-day empty"></div>';
   for(let d=1;d<=dim;d++){
     const isT=d===today.getDate()&&calMonth===today.getMonth()&&calYear===today.getFullYear();
     const cls=['cal-day',isT?'today':'',mdays.has(d)?'has-meeting':'',d===selectedDay?'selected-day':''].filter(Boolean).join(' ');
-    html+=`<div class="${cls}" onclick="selectDay(${d})">${d}</div>`;
+    html+='<div class="'+cls+'" onclick="selectDay('+d+')">'+d+'</div>';
   }
   grid.innerHTML=html;
 }
@@ -493,11 +533,7 @@ function selectDay(d){selectedDay=d;renderCalendar();renderDetail();}
 
 function renderDetail(){
   const t=document.getElementById('detail-title'),b=document.getElementById('detail-body');
-  if(!selectedDay){
-    t.textContent='🗓️ Your calendar awaits';
-    b.innerHTML='<div class="no-meetings-day"><div class="big">🗓️</div>Add a client meeting to get started.</div>';
-    return;
-  }
+  if(!selectedDay){t.textContent='🗓️ Your calendar awaits';b.innerHTML='<div class="no-meetings-day"><div class="big">🗓️</div>Add a client meeting to get started.</div>';return;}
   const dm=meetings.filter(m=>m.year===calYear&&m.month===calMonth+1&&m.date===selectedDay);
   const dayName=DAYS_FULL[new Date(calYear,calMonth,selectedDay).getDay()];
   t.textContent='📅 '+dayName+', '+selectedDay+' '+MONTHS[calMonth]+' '+calYear;
@@ -511,9 +547,7 @@ function renderDetail(){
         </div>
         <div class="meeting-time-badge">🕐 ${m.time}</div>
       </div>
-      <button class="btn-delete-meeting" onclick="askDelete(${m.id},'${escHtml(m.name).replace(/'/g,"\\'")}')">
-        🗑️ Delete This Meeting
-      </button>
+      <button class="btn-delete-meeting" onclick="askDelete(${m.id},'${escHtml(m.name).replace(/'/g,"\\'")}')">Delete</button>
     </div>`).join('')
   :'<div class="no-meetings-day"><div class="big">☕</div>No meetings on this day.</div>';
 }
