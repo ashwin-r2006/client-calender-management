@@ -255,6 +255,19 @@ select.field-input{cursor:pointer;}
 .btn-add-link{width:100%;padding:7px;border:1.5px dashed var(--border);background:transparent;border-radius:9px;color:var(--muted);font-size:0.8rem;font-weight:600;cursor:pointer;transition:all 0.2s;margin-top:2px;}
 .btn-add-link:hover{border-color:#7c3aed;color:#7c3aed;background:#f5f3ff;}
 
+/* ── REPORT COLLAPSIBLE ROWS ── */
+.report-meeting-summary{display:flex;align-items:center;justify-content:space-between;cursor:pointer;padding:10px 14px;border-radius:10px;transition:background 0.2s;user-select:none;}
+.report-meeting-summary:hover{background:var(--primary-light);}
+.report-meeting-summary .rms-date{font-weight:700;font-size:0.9rem;color:var(--text);}
+.report-meeting-summary .rms-time{background:var(--primary-light);color:var(--primary);border-radius:8px;padding:3px 9px;font-size:0.78rem;font-weight:700;}
+.report-meeting-summary .rms-arrow{font-size:0.75rem;color:var(--muted);transition:transform 0.2s;margin-left:6px;}
+.report-meeting-summary.open .rms-arrow{transform:rotate(180deg);}
+.report-meeting-detail-panel{display:none;padding:12px 14px 14px;border-top:1px solid var(--border);background:#fafbff;border-radius:0 0 10px 10px;}
+.report-meeting-detail-panel.open{display:block;}
+.rmd-row{display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;font-size:0.84rem;color:var(--text);}
+.rmd-label{font-weight:700;color:var(--muted);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.04em;min-width:70px;padding-top:1px;}
+.rmd-value{flex:1;line-height:1.5;}
+
 /* ── NOTIFICATIONS ── */
 .notif-banner{background:#f0fdf4;border:1.5px solid #86efac;border-radius:12px;padding:12px 16px;font-size:0.85rem;color:#166534;display:flex;align-items:center;gap:10px;margin-bottom:14px;}
 .notif-banner button{margin-left:auto;padding:5px 12px;border-radius:8px;border:none;background:#16a34a;color:white;font-size:0.78rem;font-weight:700;cursor:pointer;}
@@ -1178,25 +1191,43 @@ function showClientReport(name){
   const now=new Date();
   const cm=meetings.filter(function(m){return m.name.toLowerCase()===name.toLowerCase();});
   cm.sort(cmpMeeting);
-  const upcoming=cm.filter(function(m){return new Date(m.year,m.month-1,m.date,parseInt(m.time),parseInt(m.time.split(':')[1]))>=now;});
-  const past=cm.filter(function(m){return new Date(m.year,m.month-1,m.date,parseInt(m.time),parseInt(m.time.split(':')[1]))<now;});
+  const today=cm.filter(function(m){
+    const d=new Date(m.year,m.month-1,m.date);
+    const t=new Date(); t.setHours(0,0,0,0);
+    return d.getTime()===t.getTime();
+  });
+  const upcoming=cm.filter(function(m){
+    const d=new Date(m.year,m.month-1,m.date);
+    const t=new Date(); t.setHours(0,0,0,0);
+    return d>t;
+  });
+  const past=cm.filter(function(m){
+    const d=new Date(m.year,m.month-1,m.date);
+    const t=new Date(); t.setHours(0,0,0,0);
+    return d<t;
+  });
 
-  function buildRow(m,type){
-    let html='<div class="report-meeting-row '+type+'">';
-    html+='<div class="report-meeting-top">';
-    html+='<div class="report-meeting-date">'+m.day+', '+m.date+' '+MONTHS[m.month-1]+' '+m.year+'</div>';
-    html+='<div class="report-meeting-time">🕐 '+m.time+'</div>';
-    html+='</div>';
-    if(m.guests&&m.guests.length)html+='<div class="report-guests">👥 '+m.guests.map(function(g){return escHtml(g);}).join(', ')+'</div>';
-    if(m.notes)html+='<div class="report-notes-box">📝 '+escHtml(m.notes)+'</div>';
-    if(m.deadlines&&m.deadlines.length)m.deadlines.forEach(function(dl){html+='<div class="report-deadline-box">⏰ '+escHtml(dl.task)+' — '+dl.date+' '+MONTHS[dl.month-1].slice(0,3)+' '+dl.year+' at 9:00 AM</div>';});
-    if(m.links&&m.links.length){
-      html+='<div style="margin-top:6px;">';
-      m.links.forEach(function(l){html+='<a class="report-link-chip" href="'+escHtml(l.url)+'" target="_blank">🔗 '+escHtml(l.label||l.url)+'</a>';});
-      html+='</div>';
-    }
-    html+='</div>';
-    return html;
+  function buildSummary(m,type){
+    const uid='rm-'+m.id;
+    return '<div class="report-meeting-row '+type+'" style="padding:0;overflow:hidden;">'
+      +'<div class="report-meeting-summary" id="sum-'+uid+'" onclick="toggleReportRow(''+uid+'')">'
+      +'<div class="rms-date">'+m.date+' '+MONTHS[m.month-1].slice(0,3)+' '+m.year+'</div>'
+      +'<div style="display:flex;align-items:center;gap:6px;">'
+      +'<div class="rms-time">🕐 '+m.time+'</div>'
+      +'<span class="rms-arrow">▼</span>'
+      +'</div>'
+      +'</div>'
+      +'<div class="report-meeting-detail-panel" id="panel-'+uid+'">'
+      +'<div class="rmd-row"><span class="rmd-label">👤 Client</span><span class="rmd-value" style="font-weight:700;">'+escHtml(m.name)+'</span></div>'
+      +'<div class="rmd-row"><span class="rmd-label">📅 Day</span><span class="rmd-value">'+m.day+'</span></div>'
+      +'<div class="rmd-row"><span class="rmd-label">📆 Date</span><span class="rmd-value">'+m.date+' '+MONTHS[m.month-1]+' '+m.year+'</span></div>'
+      +'<div class="rmd-row"><span class="rmd-label">🕐 Time</span><span class="rmd-value">'+m.time+'</span></div>'
+      +(m.guests&&m.guests.length?'<div class="rmd-row"><span class="rmd-label">👥 Guests</span><span class="rmd-value">'+m.guests.map(function(g){return escHtml(g);}).join(', ')+'</span></div>':'')
+      +(m.notes?'<div class="rmd-row"><span class="rmd-label">📝 Notes</span><span class="rmd-value" style="white-space:pre-wrap;background:#fefce8;border-left:3px solid #f59e0b;border-radius:6px;padding:6px 10px;">'+escHtml(m.notes)+'</span></div>':'')
+      +(m.deadlines&&m.deadlines.length?'<div class="rmd-row"><span class="rmd-label">⏰ Deadline</span><span class="rmd-value">'+m.deadlines.map(function(dl){return '<div style="background:#fff7ed;border-left:3px solid #ea580c;border-radius:6px;padding:5px 9px;margin-bottom:4px;"><strong>'+escHtml(dl.task)+'</strong><br/>'+dl.date+' '+MONTHS[dl.month-1]+' '+dl.year+' at 9:00 AM</div>';}).join('')+'</span></div>':'')
+      +(m.links&&m.links.length?'<div class="rmd-row"><span class="rmd-label">🔗 Links</span><span class="rmd-value">'+m.links.map(function(l){return '<a class="report-link-chip" href="'+escHtml(l.url)+'" target="_blank">🔗 '+escHtml(l.label||l.url)+'</a>';}).join('')+'</span></div>':'')
+      +'</div>'
+      +'</div>';
   }
 
   const main=document.getElementById('reports-main');
@@ -1205,14 +1236,24 @@ function showClientReport(name){
   html+='<div class="report-client-name">👤 '+escHtml(name)+'</div>';
   html+='<div class="report-stats">';
   html+='<span class="stat-badge stat-total">'+cm.length+' Total</span>';
-  html+='<span class="stat-badge stat-upcoming">'+upcoming.length+' Upcoming</span>';
+  html+='<span class="stat-badge stat-upcoming">'+(today.length+upcoming.length)+' Upcoming</span>';
   html+='<span class="stat-badge stat-past">'+past.length+' Past</span>';
   html+='</div></div>';
-  if(upcoming.length){html+='<div class="report-section"><div class="report-section-title">🟢 Upcoming Meetings</div>';upcoming.forEach(function(m){html+=buildRow(m,'upcoming');});html+='</div>';}
-  if(past.length){html+='<div class="report-section"><div class="report-section-title">🕐 Past Meetings</div>';past.slice().reverse().forEach(function(m){html+=buildRow(m,'past');});html+='</div>';}
+  if(today.length){html+='<div class="report-section"><div class="report-section-title">🔴 Today</div>';today.forEach(function(m){html+=buildSummary(m,'upcoming');});html+='</div>';}
+  if(upcoming.length){html+='<div class="report-section"><div class="report-section-title">🟢 Upcoming</div>';upcoming.forEach(function(m){html+=buildSummary(m,'upcoming');});html+='</div>';}
+  if(past.length){html+='<div class="report-section"><div class="report-section-title">🕐 Past</div>';past.slice().reverse().forEach(function(m){html+=buildSummary(m,'past');});html+='</div>';}
   html+='</div>';
   main.innerHTML=html;
   main.scrollTop=0;
+}
+
+function toggleReportRow(uid){
+  const sum=document.getElementById('sum-'+uid);
+  const panel=document.getElementById('panel-'+uid);
+  if(!sum||!panel)return;
+  const isOpen=panel.classList.contains('open');
+  sum.classList.toggle('open',!isOpen);
+  panel.classList.toggle('open',!isOpen);
 }
 
 // ── BROWSER NOTIFICATIONS ──
@@ -1235,11 +1276,13 @@ function initNotifications(){
     btn.onclick = null;
     startNotificationChecker();
   } else if(Notification.permission === 'denied'){
-    btn.innerHTML = '🔕 Notifications <span style="font-size:0.7rem;background:#dc2626;color:white;border-radius:20px;padding:1px 7px;margin-left:2px;">BLOCKED</span>';
+    btn.innerHTML = '🔕 Notifications <span style="font-size:0.7rem;background:#dc2626;color:white;border-radius:20px;padding:1px 7px;margin-left:2px;">BLOCKED — Click to fix</span>';
     btn.classList.add('blocked');
     btn.classList.remove('enabled');
-    btn.title = 'Notifications are blocked — enable in browser settings';
-    btn.onclick = null;
+    btn.title = 'Notifications blocked — click for instructions';
+    btn.onclick = function(){
+      alert('To enable notifications:\n\n1. Press Alt+D to go to address bar\n2. Type: chrome://settings/content/notifications\n3. Press Enter\n4. Tab to Add button under Allow section\n5. Type: ashwin-r2006.github.io\n6. Press Add\n7. Come back and press F5 to reload');
+    };
   } else {
     btn.innerHTML = '🔔 Notifications <span style="font-size:0.7rem;background:#f59e0b;color:white;border-radius:20px;padding:1px 7px;margin-left:2px;">OFF</span>';
     btn.classList.remove('enabled','blocked');
