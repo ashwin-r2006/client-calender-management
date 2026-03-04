@@ -7,16 +7,16 @@
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, doc, setDoc, deleteDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-const firebaseConfig = {
-  apiKey: "AIzaSyC7Gj6A5kfegHtq2PM1uOjD67V-cLkLXxU",
-  authDomain: "meeting-calender-884f0.firebaseapp.com",
-  projectId: "meeting-calender-884f0",
-  storageBucket: "meeting-calender-884f0.firebasestorage.app",
-  messagingSenderId: "183531008292",
-  appId: "1:183531008292:web:a2ff1ae0198afe20ff43b1"
-};
-const app = initializeApp(firebaseConfig);
+import { getFirestore, collection, doc, setDoc, deleteDoc, getDocs, query, where }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+const app = initializeApp({
+  apiKey:"AIzaSyC7Gj6A5kfegHtq2PM1uOjD67V-cLkLXxU",
+  authDomain:"meeting-calender-884f0.firebaseapp.com",
+  projectId:"meeting-calender-884f0",
+  storageBucket:"meeting-calender-884f0.firebasestorage.app",
+  messagingSenderId:"183531008292",
+  appId:"1:183531008292:web:a2ff1ae0198afe20ff43b1"
+});
 const db = getFirestore(app);
 window._db = db;
 window._fsLib = { collection, doc, setDoc, deleteDoc, getDocs, query, where };
@@ -24,9 +24,16 @@ window._dbReady = true;
 window.dispatchEvent(new Event('firebase-ready'));
 </script>
 <style>
-:root{--primary:#4f46e5;--primary-dark:#3730a3;--primary-light:#e0e7ff;--accent:#06b6d4;--success:#10b981;--danger:#ef4444;--bg:#f8fafc;--text:#1e293b;--muted:#64748b;--border:#e2e8f0;--shadow:0 4px 24px rgba(79,70,229,0.08);}
+:root{
+  --primary:#4f46e5;--primary-dark:#3730a3;--primary-light:#e0e7ff;
+  --accent:#06b6d4;--success:#10b981;--danger:#ef4444;
+  --bg:#f8fafc;--text:#1e293b;--muted:#64748b;--border:#e2e8f0;
+  --shadow:0 4px 24px rgba(79,70,229,0.08);
+}
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+
+/* ── AUTH ── */
 #auth-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#4f46e5,#06b6d4);}
 .auth-card{background:white;border-radius:20px;padding:40px 36px;width:380px;box-shadow:0 20px 60px rgba(0,0,0,0.18);}
 .auth-logo{text-align:center;margin-bottom:28px;}
@@ -49,6 +56,8 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .forgot{text-align:right;margin-top:-8px;margin-bottom:14px;}
 .forgot a{font-size:0.82rem;color:var(--primary);text-decoration:none;}
 .error-msg{background:#fef2f2;color:var(--danger);border-radius:8px;padding:10px 14px;font-size:0.875rem;margin-bottom:14px;display:none;}
+
+/* ── APP SHELL ── */
 #app-screen{display:none;min-height:100vh;flex-direction:column;}
 header{background:white;border-bottom:1px solid var(--border);padding:0 20px;height:60px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 1px 8px rgba(0,0,0,0.05);position:sticky;top:0;z-index:100;}
 .header-brand{font-size:1.1rem;font-weight:800;color:var(--primary);}
@@ -57,63 +66,27 @@ header{background:white;border-bottom:1px solid var(--border);padding:0 20px;hei
 .username{font-weight:600;font-size:0.88rem;}
 .btn-signout{padding:6px 12px;border:1.5px solid var(--border);background:white;border-radius:8px;font-size:0.78rem;font-weight:600;cursor:pointer;color:var(--muted);transition:all 0.2s;}
 .btn-signout:hover{border-color:var(--danger);color:var(--danger);}
-.app-body{display:flex;flex:1;}
-.tab-bar{background:white;border-bottom:1px solid var(--border);display:flex;padding:0 20px;gap:0;}
+
+/* ── TABS ── */
+.tab-bar{background:white;border-bottom:1px solid var(--border);display:flex;padding:0 20px;}
 .tab-btn{padding:12px 22px;font-size:0.88rem;font-weight:700;color:var(--muted);border:none;background:transparent;cursor:pointer;border-bottom:3px solid transparent;transition:all 0.2s;margin-bottom:-1px;}
 .tab-btn.active{color:var(--primary);border-bottom-color:var(--primary);}
 .tab-btn:hover:not(.active){color:var(--text);background:var(--bg);}
-.tab-content{display:none;}
-.tab-content.active{display:flex;flex:1;}
-/* Client Reports Tab */
-#reports-tab{flex:1;padding:24px;overflow-y:auto;display:flex;gap:20px;}
-.reports-sidebar{width:260px;min-width:220px;background:white;border-radius:16px;box-shadow:var(--shadow);padding:16px;height:fit-content;position:sticky;top:24px;}
-.reports-sidebar h3{font-size:0.85rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:12px;}
-.reports-search{width:100%;padding:8px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:0.88rem;outline:none;margin-bottom:12px;transition:border 0.2s;}
-.reports-search:focus{border-color:var(--primary);}
-.client-report-item{padding:10px 12px;border-radius:10px;cursor:pointer;transition:all 0.2s;border:1.5px solid transparent;margin-bottom:4px;}
-.client-report-item:hover{background:var(--primary-light);border-color:var(--primary);}
-.client-report-item.active{background:var(--primary);color:white;}
-.client-report-item .cr-name{font-weight:700;font-size:0.9rem;}
-.client-report-item .cr-count{font-size:0.75rem;opacity:0.7;margin-top:2px;}
-.reports-main{flex:1;}
-.report-empty{background:white;border-radius:16px;box-shadow:var(--shadow);padding:40px;text-align:center;color:var(--muted);}
-.report-empty .big{font-size:2.5rem;margin-bottom:12px;}
-.report-card{background:white;border-radius:16px;box-shadow:var(--shadow);padding:22px;margin-bottom:16px;}
-.report-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--border);}
-.report-client-name{font-size:1.2rem;font-weight:800;color:var(--primary);}
-.report-stats{display:flex;gap:10px;flex-wrap:wrap;}
-.stat-badge{padding:5px 12px;border-radius:20px;font-size:0.78rem;font-weight:700;}
-.stat-total{background:var(--primary-light);color:var(--primary);}
-.stat-upcoming{background:#dcfce7;color:#16a34a;}
-.stat-past{background:#f1f5f9;color:var(--muted);}
-.report-section{margin-bottom:18px;}
-.report-section-title{font-size:0.75rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
-.report-meeting-row{border:1.5px solid var(--border);border-radius:12px;padding:14px;margin-bottom:8px;transition:border-color 0.2s;}
-.report-meeting-row:hover{border-color:var(--primary);}
-.report-meeting-row.upcoming{border-left:4px solid var(--success);}
-.report-meeting-row.past{border-left:4px solid var(--border);}
-.report-meeting-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
-.report-meeting-date{font-weight:700;font-size:0.92rem;}
-.report-meeting-time{background:var(--primary-light);color:var(--primary);border-radius:8px;padding:3px 9px;font-size:0.78rem;font-weight:700;}
-.report-detail-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;}
-.report-guests{font-size:0.8rem;color:var(--muted);margin-bottom:4px;}
-.report-notes-box{background:#fefce8;border-left:3px solid #f59e0b;border-radius:6px;padding:8px 10px;font-size:0.82rem;color:#92400e;white-space:pre-wrap;margin-top:6px;}
-.report-deadline-box{background:#fff7ed;border-left:3px solid #ea580c;border-radius:6px;padding:7px 10px;font-size:0.8rem;color:#9a3412;margin-top:4px;}
-.report-link-chip{display:inline-flex;align-items:center;gap:4px;background:#f5f3ff;color:#7c3aed;border-radius:20px;padding:3px 10px;font-size:0.78rem;font-weight:600;text-decoration:none;border:1px solid #ddd6fe;transition:all 0.2s;margin:2px;}
-.report-link-chip:hover{background:#7c3aed;color:white;}
-.no-clients-msg{text-align:center;color:var(--muted);font-size:0.88rem;padding:20px 0;}
-.sidebar{width:300px;min-width:280px;background:white;border-right:1px solid var(--border);padding:20px 16px;display:flex;flex-direction:column;gap:14px;height:calc(100vh - 60px);overflow-y:auto;position:sticky;top:60px;}
+.tab-pane{display:none;flex:1;}
+.tab-pane.active{display:flex;}
+
+/* ── SCHEDULER SIDEBAR ── */
+.app-body{display:flex;flex:1;}
+.sidebar{width:300px;min-width:280px;background:white;border-right:1px solid var(--border);padding:20px 16px;display:flex;flex-direction:column;gap:14px;height:calc(100vh - 116px);overflow-y:auto;position:sticky;top:116px;}
 .sidebar h2{font-size:0.95rem;font-weight:700;}
-.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;}
 .field-label{font-size:0.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;}
 .field-input{width:100%;padding:8px 9px;border:1.5px solid var(--border);border-radius:9px;font-size:0.86rem;outline:none;transition:border 0.2s;background:var(--bg);}
 .field-input:focus{border-color:var(--primary);background:white;}
 .field-input.error-field{border-color:var(--danger)!important;background:#fff5f5;}
 select.field-input{cursor:pointer;}
+.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;}
 .day-preview{display:none;align-items:center;gap:8px;background:var(--primary-light);border-radius:10px;padding:8px 12px;}
 .day-preview.visible{display:flex;}
-.day-preview-label{font-size:0.78rem;color:var(--muted);font-weight:600;}
-.day-preview-value{font-size:0.9rem;font-weight:800;color:var(--primary);}
 .time-row{display:flex;gap:7px;align-items:flex-end;}
 .time-row .field-group{flex:1;}
 .time-display{padding:8px 9px;background:var(--primary-light);color:var(--primary);border-radius:9px;font-weight:700;font-size:0.86rem;white-space:nowrap;min-width:48px;text-align:center;}
@@ -125,102 +98,27 @@ select.field-input{cursor:pointer;}
 .spinner{display:inline-block;width:12px;height:12px;border:2px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin 0.6s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg);}}
 .client-section h3{font-size:0.75rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;}
-.client-list{display:flex;flex-direction:column;gap:7px;}
-.client-item{border-radius:10px;border:1.5px solid var(--border);overflow:hidden;transition:border-color 0.2s;}
-.client-item:hover{border-color:var(--primary);}
-.client-top{display:flex;align-items:center;padding:9px 11px;gap:8px;cursor:pointer;}
-.client-top:hover{background:var(--primary-light);}
-.client-info{flex:1;min-width:0;}
-.client-name{font-weight:600;font-size:0.86rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.client-time{font-size:0.74rem;color:var(--muted);margin-top:2px;}
-.btn-delete-meeting{display:block;width:100%;padding:7px 12px;background:#fef2f2;color:#dc2626;border:none;border-top:1px solid #fecaca;font-size:0.78rem;font-weight:700;cursor:pointer;text-align:center;transition:all 0.2s;min-width:0;}
-.btn-delete-meeting:hover{background:#dc2626;color:white;}
-.btn-reschedule-meeting{display:block;width:100%;padding:7px 12px;background:#eff6ff;color:#2563eb;border:none;border-top:1px solid #bfdbfe;font-size:0.78rem;font-weight:700;cursor:pointer;text-align:center;transition:all 0.2s;min-width:0;}
-.btn-reschedule-meeting:hover{background:#2563eb;color:white;}
-.btn-edit-guests{display:block;width:100%;padding:7px 12px;background:#f0fdf4;color:#16a34a;border:none;border-top:1px solid #bbf7d0;font-size:0.78rem;font-weight:700;cursor:pointer;text-align:center;transition:all 0.2s;min-width:0;}
-.btn-edit-guests:hover{background:#16a34a;color:white;}
+.client-list{display:flex;flex-direction:column;gap:6px;}
+.client-item{border-radius:10px;border:1.5px solid var(--border);padding:10px 12px;cursor:pointer;transition:all 0.2s;}
+.client-item:hover{border-color:var(--primary);background:var(--primary-light);}
+.client-item .ci-name{font-weight:700;font-size:0.88rem;}
+.client-item .ci-time{font-size:0.74rem;color:var(--muted);margin-top:2px;}
+.empty-clients{color:var(--muted);font-size:0.84rem;text-align:center;padding:18px 0;}
+
+/* ── GUESTS ── */
 .guests-section{margin-top:2px;}
 .guests-label{font-size:0.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;}
 .guest-row{display:flex;align-items:center;gap:6px;margin-bottom:6px;}
 .guest-row input{flex:1;padding:8px 9px;border:1.5px solid var(--border);border-radius:9px;font-size:0.84rem;outline:none;background:var(--bg);transition:border 0.2s;}
 .guest-row input:focus{border-color:var(--primary);background:white;}
-.btn-remove-guest{height:34px;padding:0 10px;border-radius:7px;border:1.5px solid #fecaca;background:#fef2f2;color:#dc2626;font-size:0.75rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s;font-weight:700;white-space:nowrap;}
-.btn-remove-guest:hover{background:#dc2626;color:white;border-color:#dc2626;}
+.btn-remove-guest{height:34px;padding:0 10px;border-radius:7px;border:1.5px solid #fecaca;background:#fef2f2;color:#dc2626;font-size:0.75rem;cursor:pointer;font-weight:700;white-space:nowrap;transition:all 0.2s;flex-shrink:0;}
+.btn-remove-guest:hover{background:#dc2626;color:white;}
 .btn-add-guest{width:100%;padding:7px;border:1.5px dashed var(--border);background:transparent;border-radius:9px;color:var(--muted);font-size:0.8rem;font-weight:600;cursor:pointer;transition:all 0.2s;margin-top:2px;}
 .btn-add-guest:hover{border-color:var(--primary);color:var(--primary);background:var(--primary-light);}
 .guest-tag{display:inline-flex;align-items:center;gap:5px;background:var(--primary-light);color:var(--primary);border-radius:20px;padding:3px 10px;font-size:0.78rem;font-weight:600;margin:2px 3px 2px 0;}
-.guest-tag .remove-tag{background:none;border:none;color:var(--primary);cursor:pointer;font-size:0.85rem;padding:0;line-height:1;opacity:0.6;}
-.guest-tag .remove-tag:hover{opacity:1;}
 .guests-display{display:flex;flex-wrap:wrap;margin-top:4px;}
-.btn-minutes{display:block;width:100%;padding:7px 12px;background:#fefce8;color:#ca8a04;border:none;border-top:1px solid #fde68a;font-size:0.78rem;font-weight:700;cursor:pointer;text-align:center;transition:all 0.2s;min-width:0;}
-.btn-minutes:hover{background:#ca8a04;color:white;}
-.btn-links{display:block;width:100%;padding:7px 12px;background:#f5f3ff;color:#7c3aed;border:none;border-top:1px solid #ddd6fe;font-size:0.78rem;font-weight:700;cursor:pointer;text-align:center;transition:all 0.2s;min-width:0;}
-.btn-links:hover{background:#7c3aed;color:white;}
-.btn-deadline{display:block;width:100%;padding:7px 12px;background:#fff7ed;color:#ea580c;border:none;font-size:0.78rem;font-weight:700;cursor:pointer;text-align:center;transition:all 0.2s;min-width:0;}
-.btn-deadline:hover{background:#ea580c;color:white;}
-.deadline-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:200;display:none;align-items:center;justify-content:center;padding:20px;}
-.deadline-overlay.show{display:flex;}
-.deadline-box{background:white;border-radius:20px;padding:28px 24px 22px;width:100%;max-width:380px;box-shadow:0 20px 50px rgba(0,0,0,0.2);}
-.deadline-box h4{font-size:1.05rem;font-weight:800;color:#ea580c;margin-bottom:4px;}
-.deadline-meeting-label{font-size:0.85rem;font-weight:700;color:var(--text);margin-bottom:16px;padding:10px 12px;background:#fff7ed;border-radius:10px;}
-.deadline-field{margin-bottom:14px;}
-.deadline-field label{display:block;font-size:0.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:5px;}
-.deadline-field input{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:0.92rem;outline:none;transition:border 0.2s;background:var(--bg);}
-.deadline-field input:focus{border-color:#ea580c;background:white;}
-.deadline-field input.error-field{border-color:var(--danger)!important;background:#fff5f5;}
-.deadline-date-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;}
-.deadline-date-row input,.deadline-date-row select{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:0.92rem;outline:none;transition:border 0.2s;background:var(--bg);}
-.deadline-date-row input:focus,.deadline-date-row select:focus{border-color:#ea580c;background:white;}
-.deadline-date-row input.error-field,.deadline-date-row select.error-field{border-color:var(--danger)!important;background:#fff5f5;}
-.deadline-time-note{font-size:0.78rem;color:var(--muted);background:var(--bg);border-radius:8px;padding:8px 12px;margin-bottom:14px;text-align:center;}
-.deadline-day-preview{display:none;align-items:center;gap:8px;background:#fff7ed;border-radius:10px;padding:8px 12px;margin-bottom:14px;}
-.deadline-day-preview.visible{display:flex;}
-.deadline-error{color:#b91c1c;font-size:0.8rem;background:#fef2f2;border:1px solid #fca5a5;padding:7px 11px;border-radius:8px;display:none;line-height:1.4;margin-bottom:12px;}
-.deadline-error.show{display:block!important;}
-.deadline-btns{display:flex;gap:10px;margin-top:6px;}
-.deadline-btns button{flex:1;padding:11px;border-radius:10px;font-size:0.92rem;font-weight:700;cursor:pointer;border:none;transition:all 0.2s;}
-.btn-deadline-cancel{background:var(--bg);color:var(--text);border:1.5px solid var(--border)!important;}
-.btn-deadline-cancel:hover{background:var(--border);}
-.btn-deadline-save{background:linear-gradient(135deg,#ea580c,#f59e0b);color:white;}
-.btn-deadline-save:hover{opacity:0.9;}
-.deadline-preview{background:#fff7ed;border-radius:8px;padding:8px 10px;font-size:0.8rem;color:#9a3412;margin-top:6px;border-left:3px solid #ea580c;display:flex;align-items:center;gap:6px;}
-.notes-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:200;display:none;align-items:center;justify-content:center;padding:20px;}
-.notes-overlay.show{display:flex;}
-.notes-box{background:white;border-radius:20px;padding:28px 24px 22px;width:100%;max-width:420px;box-shadow:0 20px 50px rgba(0,0,0,0.2);}
-.notes-box h4{font-size:1.05rem;font-weight:800;margin-bottom:4px;}
-.notes-meeting-label{font-size:0.85rem;font-weight:700;color:var(--text);margin-bottom:16px;padding:10px 12px;background:#fefce8;border-radius:10px;}
-.notes-box textarea{width:100%;height:160px;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:0.9rem;outline:none;resize:vertical;font-family:inherit;line-height:1.5;transition:border 0.2s;}
-.notes-box textarea:focus{border-color:#ca8a04;}
-.notes-char-count{font-size:0.72rem;color:var(--muted);text-align:right;margin-top:4px;}
-.notes-btns{display:flex;gap:10px;margin-top:14px;}
-.notes-btns button{flex:1;padding:11px;border-radius:10px;font-size:0.92rem;font-weight:700;cursor:pointer;border:none;transition:all 0.2s;}
-.btn-notes-cancel{background:var(--bg);color:var(--text);border:1.5px solid var(--border)!important;}
-.btn-notes-cancel:hover{background:var(--border);}
-.btn-notes-save{background:linear-gradient(135deg,#ca8a04,#f59e0b);color:white;}
-.btn-notes-save:hover{opacity:0.9;}
-.links-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:200;display:none;align-items:center;justify-content:center;padding:20px;}
-.links-overlay.show{display:flex;}
-.links-box{background:white;border-radius:20px;padding:28px 24px 22px;width:100%;max-width:420px;box-shadow:0 20px 50px rgba(0,0,0,0.2);max-height:90vh;overflow-y:auto;}
-.links-box h4{font-size:1.05rem;font-weight:800;color:#7c3aed;margin-bottom:4px;}
-.links-meeting-label{font-size:0.85rem;font-weight:700;color:var(--text);margin-bottom:16px;padding:10px 12px;background:#f5f3ff;border-radius:10px;}
-.link-row{display:grid;grid-template-columns:1fr 1fr auto;gap:6px;margin-bottom:8px;align-items:center;}
-.link-row input{padding:8px 10px;border:1.5px solid var(--border);border-radius:9px;font-size:0.84rem;outline:none;background:var(--bg);transition:border 0.2s;width:100%;}
-.link-row input:focus{border-color:#7c3aed;background:white;}
-.btn-remove-link{height:34px;padding:0 10px;border-radius:7px;border:1.5px solid #fecaca;background:#fef2f2;color:#dc2626;font-size:0.75rem;cursor:pointer;font-weight:700;white-space:nowrap;transition:all 0.2s;}
-.btn-remove-link:hover{background:#dc2626;color:white;border-color:#dc2626;}
-.btn-add-link{width:100%;padding:7px;border:1.5px dashed var(--border);background:transparent;border-radius:9px;color:var(--muted);font-size:0.8rem;font-weight:600;cursor:pointer;transition:all 0.2s;margin-top:2px;}
-.btn-add-link:hover{border-color:#7c3aed;color:#7c3aed;background:#f5f3ff;}
-.links-btns{display:flex;gap:10px;margin-top:14px;}
-.links-btns button{flex:1;padding:11px;border-radius:10px;font-size:0.92rem;font-weight:700;cursor:pointer;border:none;transition:all 0.2s;}
-.btn-links-cancel{background:var(--bg);color:var(--text);border:1.5px solid var(--border)!important;}
-.btn-links-cancel:hover{background:var(--border);}
-.btn-links-save{background:linear-gradient(135deg,#7c3aed,var(--accent));color:white;}
-.btn-links-save:hover{opacity:0.9;}
-.notes-preview{background:#fefce8;border-radius:8px;padding:8px 10px;font-size:0.8rem;color:#92400e;margin-top:6px;line-height:1.5;white-space:pre-wrap;border-left:3px solid #f59e0b;}
-.links-preview{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;}
-.link-chip{display:inline-flex;align-items:center;gap:4px;background:#f5f3ff;color:#7c3aed;border-radius:20px;padding:3px 10px;font-size:0.78rem;font-weight:600;text-decoration:none;border:1px solid #ddd6fe;transition:all 0.2s;}
-.link-chip:hover{background:#7c3aed;color:white;}
-.empty-clients{color:var(--muted);font-size:0.84rem;text-align:center;padding:18px 0;}
+
+/* ── CALENDAR ── */
 .main{flex:1;padding:24px;overflow-y:auto;}
 .calendar-card{background:white;border-radius:16px;box-shadow:var(--shadow);padding:20px;max-width:680px;}
 .cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
@@ -248,88 +146,122 @@ select.field-input{cursor:pointer;}
 .meeting-client{font-weight:700;font-size:0.92rem;}
 .meeting-meta{font-size:0.78rem;color:var(--muted);margin-top:2px;}
 .meeting-time-badge{background:var(--primary-light);color:var(--primary);border-radius:8px;padding:4px 9px;font-weight:700;font-size:0.8rem;white-space:nowrap;}
+.notes-preview{background:#fefce8;border-radius:8px;padding:8px 10px;font-size:0.8rem;color:#92400e;margin-top:6px;line-height:1.5;white-space:pre-wrap;border-left:3px solid #f59e0b;}
+.links-preview{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;}
+.link-chip{display:inline-flex;align-items:center;gap:4px;background:#f5f3ff;color:#7c3aed;border-radius:20px;padding:3px 10px;font-size:0.78rem;font-weight:600;text-decoration:none;border:1px solid #ddd6fe;transition:all 0.2s;}
+.link-chip:hover{background:#7c3aed;color:white;}
+.deadline-preview{background:#fff7ed;border-radius:8px;padding:8px 10px;font-size:0.8rem;color:#9a3412;margin-top:6px;border-left:3px solid #ea580c;}
 .no-meetings-day{text-align:center;padding:24px;color:var(--muted);}
 .no-meetings-day .big{font-size:1.8rem;margin-bottom:8px;}
-.confirm-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:200;display:none;align-items:center;justify-content:center;padding:20px;}
-.confirm-overlay.show{display:flex;}
-.confirm-box{background:white;border-radius:16px;padding:26px 24px 20px;width:100%;max-width:320px;box-shadow:0 20px 50px rgba(0,0,0,0.2);}
-.confirm-box h4{font-size:1rem;font-weight:800;margin-bottom:8px;}
-.confirm-box p{font-size:0.86rem;color:var(--muted);margin-bottom:18px;line-height:1.5;}
-.confirm-btns{display:flex;gap:10px;}
-.confirm-btns button{flex:1;padding:10px;border-radius:9px;font-size:0.88rem;font-weight:700;cursor:pointer;border:none;transition:all 0.2s;}
-.btn-cancel-confirm{background:var(--bg);color:var(--text);border:1.5px solid var(--border)!important;}
-.btn-cancel-confirm:hover{background:var(--border);}
-.btn-delete-confirm{background:var(--danger);color:white;}
-.btn-delete-confirm:hover{background:#dc2626;}
-.reschedule-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:200;display:none;align-items:center;justify-content:center;padding:20px;}
-.reschedule-overlay.show{display:flex;}
-.reschedule-box{background:white;border-radius:20px;padding:28px 24px 22px;width:100%;max-width:360px;box-shadow:0 20px 50px rgba(0,0,0,0.2);}
-.reschedule-box h4{font-size:1.05rem;font-weight:800;color:var(--primary);margin-bottom:4px;}
-.reschedule-client-label{font-size:0.88rem;font-weight:700;color:var(--text);margin-bottom:18px;padding:10px 12px;background:var(--primary-light);border-radius:10px;}
-.reschedule-form-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:14px;}
-.reschedule-field{margin-bottom:14px;}
-.reschedule-field label{display:block;font-size:0.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:5px;}
-.reschedule-field input,.reschedule-field select{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:0.92rem;outline:none;transition:border 0.2s;background:var(--bg);}
-.reschedule-field input:focus,.reschedule-field select:focus{border-color:var(--primary);background:white;}
-.reschedule-field input.error-field,.reschedule-field select.error-field{border-color:var(--danger)!important;background:#fff5f5;}
-.reschedule-time-row{display:flex;align-items:center;gap:8px;}
-.reschedule-time-row input{flex:1;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:0.92rem;outline:none;transition:border 0.2s;background:var(--bg);}
-.reschedule-time-row input:focus{border-color:var(--primary);background:white;}
-.reschedule-time-row input.error-field{border-color:var(--danger)!important;background:#fff5f5;}
-.reschedule-time-row span{font-weight:800;color:var(--muted);font-size:1.1rem;}
-.reschedule-day-preview{display:none;align-items:center;gap:8px;background:var(--primary-light);border-radius:10px;padding:8px 12px;margin-bottom:14px;}
-.reschedule-day-preview.visible{display:flex;}
-.reschedule-error{color:#b91c1c;font-size:0.8rem;background:#fef2f2;border:1px solid #fca5a5;padding:7px 11px;border-radius:8px;display:none;line-height:1.4;margin-bottom:12px;}
-.reschedule-error.show{display:block!important;}
-.reschedule-btns{display:flex;gap:10px;margin-top:6px;}
-.reschedule-btns button{flex:1;padding:11px;border-radius:10px;font-size:0.92rem;font-weight:700;cursor:pointer;border:none;transition:all 0.2s;}
-.btn-reschedule-cancel{background:var(--bg);color:var(--text);border:1.5px solid var(--border)!important;}
-.btn-reschedule-cancel:hover{background:var(--border);}
-.btn-reschedule-save{background:linear-gradient(135deg,#2563eb,var(--accent));color:white;}
-.btn-reschedule-save:hover{opacity:0.9;}
-.editguests-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:200;display:none;align-items:center;justify-content:center;padding:20px;}
-.editguests-overlay.show{display:flex;}
-.editguests-box{background:white;border-radius:20px;padding:28px 24px 22px;width:100%;max-width:360px;box-shadow:0 20px 50px rgba(0,0,0,0.2);}
-.editguests-box h4{font-size:1.05rem;font-weight:800;color:#16a34a;margin-bottom:4px;}
-.editguests-client-label{font-size:0.88rem;font-weight:700;color:var(--text);margin-bottom:18px;padding:10px 12px;background:#f0fdf4;border-radius:10px;}
-.editguests-btns{display:flex;gap:10px;margin-top:14px;}
-.editguests-btns button{flex:1;padding:11px;border-radius:10px;font-size:0.92rem;font-weight:700;cursor:pointer;border:none;transition:all 0.2s;}
-.btn-editguests-cancel{background:var(--bg);color:var(--text);border:1.5px solid var(--border)!important;}
-.btn-editguests-cancel:hover{background:var(--border);}
-.btn-editguests-save{background:linear-gradient(135deg,#16a34a,#06b6d4);color:white;}
-.btn-editguests-save:hover{opacity:0.9;}
-.quick-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:200;display:none;align-items:center;justify-content:center;padding:20px;}
-.quick-overlay.show{display:flex;}
-.quick-box{background:white;border-radius:20px;padding:28px 24px 22px;width:100%;max-width:360px;box-shadow:0 20px 50px rgba(0,0,0,0.2);}
-.quick-box h4{font-size:1.05rem;font-weight:800;color:var(--primary);margin-bottom:4px;}
-.quick-date-label{font-size:0.82rem;color:var(--muted);margin-bottom:18px;}
-.quick-field{margin-bottom:14px;}
-.quick-field label{display:block;font-size:0.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:5px;}
-.quick-field input{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:0.95rem;outline:none;transition:border 0.2s;background:var(--bg);}
-.quick-field input:focus{border-color:var(--primary);background:white;}
-.quick-field input.error-field{border-color:var(--danger)!important;background:#fff5f5;}
-.quick-time-row{display:flex;align-items:center;gap:8px;}
-.quick-time-row input{flex:1;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:0.95rem;outline:none;transition:border 0.2s;background:var(--bg);}
-.quick-time-row input:focus{border-color:var(--primary);background:white;}
-.quick-time-row input.error-field{border-color:var(--danger)!important;background:#fff5f5;}
-.quick-time-row span{font-weight:800;color:var(--muted);font-size:1.1rem;}
-.quick-error{color:#b91c1c;font-size:0.8rem;background:#fef2f2;border:1px solid #fca5a5;padding:7px 11px;border-radius:8px;display:none;line-height:1.4;margin-bottom:12px;}
-.quick-error.show{display:block!important;}
-.quick-btns{display:flex;gap:10px;margin-top:6px;}
-.quick-btns button{flex:1;padding:11px;border-radius:10px;font-size:0.92rem;font-weight:700;cursor:pointer;border:none;transition:all 0.2s;}
-.btn-quick-cancel{background:var(--bg);color:var(--text);border:1.5px solid var(--border)!important;}
-.btn-quick-cancel:hover{background:var(--border);}
-.btn-quick-save{background:linear-gradient(135deg,var(--primary),var(--accent));color:white;}
-.btn-quick-save:hover{opacity:0.9;}
+
+/* ── MEETING ACTION BUTTONS ── */
+.meeting-actions{display:flex;flex-direction:column;}
+.m-btn{display:block;width:100%;padding:9px 14px;border:none;font-size:0.82rem;font-weight:700;cursor:pointer;text-align:left;transition:all 0.2s;border-top:1px solid var(--border);}
+.m-btn:hover{filter:brightness(0.93);}
+.m-btn-reschedule{background:#eff6ff;color:#2563eb;}
+.m-btn-reschedule:hover{background:#2563eb;color:white;}
+.m-btn-guests{background:#f0fdf4;color:#16a34a;}
+.m-btn-guests:hover{background:#16a34a;color:white;}
+.m-btn-notes{background:#fefce8;color:#ca8a04;}
+.m-btn-notes:hover{background:#ca8a04;color:white;}
+.m-btn-links{background:#f5f3ff;color:#7c3aed;}
+.m-btn-links:hover{background:#7c3aed;color:white;}
+.m-btn-deadline{background:#fff7ed;color:#ea580c;}
+.m-btn-deadline:hover{background:#ea580c;color:white;}
+.m-btn-delete{background:#fef2f2;color:#dc2626;}
+.m-btn-delete:hover{background:#dc2626;color:white;}
+
+/* ── CLIENT REPORTS TAB ── */
+#reports-tab{flex:1;padding:24px;overflow-y:auto;display:flex;gap:20px;}
+.reports-sidebar{width:260px;min-width:220px;background:white;border-radius:16px;box-shadow:var(--shadow);padding:16px;height:fit-content;position:sticky;top:24px;}
+.reports-sidebar h3{font-size:0.85rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:12px;}
+.reports-search{width:100%;padding:8px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:0.88rem;outline:none;margin-bottom:12px;transition:border 0.2s;}
+.reports-search:focus{border-color:var(--primary);}
+.client-report-item{padding:10px 12px;border-radius:10px;cursor:pointer;transition:all 0.2s;border:1.5px solid transparent;margin-bottom:4px;}
+.client-report-item:hover{background:var(--primary-light);border-color:var(--primary);}
+.client-report-item.active{background:var(--primary);color:white;}
+.client-report-item .cr-name{font-weight:700;font-size:0.9rem;}
+.client-report-item .cr-count{font-size:0.75rem;opacity:0.7;margin-top:2px;}
+.reports-main{flex:1;}
+.report-empty{background:white;border-radius:16px;box-shadow:var(--shadow);padding:40px;text-align:center;color:var(--muted);}
+.report-empty .big{font-size:2.5rem;margin-bottom:12px;}
+.report-card{background:white;border-radius:16px;box-shadow:var(--shadow);padding:22px;margin-bottom:16px;}
+.report-card-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--border);}
+.report-client-name{font-size:1.2rem;font-weight:800;color:var(--primary);}
+.report-stats{display:flex;gap:8px;flex-wrap:wrap;}
+.stat-badge{padding:5px 12px;border-radius:20px;font-size:0.78rem;font-weight:700;}
+.stat-total{background:var(--primary-light);color:var(--primary);}
+.stat-upcoming{background:#dcfce7;color:#16a34a;}
+.stat-past{background:#f1f5f9;color:var(--muted);}
+.report-section{margin-bottom:18px;}
+.report-section-title{font-size:0.75rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;}
+.report-meeting-row{border:1.5px solid var(--border);border-radius:12px;padding:14px;margin-bottom:8px;transition:border-color 0.2s;}
+.report-meeting-row:hover{border-color:var(--primary);}
+.report-meeting-row.upcoming{border-left:4px solid var(--success);}
+.report-meeting-row.past{border-left:4px solid #cbd5e1;}
+.report-meeting-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;flex-wrap:wrap;gap:6px;}
+.report-meeting-date{font-weight:700;font-size:0.92rem;}
+.report-meeting-time{background:var(--primary-light);color:var(--primary);border-radius:8px;padding:3px 9px;font-size:0.78rem;font-weight:700;}
+.report-guests{font-size:0.8rem;color:var(--muted);margin-bottom:4px;}
+.report-notes-box{background:#fefce8;border-left:3px solid #f59e0b;border-radius:6px;padding:8px 10px;font-size:0.82rem;color:#92400e;white-space:pre-wrap;margin-top:6px;}
+.report-deadline-box{background:#fff7ed;border-left:3px solid #ea580c;border-radius:6px;padding:7px 10px;font-size:0.8rem;color:#9a3412;margin-top:4px;}
+.report-link-chip{display:inline-flex;align-items:center;gap:4px;background:#f5f3ff;color:#7c3aed;border-radius:20px;padding:3px 10px;font-size:0.78rem;font-weight:600;text-decoration:none;border:1px solid #ddd6fe;transition:all 0.2s;margin:2px;}
+.report-link-chip:hover{background:#7c3aed;color:white;}
+.no-clients-msg{text-align:center;color:var(--muted);font-size:0.88rem;padding:20px 0;}
+
+/* ── OVERLAYS ── */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:200;display:none;align-items:center;justify-content:center;padding:20px;}
+.overlay.show{display:flex;}
+.overlay-box{background:white;border-radius:20px;padding:28px 24px 22px;width:100%;max-width:380px;box-shadow:0 20px 50px rgba(0,0,0,0.2);max-height:90vh;overflow-y:auto;}
+.overlay-box h4{font-size:1.05rem;font-weight:800;margin-bottom:4px;}
+.overlay-label{font-size:0.85rem;font-weight:700;color:var(--text);margin-bottom:16px;padding:10px 12px;border-radius:10px;}
+.overlay-field{margin-bottom:14px;}
+.overlay-field label{display:block;font-size:0.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:5px;}
+.overlay-field input,.overlay-field textarea,.overlay-field select{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:0.92rem;outline:none;transition:border 0.2s;background:var(--bg);font-family:inherit;}
+.overlay-field input:focus,.overlay-field textarea:focus,.overlay-field select:focus{border-color:var(--primary);background:white;}
+.overlay-field input.err,.overlay-field select.err{border-color:var(--danger)!important;background:#fff5f5;}
+.overlay-field textarea{height:150px;resize:vertical;line-height:1.5;}
+.overlay-date-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;}
+.overlay-date-row input,.overlay-date-row select{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:0.9rem;outline:none;transition:border 0.2s;background:var(--bg);}
+.overlay-date-row input:focus,.overlay-date-row select:focus{border-color:var(--primary);background:white;}
+.overlay-date-row input.err,.overlay-date-row select.err{border-color:var(--danger)!important;background:#fff5f5;}
+.overlay-day-preview{display:none;align-items:center;gap:8px;border-radius:10px;padding:8px 12px;margin-bottom:14px;background:var(--primary-light);}
+.overlay-day-preview.visible{display:flex;}
+.overlay-time-row{display:flex;align-items:center;gap:8px;}
+.overlay-time-row input{flex:1;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:0.92rem;outline:none;transition:border 0.2s;background:var(--bg);}
+.overlay-time-row input:focus{border-color:var(--primary);background:white;}
+.overlay-time-row input.err{border-color:var(--danger)!important;background:#fff5f5;}
+.overlay-time-row span{font-weight:800;color:var(--muted);font-size:1.1rem;}
+.overlay-error{color:#b91c1c;font-size:0.8rem;background:#fef2f2;border:1px solid #fca5a5;padding:7px 11px;border-radius:8px;display:none;line-height:1.4;margin-bottom:12px;}
+.overlay-error.show{display:block!important;}
+.overlay-btns{display:flex;gap:10px;margin-top:14px;}
+.overlay-btns button{flex:1;padding:11px;border-radius:10px;font-size:0.92rem;font-weight:700;cursor:pointer;border:none;transition:all 0.2s;}
+.btn-ov-cancel{background:var(--bg);color:var(--text);border:1.5px solid var(--border)!important;}
+.btn-ov-cancel:hover{background:var(--border);}
+.char-count{font-size:0.72rem;color:var(--muted);text-align:right;margin-top:4px;}
+.time-note{font-size:0.78rem;color:var(--muted);background:var(--bg);border-radius:8px;padding:8px 12px;margin-bottom:14px;text-align:center;}
+.link-row{display:grid;grid-template-columns:1fr 1fr auto;gap:6px;margin-bottom:8px;align-items:center;}
+.link-row input{padding:8px 10px;border:1.5px solid var(--border);border-radius:9px;font-size:0.84rem;outline:none;background:var(--bg);transition:border 0.2s;width:100%;}
+.link-row input:focus{border-color:#7c3aed;background:white;}
+.btn-remove-link{height:34px;padding:0 10px;border-radius:7px;border:1.5px solid #fecaca;background:#fef2f2;color:#dc2626;font-size:0.75rem;cursor:pointer;font-weight:700;white-space:nowrap;transition:all 0.2s;}
+.btn-remove-link:hover{background:#dc2626;color:white;}
+.btn-add-link{width:100%;padding:7px;border:1.5px dashed var(--border);background:transparent;border-radius:9px;color:var(--muted);font-size:0.8rem;font-weight:600;cursor:pointer;transition:all 0.2s;margin-top:2px;}
+.btn-add-link:hover{border-color:#7c3aed;color:#7c3aed;background:#f5f3ff;}
+
+/* ── TOAST ── */
 #toast{position:fixed;bottom:24px;right:16px;left:16px;max-width:360px;margin:0 auto;background:#1e293b;color:white;padding:12px 18px;border-radius:12px;font-size:0.88rem;font-weight:600;box-shadow:0 8px 30px rgba(0,0,0,0.2);z-index:9999;transform:translateY(80px);opacity:0;transition:all 0.3s;pointer-events:none;text-align:center;}
 #toast.show{transform:translateY(0);opacity:1;}
 #toast.success{background:var(--success);}
+
+/* ── RESPONSIVE ── */
 @media(max-width:768px){
   .app-body{flex-direction:column;}
   .sidebar{width:100%;height:auto;position:static;border-right:none;border-bottom:1px solid var(--border);}
   .main{padding:16px;}
   .username{display:none;}
   .auth-card{width:100%;max-width:380px;padding:32px 24px;}
+  #reports-tab{flex-direction:column;}
+  .reports-sidebar{width:100%;position:static;}
 }
 @media(max-width:400px){
   .form-row-3{grid-template-columns:1fr 1fr;}
@@ -339,6 +271,7 @@ select.field-input{cursor:pointer;}
 </head>
 <body>
 
+<!-- AUTH -->
 <div id="auth-screen">
   <div class="auth-card">
     <div class="auth-logo">
@@ -374,6 +307,7 @@ select.field-input{cursor:pointer;}
   </div>
 </div>
 
+<!-- APP -->
 <div id="app-screen">
   <header>
     <div class="header-brand">📅 MeetingDesk</div>
@@ -383,91 +317,95 @@ select.field-input{cursor:pointer;}
       <button class="btn-signout" onclick="signOut()">Sign Out</button>
     </div>
   </header>
-  <div class="tab-bar">
-    <button class="tab-btn active" onclick="switchMainTab('scheduler')">📅 Meeting Scheduler</button>
-    <button class="tab-btn" onclick="switchMainTab('reports')">📊 Client Reports</button>
-  </div>
-  <div class="tab-content active" id="tab-scheduler">
-  <div class="app-body">
-    <aside class="sidebar">
-      <h2>➕ Add Meeting</h2>
-      <div>
-        <div class="field-label">Client Name</div>
-        <input class="field-input" id="client-name" placeholder="e.g. John Doe"/>
-      </div>
-      <div class="guests-section">
-        <div class="guests-label">Guest Names</div>
-        <div id="guest-rows"></div>
-        <button class="btn-add-guest" onclick="addGuestRow()">+ Add Guest</button>
-      </div>
-      <div class="form-row-3">
-        <div>
-          <div class="field-label">Date</div>
-          <input class="field-input" id="meet-date" type="number" min="1" max="31" placeholder="DD" oninput="updateDayPreview()"/>
-        </div>
-        <div>
-          <div class="field-label">Month</div>
-          <select class="field-input" id="meet-month" onchange="updateDayPreview()">
-            <option value="">MM</option>
-            <option value="1">Jan</option><option value="2">Feb</option><option value="3">Mar</option>
-            <option value="4">Apr</option><option value="5">May</option><option value="6">Jun</option>
-            <option value="7">Jul</option><option value="8">Aug</option><option value="9">Sep</option>
-            <option value="10">Oct</option><option value="11">Nov</option><option value="12">Dec</option>
-          </select>
-        </div>
-        <div>
-          <div class="field-label">Year</div>
-          <input class="field-input" id="meet-year" type="number" placeholder="YYYY" value="2026" oninput="updateDayPreview()"/>
-        </div>
-      </div>
-      <div class="day-preview" id="day-preview">
-        <span>📅</span>
-        <span class="day-preview-label">Falls on</span>
-        <span class="day-preview-value" id="day-preview-value">—</span>
-      </div>
-      <div>
-        <div class="field-label">Time</div>
-        <div class="time-row">
-          <div class="field-group">
-            <input class="field-input" id="meet-hour" type="number" min="0" max="23" placeholder="HH" oninput="updateTimePreview()"/>
-          </div>
-          <span style="font-weight:700;color:var(--muted);padding-bottom:9px;">:</span>
-          <div class="field-group">
-            <input class="field-input" id="meet-min" type="number" min="0" max="59" placeholder="MM" oninput="updateTimePreview()"/>
-          </div>
-          <div class="time-display" id="time-preview">--:--</div>
-        </div>
-      </div>
-      <div class="add-error" id="add-error"></div>
-      <button class="btn-add" onclick="addMeeting()">+ Schedule Meeting</button>
-      <div class="sync-status" id="sync-status"></div>
-      <div class="client-section">
-        <h3>All Meetings</h3>
-        <div class="client-list" id="client-list">
-          <div class="empty-clients">No meetings yet.</div>
-        </div>
-      </div>
-    </aside>
-    <main class="main">
-      <div class="calendar-card">
-        <div class="cal-header">
-          <button class="cal-nav" onclick="changeMonth(-1)">←</button>
-          <div class="cal-title" id="cal-title"></div>
-          <button class="cal-nav" onclick="changeMonth(1)">→</button>
-        </div>
-        <div class="cal-grid" id="cal-grid"></div>
-      </div>
-      <div class="meeting-detail">
-        <h3 id="detail-title">🗓️ Your calendar awaits</h3>
-        <div id="detail-body">
-          <div class="no-meetings-day"><div class="big">🗓️</div>Add a client meeting to get started.</div>
-        </div>
-      </div>
-    </main>
-  </div>
-  </div><!-- end tab-scheduler -->
 
-  <div class="tab-content" id="tab-reports">
+  <div class="tab-bar">
+    <button class="tab-btn active" id="tab-btn-scheduler" onclick="switchMainTab('scheduler')">📅 Meeting Scheduler</button>
+    <button class="tab-btn" id="tab-btn-reports" onclick="switchMainTab('reports')">📊 Client Reports</button>
+  </div>
+
+  <!-- SCHEDULER TAB -->
+  <div class="tab-pane active" id="tab-scheduler">
+    <div class="app-body">
+      <aside class="sidebar">
+        <h2>➕ Add Meeting</h2>
+        <div>
+          <div class="field-label">Client Name</div>
+          <input class="field-input" id="client-name" placeholder="e.g. John Doe"/>
+        </div>
+        <div class="guests-section">
+          <div class="guests-label">Guest Names</div>
+          <div id="guest-rows"></div>
+          <button class="btn-add-guest" onclick="addGuestRow()">+ Add Guest</button>
+        </div>
+        <div class="form-row-3">
+          <div>
+            <div class="field-label">Date</div>
+            <input class="field-input" id="meet-date" type="number" min="1" max="31" placeholder="DD" oninput="updateDayPreview()"/>
+          </div>
+          <div>
+            <div class="field-label">Month</div>
+            <select class="field-input" id="meet-month" onchange="updateDayPreview()">
+              <option value="">MM</option>
+              <option value="1">Jan</option><option value="2">Feb</option><option value="3">Mar</option>
+              <option value="4">Apr</option><option value="5">May</option><option value="6">Jun</option>
+              <option value="7">Jul</option><option value="8">Aug</option><option value="9">Sep</option>
+              <option value="10">Oct</option><option value="11">Nov</option><option value="12">Dec</option>
+            </select>
+          </div>
+          <div>
+            <div class="field-label">Year</div>
+            <input class="field-input" id="meet-year" type="number" placeholder="YYYY" value="2026" oninput="updateDayPreview()"/>
+          </div>
+        </div>
+        <div class="day-preview" id="day-preview">
+          <span>📅</span>
+          <span style="font-size:0.78rem;color:var(--muted);font-weight:600;">Falls on</span>
+          <span style="font-size:0.9rem;font-weight:800;color:var(--primary);" id="day-preview-value">—</span>
+        </div>
+        <div>
+          <div class="field-label">Time</div>
+          <div class="time-row">
+            <div class="field-group">
+              <input class="field-input" id="meet-hour" type="number" min="0" max="23" placeholder="HH" oninput="updateTimePreview()"/>
+            </div>
+            <span style="font-weight:700;color:var(--muted);padding-bottom:9px;">:</span>
+            <div class="field-group">
+              <input class="field-input" id="meet-min" type="number" min="0" max="59" placeholder="MM" oninput="updateTimePreview()"/>
+            </div>
+            <div class="time-display" id="time-preview">--:--</div>
+          </div>
+        </div>
+        <div class="add-error" id="add-error"></div>
+        <button class="btn-add" onclick="addMeeting()">+ Schedule Meeting</button>
+        <div class="sync-status" id="sync-status"></div>
+        <div class="client-section">
+          <h3>All Meetings</h3>
+          <div class="client-list" id="client-list">
+            <div class="empty-clients">No meetings yet.</div>
+          </div>
+        </div>
+      </aside>
+      <main class="main">
+        <div class="calendar-card">
+          <div class="cal-header">
+            <button class="cal-nav" onclick="changeMonth(-1)">←</button>
+            <div class="cal-title" id="cal-title"></div>
+            <button class="cal-nav" onclick="changeMonth(1)">→</button>
+          </div>
+          <div class="cal-grid" id="cal-grid"></div>
+        </div>
+        <div class="meeting-detail">
+          <h3 id="detail-title">🗓️ Your calendar awaits</h3>
+          <div id="detail-body">
+            <div class="no-meetings-day"><div class="big">🗓️</div>Add a client meeting to get started.</div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- REPORTS TAB -->
+  <div class="tab-pane" id="tab-reports">
     <div id="reports-tab">
       <div class="reports-sidebar">
         <h3>👥 Clients</h3>
@@ -478,152 +416,21 @@ select.field-input{cursor:pointer;}
         <div class="report-empty"><div class="big">📊</div><p>Select a client to view their full report.</p></div>
       </div>
     </div>
-  </div><!-- end tab-reports -->
-
-</div>
-
-<div class="notes-overlay" id="notes-overlay">
-  <div class="notes-box">
-    <h4>📝 Minutes of Meeting</h4>
-    <div class="notes-meeting-label" id="notes-meeting-label">Meeting</div>
-    <textarea id="notes-textarea" placeholder="Write your meeting notes, decisions, action items..."></textarea>
-    <div class="notes-char-count" id="notes-char-count">0 characters</div>
-    <div class="notes-btns">
-      <button class="btn-notes-cancel" onclick="closeNotes()">Cancel</button>
-      <button class="btn-notes-save" onclick="saveNotes()">Save Notes</button>
-    </div>
   </div>
 </div>
 
-<div class="links-overlay" id="links-overlay">
-  <div class="links-box">
-    <h4>🔗 Meeting Links</h4>
-    <div class="links-meeting-label" id="links-meeting-label">Meeting</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:6px;margin-bottom:6px;">
-      <div style="font-size:0.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;">Label</div>
-      <div style="font-size:0.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;">URL</div>
-      <div></div>
-    </div>
-    <div id="links-rows"></div>
-    <button class="btn-add-link" onclick="addLinkRow()">+ Add Link</button>
-    <div class="links-btns">
-      <button class="btn-links-cancel" onclick="closeLinks()">Cancel</button>
-      <button class="btn-links-save" onclick="saveLinks()">Save Links</button>
-    </div>
-  </div>
-</div>
-
-<div class="deadline-overlay" id="deadline-overlay">
-  <div class="deadline-box">
-    <h4>⏰ Add Deadline</h4>
-    <div class="deadline-meeting-label" id="deadline-meeting-label">Meeting</div>
-    <div class="deadline-field">
-      <label>What is the deadline for?</label>
-      <input type="text" id="deadline-task" placeholder="e.g. Submit proposal, Send report..."/>
-    </div>
-    <div class="deadline-field">
-      <label>Deadline Date</label>
-      <div class="deadline-date-row">
-        <input type="number" id="deadline-date" min="1" max="31" placeholder="DD" oninput="updateDeadlineDay()"/>
-        <select id="deadline-month" onchange="updateDeadlineDay()">
-          <option value="">MM</option>
-          <option value="1">Jan</option><option value="2">Feb</option><option value="3">Mar</option>
-          <option value="4">Apr</option><option value="5">May</option><option value="6">Jun</option>
-          <option value="7">Jul</option><option value="8">Aug</option><option value="9">Sep</option>
-          <option value="10">Oct</option><option value="11">Nov</option><option value="12">Dec</option>
-        </select>
-        <input type="number" id="deadline-year" placeholder="YYYY" value="2026" oninput="updateDeadlineDay()"/>
-      </div>
-    </div>
-    <div class="deadline-day-preview" id="deadline-day-preview">
-      <span>📅</span>
-      <span style="font-size:0.78rem;color:var(--muted);font-weight:600;">Falls on</span>
-      <span style="font-size:0.9rem;font-weight:800;color:#ea580c;" id="deadline-day-value">—</span>
-    </div>
-    <div class="deadline-time-note">🕘 Reminder will be set for <strong>9:00 AM</strong> on the deadline date</div>
-    <div class="deadline-error" id="deadline-error"></div>
-    <div class="deadline-btns">
-      <button class="btn-deadline-cancel" onclick="closeDeadline()">Cancel</button>
-      <button class="btn-deadline-save" onclick="saveDeadline()">Set Deadline</button>
-    </div>
-  </div>
-</div>
-
-<div class="editguests-overlay" id="editguests-overlay">
-  <div class="editguests-box">
-    <h4>👥 Edit Guests</h4>
-    <div class="editguests-client-label" id="editguests-client-label">👤 Client Name</div>
-    <div class="guests-label">Guest Names</div>
-    <div id="editguests-rows"></div>
-    <button class="btn-add-guest" onclick="addEditGuestRow()">+ Add Guest</button>
-    <div class="editguests-btns">
-      <button class="btn-editguests-cancel" onclick="closeEditGuests()">Cancel</button>
-      <button class="btn-editguests-save" onclick="saveEditGuests()">Save Guests</button>
-    </div>
-  </div>
-</div>
-
-<div class="reschedule-overlay" id="reschedule-overlay">
-  <div class="reschedule-box">
-    <h4>🔄 Reschedule Meeting</h4>
-    <div class="reschedule-client-label" id="reschedule-client-label">👤 Client Name</div>
-    <div class="reschedule-form-row">
-      <div>
-        <div style="font-size:0.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;margin-bottom:4px;">Date</div>
-        <input class="field-input" id="reschedule-date" type="number" min="1" max="31" placeholder="DD" oninput="updateRescheduleDay()"/>
-      </div>
-      <div>
-        <div style="font-size:0.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;margin-bottom:4px;">Month</div>
-        <select class="field-input" id="reschedule-month" onchange="updateRescheduleDay()">
-          <option value="">MM</option>
-          <option value="1">Jan</option><option value="2">Feb</option><option value="3">Mar</option>
-          <option value="4">Apr</option><option value="5">May</option><option value="6">Jun</option>
-          <option value="7">Jul</option><option value="8">Aug</option><option value="9">Sep</option>
-          <option value="10">Oct</option><option value="11">Nov</option><option value="12">Dec</option>
-        </select>
-      </div>
-      <div>
-        <div style="font-size:0.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;margin-bottom:4px;">Year</div>
-        <input class="field-input" id="reschedule-year" type="number" placeholder="YYYY" value="2026" oninput="updateRescheduleDay()"/>
-      </div>
-    </div>
-    <div class="reschedule-day-preview" id="reschedule-day-preview">
-      <span>📅</span>
-      <span style="font-size:0.78rem;color:var(--muted);font-weight:600;">Falls on</span>
-      <span style="font-size:0.9rem;font-weight:800;color:var(--primary);" id="reschedule-day-value">—</span>
-    </div>
-    <div class="reschedule-field">
-      <label>Time</label>
-      <div class="reschedule-time-row">
-        <input type="number" id="reschedule-hour" min="0" max="23" placeholder="HH"/>
-        <span>:</span>
-        <input type="number" id="reschedule-min" min="0" max="59" placeholder="MM"/>
-      </div>
-    </div>
-    <div class="guests-section" style="margin-bottom:14px;">
-      <div class="guests-label">Guests</div>
-      <div id="reschedule-guest-rows"></div>
-      <button class="btn-add-guest" onclick="addRescheduleGuestRow()">+ Add Guest</button>
-    </div>
-    <div class="reschedule-error" id="reschedule-error"></div>
-    <div class="reschedule-btns">
-      <button class="btn-reschedule-cancel" onclick="closeReschedule()">Cancel</button>
-      <button class="btn-reschedule-save" onclick="saveReschedule()">Reschedule</button>
-    </div>
-  </div>
-</div>
-
-<div class="quick-overlay" id="quick-overlay">
-  <div class="quick-box">
-    <h4>📅 Quick Add Meeting</h4>
-    <div class="quick-date-label" id="quick-date-label">Monday, 1 January 2026</div>
-    <div class="quick-field">
+<!-- QUICK ADD POPUP -->
+<div class="overlay" id="quick-overlay">
+  <div class="overlay-box">
+    <h4 style="color:var(--primary);">📅 Quick Add Meeting</h4>
+    <div class="overlay-label" style="background:var(--primary-light);" id="quick-date-label">Date</div>
+    <div class="overlay-field">
       <label>Client Name</label>
       <input type="text" id="quick-name" placeholder="e.g. John Doe"/>
     </div>
-    <div class="quick-field">
+    <div class="overlay-field">
       <label>Time</label>
-      <div class="quick-time-row">
+      <div class="overlay-time-row">
         <input type="number" id="quick-hour" min="0" max="23" placeholder="HH"/>
         <span>:</span>
         <input type="number" id="quick-min" min="0" max="59" placeholder="MM"/>
@@ -634,21 +441,148 @@ select.field-input{cursor:pointer;}
       <div id="quick-guest-rows"></div>
       <button class="btn-add-guest" onclick="addQuickGuestRow()">+ Add Guest</button>
     </div>
-    <div class="quick-error" id="quick-error"></div>
-    <div class="quick-btns">
-      <button class="btn-quick-cancel" onclick="closeQuick()">Cancel</button>
-      <button class="btn-quick-save" onclick="saveQuick()">Schedule</button>
+    <div class="overlay-error" id="quick-error"></div>
+    <div class="overlay-btns">
+      <button class="btn-ov-cancel" onclick="closeQuick()">Cancel</button>
+      <button style="background:linear-gradient(135deg,var(--primary),var(--accent));color:white;" onclick="saveQuick()">Schedule</button>
     </div>
   </div>
 </div>
 
-<div class="confirm-overlay" id="confirm-overlay">
-  <div class="confirm-box">
+<!-- RESCHEDULE POPUP -->
+<div class="overlay" id="reschedule-overlay">
+  <div class="overlay-box">
+    <h4 style="color:var(--primary);">🔄 Reschedule Meeting</h4>
+    <div class="overlay-label" style="background:var(--primary-light);" id="reschedule-label">Client</div>
+    <div class="overlay-field">
+      <label>New Date</label>
+      <div class="overlay-date-row">
+        <input type="number" id="rs-date" min="1" max="31" placeholder="DD" oninput="updateOverlayDay('rs')"/>
+        <select id="rs-month" onchange="updateOverlayDay('rs')">
+          <option value="">MM</option>
+          <option value="1">Jan</option><option value="2">Feb</option><option value="3">Mar</option>
+          <option value="4">Apr</option><option value="5">May</option><option value="6">Jun</option>
+          <option value="7">Jul</option><option value="8">Aug</option><option value="9">Sep</option>
+          <option value="10">Oct</option><option value="11">Nov</option><option value="12">Dec</option>
+        </select>
+        <input type="number" id="rs-year" placeholder="YYYY" value="2026" oninput="updateOverlayDay('rs')"/>
+      </div>
+    </div>
+    <div class="overlay-day-preview" id="rs-day-preview">
+      <span>📅</span><span style="font-size:0.78rem;color:var(--muted);font-weight:600;">Falls on</span>
+      <span style="font-size:0.9rem;font-weight:800;color:var(--primary);" id="rs-day-value">—</span>
+    </div>
+    <div class="overlay-field">
+      <label>New Time</label>
+      <div class="overlay-time-row">
+        <input type="number" id="rs-hour" min="0" max="23" placeholder="HH"/>
+        <span>:</span>
+        <input type="number" id="rs-min" min="0" max="59" placeholder="MM"/>
+      </div>
+    </div>
+    <div class="overlay-error" id="rs-error"></div>
+    <div class="overlay-btns">
+      <button class="btn-ov-cancel" onclick="closeOverlay('reschedule-overlay')">Cancel</button>
+      <button style="background:linear-gradient(135deg,#2563eb,var(--accent));color:white;" onclick="saveReschedule()">Reschedule</button>
+    </div>
+  </div>
+</div>
+
+<!-- GUESTS POPUP -->
+<div class="overlay" id="guests-overlay">
+  <div class="overlay-box">
+    <h4 style="color:#16a34a;">👥 Edit Guests</h4>
+    <div class="overlay-label" style="background:#f0fdf4;" id="guests-label">Client</div>
+    <div class="guests-label">Guest Names</div>
+    <div id="guests-edit-rows"></div>
+    <button class="btn-add-guest" onclick="addEditGuestRow()">+ Add Guest</button>
+    <div class="overlay-btns">
+      <button class="btn-ov-cancel" onclick="closeOverlay('guests-overlay')">Cancel</button>
+      <button style="background:linear-gradient(135deg,#16a34a,var(--accent));color:white;" onclick="saveGuests()">Save Guests</button>
+    </div>
+  </div>
+</div>
+
+<!-- NOTES POPUP -->
+<div class="overlay" id="notes-overlay">
+  <div class="overlay-box">
+    <h4 style="color:#ca8a04;">📝 Minutes of Meeting</h4>
+    <div class="overlay-label" style="background:#fefce8;" id="notes-label">Client</div>
+    <div class="overlay-field">
+      <label>Notes</label>
+      <textarea id="notes-textarea" placeholder="Write your meeting notes, decisions, action items..."></textarea>
+    </div>
+    <div class="char-count" id="notes-char-count">0 characters</div>
+    <div class="overlay-btns">
+      <button class="btn-ov-cancel" onclick="closeOverlay('notes-overlay')">Cancel</button>
+      <button style="background:linear-gradient(135deg,#ca8a04,#f59e0b);color:white;" onclick="saveNotes()">Save Notes</button>
+    </div>
+  </div>
+</div>
+
+<!-- LINKS POPUP -->
+<div class="overlay" id="links-overlay">
+  <div class="overlay-box">
+    <h4 style="color:#7c3aed;">🔗 Meeting Links</h4>
+    <div class="overlay-label" style="background:#f5f3ff;" id="links-label">Client</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:6px;margin-bottom:6px;">
+      <div style="font-size:0.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;">Label</div>
+      <div style="font-size:0.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;">URL</div>
+      <div></div>
+    </div>
+    <div id="links-rows"></div>
+    <button class="btn-add-link" onclick="addLinkRow()">+ Add Link</button>
+    <div class="overlay-btns">
+      <button class="btn-ov-cancel" onclick="closeOverlay('links-overlay')">Cancel</button>
+      <button style="background:linear-gradient(135deg,#7c3aed,var(--accent));color:white;" onclick="saveLinks()">Save Links</button>
+    </div>
+  </div>
+</div>
+
+<!-- DEADLINE POPUP -->
+<div class="overlay" id="deadline-overlay">
+  <div class="overlay-box">
+    <h4 style="color:#ea580c;">⏰ Add Deadline</h4>
+    <div class="overlay-label" style="background:#fff7ed;" id="deadline-label">Client</div>
+    <div class="overlay-field">
+      <label>What is the deadline for?</label>
+      <input type="text" id="dl-task" placeholder="e.g. Submit proposal, Send report..."/>
+    </div>
+    <div class="overlay-field">
+      <label>Deadline Date</label>
+      <div class="overlay-date-row">
+        <input type="number" id="dl-date" min="1" max="31" placeholder="DD" oninput="updateOverlayDay('dl')"/>
+        <select id="dl-month" onchange="updateOverlayDay('dl')">
+          <option value="">MM</option>
+          <option value="1">Jan</option><option value="2">Feb</option><option value="3">Mar</option>
+          <option value="4">Apr</option><option value="5">May</option><option value="6">Jun</option>
+          <option value="7">Jul</option><option value="8">Aug</option><option value="9">Sep</option>
+          <option value="10">Oct</option><option value="11">Nov</option><option value="12">Dec</option>
+        </select>
+        <input type="number" id="dl-year" placeholder="YYYY" value="2026" oninput="updateOverlayDay('dl')"/>
+      </div>
+    </div>
+    <div class="overlay-day-preview" id="dl-day-preview">
+      <span>📅</span><span style="font-size:0.78rem;color:var(--muted);font-weight:600;">Falls on</span>
+      <span style="font-size:0.9rem;font-weight:800;color:#ea580c;" id="dl-day-value">—</span>
+    </div>
+    <div class="time-note">🕘 Time is fixed at <strong>9:00 AM</strong></div>
+    <div class="overlay-error" id="dl-error"></div>
+    <div class="overlay-btns">
+      <button class="btn-ov-cancel" onclick="closeOverlay('deadline-overlay')">Cancel</button>
+      <button style="background:linear-gradient(135deg,#ea580c,#f59e0b);color:white;" onclick="saveDeadline()">Set Deadline</button>
+    </div>
+  </div>
+</div>
+
+<!-- DELETE CONFIRM -->
+<div class="overlay" id="confirm-overlay">
+  <div class="overlay-box" style="max-width:320px;">
     <h4>🗑️ Delete Meeting?</h4>
-    <p id="confirm-text">Are you sure? This cannot be undone.</p>
-    <div class="confirm-btns">
-      <button class="btn-cancel-confirm" onclick="closeConfirm()">Cancel</button>
-      <button class="btn-delete-confirm" onclick="confirmDelete()">Yes, Delete</button>
+    <p id="confirm-text" style="font-size:0.86rem;color:var(--muted);margin:10px 0 18px;line-height:1.5;"></p>
+    <div class="overlay-btns">
+      <button class="btn-ov-cancel" onclick="closeOverlay('confirm-overlay')">Cancel</button>
+      <button style="background:var(--danger);color:white;" onclick="confirmDelete()">Yes, Delete</button>
     </div>
   </div>
 </div>
@@ -656,34 +590,22 @@ select.field-input{cursor:pointer;}
 <div id="toast"></div>
 
 <script>
-let currentUser=null,meetings=[],calYear=new Date().getFullYear(),calMonth=new Date().getMonth(),selectedDay=null,pendingDeleteId=null;
+// ── CONSTANTS ──
 const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
-const DAYS_FULL=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-const DAYS_SHORT=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const DAYS=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const DAYS_S=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+// ── STATE ──
+let currentUser=null, meetings=[], calYear=new Date().getFullYear(), calMonth=new Date().getMonth(), selectedDay=null;
+let pendingId=null; // shared for all overlay actions
 let accounts=JSON.parse(localStorage.getItem('md_accounts')||'{}');
-let authMode='signin';
+let authMode='signin', activeReportClient=null;
 
-// ── SESSION PERSISTENCE ──
-// On page load, check if user was already logged in
-window.addEventListener('load', function(){
-  const savedSession = localStorage.getItem('md_session');
-  if(savedSession){
-    try{
-      const session = JSON.parse(savedSession);
-      if(session.email && accounts[session.email]){
-        loginAs(session.email, session.displayName || null);
-      }
-    }catch(e){
-      localStorage.removeItem('md_session');
-    }
-  }
-});
-
+// ── FIREBASE ──
 function setSyncStatus(msg){
   const el=document.getElementById('sync-status');
   el.innerHTML=msg?'<span class="spinner"></span>'+msg:'';
 }
-
 async function loadMeetingsFromFirebase(email){
   setSyncStatus('Loading meetings...');
   try{
@@ -691,59 +613,31 @@ async function loadMeetingsFromFirebase(email){
     const q=query(collection(window._db,'meetings'),where('userEmail','==',email));
     const snap=await getDocs(q);
     meetings=snap.docs.map(d=>d.data());
-    meetings.sort((a,b)=>new Date(a.year,a.month-1,a.date,...a.time.split(':').map(Number))-new Date(b.year,b.month-1,b.date,...b.time.split(':').map(Number)));
-  }catch(e){
-    console.error(e);
-    toast('Could not load meetings. Check your internet.','');
-  }
+    meetings.sort((a,b)=>cmpMeeting(a,b));
+  }catch(e){toast('Could not load meetings. Check your internet.');}
   setSyncStatus('');
 }
-
-async function saveMeetingToFirebase(meeting){
+async function saveMeetingToFirebase(m){
   setSyncStatus('Saving...');
   try{
     const {doc,setDoc,collection}=window._fsLib;
-    await setDoc(doc(collection(window._db,'meetings'),String(meeting.id)),meeting);
-  }catch(e){
-    console.error(e);
-    toast('Could not save meeting. Check your internet.','');
-  }
+    await setDoc(doc(collection(window._db,'meetings'),String(m.id)),m);
+  }catch(e){toast('Could not save. Check your internet.');}
   setSyncStatus('');
 }
-
 async function deleteMeetingFromFirebase(id){
   setSyncStatus('Deleting...');
   try{
     const {doc,deleteDoc,collection}=window._fsLib;
     await deleteDoc(doc(collection(window._db,'meetings'),String(id)));
-  }catch(e){
-    console.error(e);
-    toast('Could not delete. Check your internet.','');
-  }
+  }catch(e){toast('Could not delete. Check your internet.');}
   setSyncStatus('');
 }
-
-function updateDayPreview(){
-  const date=parseInt(document.getElementById('meet-date').value);
-  const month=parseInt(document.getElementById('meet-month').value);
-  const year=parseInt(document.getElementById('meet-year').value);
-  const preview=document.getElementById('day-preview');
-  if(date&&month&&year&&date>=1&&date<=31){
-    const d=new Date(year,month-1,date);
-    if(d.getDate()===date&&d.getMonth()===month-1){
-      document.getElementById('day-preview-value').textContent=DAYS_FULL[d.getDay()];
-      preview.classList.add('visible');return;
-    }
-  }
-  preview.classList.remove('visible');
+function cmpMeeting(a,b){
+  return new Date(a.year,a.month-1,a.date,...a.time.split(':'))-new Date(b.year,b.month-1,b.date,...b.time.split(':'));
 }
 
-function updateTimePreview(){
-  const h=document.getElementById('meet-hour').value;
-  const m=document.getElementById('meet-min').value;
-  document.getElementById('time-preview').textContent=(h!==''&&m!=='')?String(parseInt(h)).padStart(2,'0')+':'+String(parseInt(m)).padStart(2,'0'):'--:--';
-}
-
+// ── AUTH ──
 function switchTab(mode){
   authMode=mode;
   document.querySelectorAll('.auth-tab').forEach((t,i)=>t.classList.toggle('active',(mode==='signin'?0:1)===i));
@@ -753,7 +647,6 @@ function switchTab(mode){
 }
 function showAuthError(msg){const e=document.getElementById('auth-error');e.textContent=msg;e.style.display='block';}
 function hideAuthError(){document.getElementById('auth-error').style.display='none';}
-
 function handleAuth(){
   const email=document.getElementById('auth-email').value.trim();
   const pw=document.getElementById('auth-password').value;
@@ -762,27 +655,24 @@ function handleAuth(){
   if(authMode==='signup'){
     if(accounts[email]){showAuthError('Account already exists. Please sign in.');return;}
     if(pw.length<6){showAuthError('Password must be at least 6 characters.');return;}
-    accounts[email]={pw};
-    localStorage.setItem('md_accounts',JSON.stringify(accounts));
+    accounts[email]={pw};localStorage.setItem('md_accounts',JSON.stringify(accounts));
     loginAs(email,null);
   }else{
     if(!accounts[email]||accounts[email].pw!==pw){showAuthError('Invalid email or password.');return;}
     loginAs(email,null);
   }
 }
-
 function handleGoogleCredential(response){
   try{
     const payload=JSON.parse(atob(response.credential.split('.')[1]));
     const email=payload.email;
     const displayName=payload.given_name||payload.name||email.split('@')[0];
-    if(!accounts[email]) accounts[email]={pw:'__google__',googleName:displayName};
+    if(!accounts[email])accounts[email]={pw:'__google__',googleName:displayName};
     else accounts[email].googleName=displayName;
     localStorage.setItem('md_accounts',JSON.stringify(accounts));
     loginAs(email,displayName);
   }catch(e){showAuthError('Google sign-in failed. Please try again.');}
 }
-
 async function loginAs(email,displayName,silent){
   currentUser=email;
   const name=displayName||accounts[email]?.googleName||email.split('@')[0];
@@ -790,166 +680,157 @@ async function loginAs(email,displayName,silent){
   document.getElementById('user-avatar').textContent=name[0].toUpperCase();
   document.getElementById('user-name').textContent=name.charAt(0).toUpperCase()+name.slice(1);
   document.getElementById('auth-screen').style.display='none';
-  const app=document.getElementById('app-screen');
-  app.style.display='flex';app.style.flexDirection='column';
+  const appEl=document.getElementById('app-screen');
+  appEl.style.display='flex';appEl.style.flexDirection='column';
   renderCalendar();
   const doLoad=async()=>{
     await loadMeetingsFromFirebase(email);
     renderAll();
-    if(!silent) toast('Welcome, '+name+'! 👋','success');
+    if(!silent)toast('Welcome, '+name+'! 👋','success');
   };
-  if(window._dbReady) await doLoad();
+  if(window._dbReady)await doLoad();
   else window.addEventListener('firebase-ready',doLoad,{once:true});
 }
-
 function signOut(){
   currentUser=null;meetings=[];
-  localStorage.removeItem('md_session');
-  localStorage.removeItem('md_calstate');
+  localStorage.removeItem('md_session');localStorage.removeItem('md_calstate');
   document.getElementById('auth-screen').style.display='flex';
   document.getElementById('app-screen').style.display='none';
   document.getElementById('auth-password').value='';
 }
 
-function showAddError(msg){const e=document.getElementById('add-error');e.textContent=msg;e.classList.add('show');e.scrollIntoView({behavior:'smooth',block:'nearest'});}
-function clearAddError(){const e=document.getElementById('add-error');e.textContent='';e.classList.remove('show');}
-function markField(id,hasError){const el=document.getElementById(id);if(hasError)el.classList.add('error-field');else el.classList.remove('error-field');}
+// ── TABS ──
+function switchMainTab(tab){
+  document.getElementById('tab-btn-scheduler').classList.toggle('active',tab==='scheduler');
+  document.getElementById('tab-btn-reports').classList.toggle('active',tab==='reports');
+  document.getElementById('tab-scheduler').classList.toggle('active',tab==='scheduler');
+  document.getElementById('tab-reports').classList.toggle('active',tab==='reports');
+  if(tab==='reports'){activeReportClient=null;renderReportsList();}
+}
 
+// ── FORM HELPERS ──
+function updateDayPreview(){
+  const d=parseInt(document.getElementById('meet-date').value);
+  const m=parseInt(document.getElementById('meet-month').value);
+  const y=parseInt(document.getElementById('meet-year').value);
+  const el=document.getElementById('day-preview');
+  if(d&&m&&y){const dt=new Date(y,m-1,d);if(dt.getDate()===d&&dt.getMonth()===m-1){document.getElementById('day-preview-value').textContent=DAYS[dt.getDay()];el.classList.add('visible');return;}}
+  el.classList.remove('visible');
+}
+function updateTimePreview(){
+  const h=document.getElementById('meet-hour').value;
+  const m=document.getElementById('meet-min').value;
+  document.getElementById('time-preview').textContent=(h!==''&&m!=='')?pad(parseInt(h))+':'+pad(parseInt(m)):'--:--';
+}
+function updateOverlayDay(prefix){
+  const d=parseInt(document.getElementById(prefix+'-date').value);
+  const m=parseInt(document.getElementById(prefix+'-month').value);
+  const y=parseInt(document.getElementById(prefix+'-year').value);
+  const el=document.getElementById(prefix+'-day-preview');
+  if(d&&m&&y){const dt=new Date(y,m-1,d);if(dt.getDate()===d&&dt.getMonth()===m-1){document.getElementById(prefix+'-day-value').textContent=DAYS[dt.getDay()];el.classList.add('visible');return;}}
+  el.classList.remove('visible');
+}
+function pad(n){return String(n).padStart(2,'0');}
+function showAddError(msg){const e=document.getElementById('add-error');e.textContent=msg;e.classList.add('show');}
+function clearAddError(){const e=document.getElementById('add-error');e.textContent='';e.classList.remove('show');}
+function markField(id,err){document.getElementById(id).classList.toggle('error-field',err);}
+function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function toast(msg,type=''){const e=document.getElementById('toast');e.textContent=msg;e.className='show'+(type?' '+type:'');setTimeout(()=>e.className='',3000);}
+
+// ── GUEST HELPERS ──
+function addGuestRow(val=''){
+  const r=makeGuestRow(val,'guest-rows');document.getElementById('guest-rows').appendChild(r);r.querySelector('input').focus();
+}
+function addQuickGuestRow(val=''){
+  const r=makeGuestRow(val,'quick-guest-rows');document.getElementById('quick-guest-rows').appendChild(r);
+}
+function addEditGuestRow(val=''){
+  const r=makeGuestRow(val,'guests-edit-rows');document.getElementById('guests-edit-rows').appendChild(r);
+}
+function makeGuestRow(val,containerId){
+  const row=document.createElement('div');row.className='guest-row';
+  const inp=document.createElement('input');inp.type='text';inp.placeholder='Guest name';inp.value=val;
+  const btn=document.createElement('button');btn.className='btn-remove-guest';btn.textContent='Remove';
+  btn.onclick=function(){row.remove();};
+  row.appendChild(inp);row.appendChild(btn);return row;
+}
+function getGuests(containerId){
+  return Array.from(document.querySelectorAll('#'+containerId+' input')).map(i=>i.value.trim()).filter(Boolean);
+}
+function clearGuestRows(){document.getElementById('guest-rows').innerHTML='';}
+
+// ── ADD MEETING ──
 async function addMeeting(){
   clearAddError();
   ['client-name','meet-date','meet-month','meet-year','meet-hour','meet-min'].forEach(id=>markField(id,false));
-  const nameEl=document.getElementById('client-name');
-  const dateEl=document.getElementById('meet-date');
-  const monthEl=document.getElementById('meet-month');
-  const yearEl=document.getElementById('meet-year');
-  const hourEl=document.getElementById('meet-hour');
-  const minEl=document.getElementById('meet-min');
-  const name=nameEl.value.trim();
-  const date=parseInt(dateEl.value);
-  const month=parseInt(monthEl.value);
-  const year=parseInt(yearEl.value);
-  const hour=hourEl.value.trim();
-  const min=minEl.value.trim();
-  if(!name){markField('client-name',true);showAddError('Please enter the client name.');nameEl.focus();return;}
-  if(!dateEl.value||isNaN(date)||date<1||date>31){markField('meet-date',true);showAddError('Please enter a valid date (1-31).');dateEl.focus();return;}
-  if(!monthEl.value||isNaN(month)){markField('meet-month',true);showAddError('Please select a month.');monthEl.focus();return;}
-  if(!yearEl.value||isNaN(year)||year<2020||year>2100){markField('meet-year',true);showAddError('Please enter a valid year.');yearEl.focus();return;}
+  const name=document.getElementById('client-name').value.trim();
+  const date=parseInt(document.getElementById('meet-date').value);
+  const month=parseInt(document.getElementById('meet-month').value);
+  const year=parseInt(document.getElementById('meet-year').value);
+  const hour=document.getElementById('meet-hour').value.trim();
+  const min=document.getElementById('meet-min').value.trim();
+  if(!name){markField('client-name',true);showAddError('Please enter the client name.');return;}
+  if(!document.getElementById('meet-date').value||isNaN(date)||date<1||date>31){markField('meet-date',true);showAddError('Please enter a valid date (1-31).');return;}
+  if(!document.getElementById('meet-month').value||isNaN(month)){markField('meet-month',true);showAddError('Please select a month.');return;}
+  if(!document.getElementById('meet-year').value||isNaN(year)||year<2020||year>2100){markField('meet-year',true);showAddError('Please enter a valid year.');return;}
   const testDate=new Date(year,month-1,date);
   if(testDate.getDate()!==date||testDate.getMonth()!==month-1){markField('meet-date',true);markField('meet-month',true);showAddError(date+' '+MONTHS[month-1]+' '+year+' is not a valid date.');return;}
-  if(hour===''){markField('meet-hour',true);showAddError('Please enter the hour (0-23).');hourEl.focus();return;}
-  if(parseInt(hour)<0||parseInt(hour)>23){markField('meet-hour',true);showAddError('Hour must be between 0 and 23.');hourEl.focus();return;}
-  if(min===''){markField('meet-min',true);showAddError('Please enter the minutes (0-59).');minEl.focus();return;}
-  if(parseInt(min)<0||parseInt(min)>59){markField('meet-min',true);showAddError('Minutes must be between 0 and 59.');minEl.focus();return;}
-  const dayName=DAYS_FULL[testDate.getDay()];
-  const hh=String(parseInt(hour)).padStart(2,'0');
-  const mm=String(parseInt(min)).padStart(2,'0');
-  const guests=getGuests();
-  const meeting={id:Date.now(),userEmail:currentUser,name,day:dayName,date,month,year,time:hh+':'+mm,guests};
-  meetings.push(meeting);
-  meetings.sort((a,b)=>new Date(a.year,a.month-1,a.date,...a.time.split(':').map(Number))-new Date(b.year,b.month-1,b.date,...b.time.split(':').map(Number)));
-  clearForm();
-  calYear=year;calMonth=month-1;selectedDay=date;
-  saveCalState();renderAll();
+  if(hour===''){markField('meet-hour',true);showAddError('Please enter the hour (0-23).');return;}
+  if(parseInt(hour)<0||parseInt(hour)>23){markField('meet-hour',true);showAddError('Hour must be 0-23.');return;}
+  if(min===''){markField('meet-min',true);showAddError('Please enter the minutes (0-59).');return;}
+  if(parseInt(min)<0||parseInt(min)>59){markField('meet-min',true);showAddError('Minutes must be 0-59.');return;}
+  const guests=getGuests('guest-rows');
+  const meeting={id:Date.now(),userEmail:currentUser,name,day:DAYS[testDate.getDay()],date,month,year,time:pad(parseInt(hour))+':'+pad(parseInt(min)),guests,notes:'',links:[],deadlines:[]};
+  meetings.push(meeting);meetings.sort(cmpMeeting);
+  clearForm();calYear=year;calMonth=month-1;selectedDay=date;saveCalState();renderAll();
   await saveMeetingToFirebase(meeting);
-  toast('Meeting with '+name+' scheduled for '+dayName+'!','success');
+  toast('Meeting with '+name+' scheduled!','success');
 }
-
 function clearForm(){
   ['client-name','meet-date','meet-hour','meet-min'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('meet-month').value='';
-  document.getElementById('meet-year').value='2026';
+  document.getElementById('meet-month').value='';document.getElementById('meet-year').value='2026';
   document.getElementById('time-preview').textContent='--:--';
   document.getElementById('day-preview').classList.remove('visible');
-  clearGuestRows();
-  clearAddError();
+  clearGuestRows();clearAddError();
   ['client-name','meet-date','meet-month','meet-year','meet-hour','meet-min'].forEach(id=>markField(id,false));
 }
 
-function askDelete(id,name){
-  pendingDeleteId=id;
-  document.getElementById('confirm-text').textContent='Are you sure you want to delete the meeting with "'+name+'"? This cannot be undone.';
-  document.getElementById('confirm-overlay').classList.add('show');
-}
-function closeConfirm(){pendingDeleteId=null;document.getElementById('confirm-overlay').classList.remove('show');}
-async function confirmDelete(){
-  if(pendingDeleteId===null)return;
-  const id=pendingDeleteId;
-  meetings=meetings.filter(m=>m.id!=id);
-  pendingDeleteId=null;
-  document.getElementById('confirm-overlay').classList.remove('show');
-  renderAll();
-  await deleteMeetingFromFirebase(id);
-  toast('Meeting deleted.','');
-}
-document.getElementById('confirm-overlay').addEventListener('click',function(e){if(e.target===this)closeConfirm();});
-
+// ── RENDER ──
 function renderAll(){renderClientList();renderCalendar();renderDetail();}
-
-function makeMeetingButtons(id,safeName){
-  // returns html with data attributes; attachMeetingButtons wires up events after render
-  return '<div class="meeting-action-btns" data-id="'+id+'" data-name="'+safeName+'" style="display:flex;flex-direction:column;border-top:1px solid #e2e8f0;">'
-    +'<button class="btn-reschedule-meeting" data-fn="openReschedule" style="border-top:none;border-bottom:1px solid #bfdbfe;">🔄 Reschedule</button>'
-    +'<button class="btn-edit-guests" data-fn="openEditGuests" style="border-top:none;border-bottom:1px solid #bbf7d0;">👥 Guests</button>'
-    +'<button class="btn-minutes" data-fn="openNotes" style="border-top:none;border-bottom:1px solid #fde68a;">📝 Minutes of Meeting</button>'
-    +'<button class="btn-links" data-fn="openLinks" style="border-top:none;border-bottom:1px solid #ddd6fe;">🔗 Meeting Links</button>'
-    +'<button class="btn-deadline" data-fn="openDeadline" style="border-top:none;border-bottom:1px solid #fed7aa;">⏰ Deadline</button>'
-    +'<button class="btn-delete-meeting" data-fn="askDelete" style="border-top:none;">🗑️ Delete</button>'
-    +'</div>';
-}
-
-function attachMeetingButtons(container){
-  container.querySelectorAll('.meeting-action-btns').forEach(function(wrap){
-    var id=Number(wrap.dataset.id);
-    var name=wrap.dataset.name;
-    // find meeting by id
-    wrap.querySelectorAll('button[data-fn]').forEach(function(btn){
-      btn.addEventListener('click',function(e){
-        e.stopPropagation();
-        var fn=btn.dataset.fn;
-        if(fn==='openReschedule') openReschedule(id,name);
-        else if(fn==='openEditGuests') openEditGuests(id,name);
-        else if(fn==='openNotes') openNotes(id,name);
-        else if(fn==='openLinks') openLinks(id,name);
-        else if(fn==='openDeadline') openDeadline(id,name);
-        else if(fn==='askDelete') askDelete(id,name);
-      });
-    });
-  });
-}
 
 function renderClientList(){
   const list=document.getElementById('client-list');
   if(!meetings.length){list.innerHTML='<div class="empty-clients">No meetings yet.</div>';return;}
-  list.innerHTML=meetings.map(m=>{
-    return '<div class="client-item" onclick="jumpToMeeting('+m.id+')" style="cursor:pointer;padding:10px 12px;">'
-      +'<div class="client-name">'+escHtml(m.name)+'</div>'
-      +'<div class="client-time">'+m.day+', '+m.date+' '+MONTHS[m.month-1].slice(0,3)+' '+m.year+' &middot; '+m.time+'</div>'
-      +'</div>';
-  }).join('');
-  attachMeetingButtons(list);
+  list.innerHTML='';
+  meetings.forEach(function(m){
+    const item=document.createElement('div');
+    item.className='client-item';
+    item.innerHTML='<div class="ci-name">'+escHtml(m.name)+'</div>'
+      +'<div class="ci-time">'+m.day+', '+m.date+' '+MONTHS[m.month-1].slice(0,3)+' '+m.year+' · '+m.time+'</div>';
+    item.addEventListener('click',function(){jumpToMeeting(m.id);});
+    list.appendChild(item);
+  });
 }
 
 function jumpToMeeting(id){
-  const m=meetings.find(x=>x.id==id);
-  if(!m)return;
+  const m=meetings.find(x=>x.id==id);if(!m)return;
   calYear=m.year;calMonth=m.month-1;selectedDay=m.date;
   saveCalState();renderCalendar();renderDetail();
-  // Scroll to detail panel
-  setTimeout(()=>{
-    const detail=document.querySelector('.meeting-detail');
-    if(detail) detail.scrollIntoView({behavior:'smooth',block:'start'});
+  setTimeout(function(){
+    const el=document.querySelector('.meeting-detail');
+    if(el)el.scrollIntoView({behavior:'smooth',block:'start'});
   },100);
 }
 
 function renderCalendar(){
   document.getElementById('cal-title').textContent=MONTHS[calMonth]+' '+calYear;
   const grid=document.getElementById('cal-grid');
-  let html=DAYS_SHORT.map(d=>'<div class="cal-dow">'+d+'</div>').join('');
-  const firstDay=new Date(calYear,calMonth,1).getDay();
-  const dim=new Date(calYear,calMonth+1,0).getDate();
   const today=new Date();
   const mdays=new Set(meetings.filter(m=>m.year===calYear&&m.month===calMonth+1).map(m=>m.date));
-  for(let i=0;i<firstDay;i++) html+='<div class="cal-day empty"></div>';
+  const firstDay=new Date(calYear,calMonth,1).getDay();
+  const dim=new Date(calYear,calMonth+1,0).getDate();
+  let html=DAYS_S.map(d=>'<div class="cal-dow">'+d+'</div>').join('');
+  for(let i=0;i<firstDay;i++)html+='<div class="cal-day empty"></div>';
   for(let d=1;d<=dim;d++){
     const isT=d===today.getDate()&&calMonth===today.getMonth()&&calYear===today.getFullYear();
     const cls=['cal-day',isT?'today':'',mdays.has(d)?'has-meeting':'',d===selectedDay?'selected-day':''].filter(Boolean).join(' ');
@@ -960,36 +841,7 @@ function renderCalendar(){
 
 function selectDay(d){
   selectedDay=d;saveCalState();renderCalendar();renderDetail();
-  setTimeout(function(){ openQuick(d); }, 50);
-}
-
-function renderDetail(){
-  const t=document.getElementById('detail-title'),b=document.getElementById('detail-body');
-  if(!selectedDay){t.textContent='🗓️ Your calendar awaits';b.innerHTML='<div class="no-meetings-day"><div class="big">🗓️</div>Add a client meeting to get started.</div>';return;}
-  const dm=meetings.filter(m=>m.year===calYear&&m.month===calMonth+1&&m.date===selectedDay);
-  const dayName=DAYS_FULL[new Date(calYear,calMonth,selectedDay).getDay()];
-  t.textContent='📅 '+dayName+', '+selectedDay+' '+MONTHS[calMonth]+' '+calYear;
-  b.innerHTML=dm.length?dm.map(m=>{
-    const safeName=escHtml(m.name).replace(/'/g,'&#39;');
-    const guestHtml=m.guests&&m.guests.length?'<div class="guests-display" style="margin-top:4px;">'+m.guests.map(g=>'<span class="guest-tag">👤 '+escHtml(g)+'</span>').join('')+'</div>':'';
-    const notesHtml=m.notes?'<div class="notes-preview">📝 '+escHtml(m.notes)+'</div>':'';
-    const deadlineHtml=m.deadlines&&m.deadlines.length?'<div style="margin-top:6px;">'+m.deadlines.map(function(dl){return '<div class="deadline-preview">⏰ '+escHtml(dl.task)+' &mdash; '+dl.date+' '+MONTHS[dl.month-1].slice(0,3)+' '+dl.year+' at 9:00 AM</div>';}).join('')+'</div>':'';
-    const linksHtml=m.links&&m.links.length?'<div class="links-preview">'+m.links.map(l=>'<a class="link-chip" href="'+escHtml(l.url)+'" target="_blank">🔗 '+escHtml(l.label||l.url)+'</a>').join('')+'</div>':'';
-    return '<div class="meeting-card">'
-      +'<div class="meeting-card-top">'
-      +'<div class="meeting-dot"></div>'
-      +'<div class="meeting-info">'
-      +'<div class="meeting-client">'+escHtml(m.name)+'</div>'
-      +'<div class="meeting-meta">'+m.day+'</div>'
-      +guestHtml+notesHtml+deadlineHtml+linksHtml
-      +'</div>'
-      +'<div class="meeting-time-badge">🕐 '+m.time+'</div>'
-      +'</div>'
-      +makeMeetingButtons(m.id,safeName)
-      +'</div>';
-  }).join('')
-  :'<div class="no-meetings-day"><div class="big">☕</div>No meetings on this day.</div>';
-  attachMeetingButtons(b);
+  setTimeout(function(){openQuick(d);},50);
 }
 
 function changeMonth(dir){
@@ -999,36 +851,92 @@ function changeMonth(dir){
   selectedDay=null;saveCalState();renderCalendar();renderDetail();
 }
 
-// ── GUEST HELPERS ──
-function addGuestRow(val=''){
-  const container=document.getElementById('guest-rows');
-  const row=document.createElement('div');
-  row.className='guest-row';
-  row.innerHTML=`<input type="text" placeholder="Guest name" value="${escHtml(val)}"/><button class="btn-remove-guest" onclick="this.parentElement.remove()">Remove</button>`;
-  container.appendChild(row);
-  row.querySelector('input').focus();
-}
-function getGuests(){
-  return Array.from(document.querySelectorAll('#guest-rows .guest-row input')).map(i=>i.value.trim()).filter(Boolean);
-}
-function clearGuestRows(){
-  document.getElementById('guest-rows').innerHTML='';
+function renderDetail(){
+  const t=document.getElementById('detail-title');
+  const b=document.getElementById('detail-body');
+  if(!selectedDay){t.textContent='🗓️ Your calendar awaits';b.innerHTML='<div class="no-meetings-day"><div class="big">🗓️</div>Add a client meeting to get started.</div>';return;}
+  const dm=meetings.filter(m=>m.year===calYear&&m.month===calMonth+1&&m.date===selectedDay);
+  const dayName=DAYS[new Date(calYear,calMonth,selectedDay).getDay()];
+  t.textContent='📅 '+dayName+', '+selectedDay+' '+MONTHS[calMonth]+' '+calYear;
+  if(!dm.length){b.innerHTML='<div class="no-meetings-day"><div class="big">☕</div>No meetings on this day.</div>';return;}
+  b.innerHTML='';
+  dm.forEach(function(m){
+    const card=document.createElement('div');
+    card.className='meeting-card';
+    // top info
+    const topHtml='<div class="meeting-card-top">'
+      +'<div class="meeting-dot"></div>'
+      +'<div class="meeting-info">'
+      +'<div class="meeting-client">'+escHtml(m.name)+'</div>'
+      +'<div class="meeting-meta">'+m.day+'</div>'
+      +(m.guests&&m.guests.length?'<div class="guests-display">'+m.guests.map(g=>'<span class="guest-tag">👤 '+escHtml(g)+'</span>').join('')+'</div>':'')
+      +(m.notes?'<div class="notes-preview">📝 '+escHtml(m.notes)+'</div>':'')
+      +(m.deadlines&&m.deadlines.length?m.deadlines.map(dl=>'<div class="deadline-preview">⏰ '+escHtml(dl.task)+' — '+dl.date+' '+MONTHS[dl.month-1].slice(0,3)+' '+dl.year+' at 9:00 AM</div>').join(''):'')
+      +(m.links&&m.links.length?'<div class="links-preview">'+m.links.map(l=>'<a class="link-chip" href="'+escHtml(l.url)+'" target="_blank">🔗 '+escHtml(l.label||l.url)+'</a>').join('')+'</div>':'')
+      +'</div>'
+      +'<div class="meeting-time-badge">🕐 '+m.time+'</div>'
+      +'</div>';
+    card.innerHTML=topHtml;
+    // action buttons
+    const actions=document.createElement('div');
+    actions.className='meeting-actions';
+    const btns=[
+      ['m-btn m-btn-reschedule','🔄 Reschedule',function(){openReschedule(m.id,m.name);}],
+      ['m-btn m-btn-guests','👥 Edit Guests',function(){openGuestsEdit(m.id,m.name);}],
+      ['m-btn m-btn-notes','📝 Minutes of Meeting',function(){openNotes(m.id,m.name);}],
+      ['m-btn m-btn-links','🔗 Meeting Links',function(){openLinks(m.id,m.name);}],
+      ['m-btn m-btn-deadline','⏰ Deadline',function(){openDeadline(m.id,m.name);}],
+      ['m-btn m-btn-delete','🗑️ Delete',function(){askDelete(m.id,m.name);}]
+    ];
+    btns.forEach(function(b){
+      const btn=document.createElement('button');
+      btn.className=b[0];btn.textContent=b[1];
+      btn.addEventListener('click',b[2]);
+      actions.appendChild(btn);
+    });
+    card.appendChild(actions);
+    b.appendChild(card);
+  });
+  attachOverlayClickOutside();
 }
 
-function addQuickGuestRow(val=''){
-  const container=document.getElementById('quick-guest-rows');
-  const row=document.createElement('div');
-  row.className='guest-row';
-  row.innerHTML=`<input type="text" placeholder="Guest name" value="${escHtml(val)}"/><button class="btn-remove-guest" onclick="this.parentElement.remove()">Remove</button>`;
-  container.appendChild(row);
-  row.querySelector('input').focus();
-}
-function getQuickGuests(){
-  return Array.from(document.querySelectorAll('#quick-guest-rows .guest-row input')).map(i=>i.value.trim()).filter(Boolean);
-}
+// ── SESSION & CAL STATE ──
+function saveCalState(){localStorage.setItem('md_calstate',JSON.stringify({calYear,calMonth,selectedDay}));}
+(function restoreSession(){
+  const saved=localStorage.getItem('md_session');
+  if(saved){
+    try{
+      const s=JSON.parse(saved);
+      if(s.email&&accounts[s.email]){
+        const cs=localStorage.getItem('md_calstate');
+        if(cs){try{const c=JSON.parse(cs);calYear=c.calYear;calMonth=c.calMonth;selectedDay=c.selectedDay;}catch(e){}}
+        loginAs(s.email,s.displayName,true);return;
+      }
+    }catch(e){localStorage.removeItem('md_session');}
+  }
+  renderCalendar();
+})();
 
+// ── OVERLAYS ──
+function closeOverlay(id){document.getElementById(id).classList.remove('show');}
+function attachOverlayClickOutside(){
+  document.querySelectorAll('.overlay').forEach(function(el){
+    el.onclick=function(e){if(e.target===el)el.classList.remove('show');};
+  });
+}
+attachOverlayClickOutside();
+
+// Enter/Escape keys
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape') document.querySelectorAll('.overlay.show').forEach(el=>el.classList.remove('show'));
+  if(e.key==='Enter'){
+    if(document.getElementById('quick-overlay').classList.contains('show')) saveQuick();
+  }
+});
+
+// ── QUICK ADD ──
 function openQuick(d){
-  const dayName=DAYS_FULL[new Date(calYear,calMonth,d).getDay()];
+  const dayName=DAYS[new Date(calYear,calMonth,d).getDay()];
   document.getElementById('quick-date-label').textContent=dayName+', '+d+' '+MONTHS[calMonth]+' '+calYear;
   document.getElementById('quick-name').value='';
   document.getElementById('quick-hour').value='';
@@ -1036,453 +944,255 @@ function openQuick(d){
   document.getElementById('quick-guest-rows').innerHTML='';
   document.getElementById('quick-error').textContent='';
   document.getElementById('quick-error').classList.remove('show');
-  document.getElementById('quick-name').classList.remove('error-field');
-  document.getElementById('quick-hour').classList.remove('error-field');
-  document.getElementById('quick-min').classList.remove('error-field');
+  ['quick-name','quick-hour','quick-min'].forEach(function(id){document.getElementById(id).classList.remove('err');});
   document.getElementById('quick-overlay').classList.add('show');
-  setTimeout(()=>document.getElementById('quick-name').focus(),100);
+  setTimeout(function(){document.getElementById('quick-name').focus();},100);
 }
-function closeQuick(){
-  document.getElementById('quick-overlay').classList.remove('show');
-}
+function closeQuick(){closeOverlay('quick-overlay');}
 async function saveQuick(){
-  const nameEl=document.getElementById('quick-name');
-  const hourEl=document.getElementById('quick-hour');
-  const minEl=document.getElementById('quick-min');
+  const name=document.getElementById('quick-name').value.trim();
+  const hour=document.getElementById('quick-hour').value.trim();
+  const min=document.getElementById('quick-min').value.trim();
   const errEl=document.getElementById('quick-error');
-  const name=nameEl.value.trim();
-  const hour=hourEl.value.trim();
-  const min=minEl.value.trim();
-  nameEl.classList.remove('error-field');
-  hourEl.classList.remove('error-field');
-  minEl.classList.remove('error-field');
+  ['quick-name','quick-hour','quick-min'].forEach(function(id){document.getElementById(id).classList.remove('err');});
   errEl.classList.remove('show');
-  if(!name){nameEl.classList.add('error-field');errEl.textContent='Please enter the client name.';errEl.classList.add('show');nameEl.focus();return;}
-  if(hour===''){hourEl.classList.add('error-field');errEl.textContent='Please enter the hour (0-23).';errEl.classList.add('show');hourEl.focus();return;}
-  if(parseInt(hour)<0||parseInt(hour)>23){hourEl.classList.add('error-field');errEl.textContent='Hour must be between 0 and 23.';errEl.classList.add('show');hourEl.focus();return;}
-  if(min===''){minEl.classList.add('error-field');errEl.textContent='Please enter the minutes (0-59).';errEl.classList.add('show');minEl.focus();return;}
-  if(parseInt(min)<0||parseInt(min)>59){minEl.classList.add('error-field');errEl.textContent='Minutes must be between 0 and 59.';errEl.classList.add('show');minEl.focus();return;}
-  const dayName=DAYS_FULL[new Date(calYear,calMonth,selectedDay).getDay()];
-  const hh=String(parseInt(hour)).padStart(2,'0');
-  const mm=String(parseInt(min)).padStart(2,'0');
-  const guests=getQuickGuests();
-  const meeting={id:Date.now(),userEmail:currentUser,name,day:dayName,date:selectedDay,month:calMonth+1,year:calYear,time:hh+':'+mm,guests};
-  meetings.push(meeting);
-  meetings.sort((a,b)=>new Date(a.year,a.month-1,a.date,...a.time.split(':').map(Number))-new Date(b.year,b.month-1,b.date,...b.time.split(':').map(Number)));
-  closeQuick();
-  renderAll();
+  if(!name){document.getElementById('quick-name').classList.add('err');errEl.textContent='Please enter client name.';errEl.classList.add('show');return;}
+  if(hour===''||parseInt(hour)<0||parseInt(hour)>23){document.getElementById('quick-hour').classList.add('err');errEl.textContent='Enter hour (0-23).';errEl.classList.add('show');return;}
+  if(min===''||parseInt(min)<0||parseInt(min)>59){document.getElementById('quick-min').classList.add('err');errEl.textContent='Enter minutes (0-59).';errEl.classList.add('show');return;}
+  const dt=new Date(calYear,calMonth,selectedDay);
+  const guests=getGuests('quick-guest-rows');
+  const meeting={id:Date.now(),userEmail:currentUser,name,day:DAYS[dt.getDay()],date:selectedDay,month:calMonth+1,year:calYear,time:pad(parseInt(hour))+':'+pad(parseInt(min)),guests,notes:'',links:[],deadlines:[]};
+  meetings.push(meeting);meetings.sort(cmpMeeting);
+  closeQuick();renderAll();
   await saveMeetingToFirebase(meeting);
-  toast('Meeting with '+name+' scheduled for '+dayName+'!','success');
-}
-document.getElementById('quick-overlay').addEventListener('click',function(e){if(e.target===this)closeQuick();});
-// Allow Enter key to save
-document.addEventListener('keydown',function(e){
-  if(e.key==='Enter'&&document.getElementById('quick-overlay').classList.contains('show')) saveQuick();
-  if(e.key==='Escape'&&document.getElementById('quick-overlay').classList.contains('show')) closeQuick();
-});
-
-let pendingRescheduleId=null;
-
-function addRescheduleGuestRow(val=''){
-  const container=document.getElementById('reschedule-guest-rows');
-  const row=document.createElement('div');
-  row.className='guest-row';
-  row.innerHTML=`<input type="text" placeholder="Guest name" value="${escHtml(val)}"/><button class="btn-remove-guest" onclick="this.parentElement.remove()">Remove</button>`;
-  container.appendChild(row);
-}
-function getRescheduleGuests(){
-  return Array.from(document.querySelectorAll('#reschedule-guest-rows .guest-row input')).map(i=>i.value.trim()).filter(Boolean);
+  toast('Meeting with '+name+' scheduled!','success');
 }
 
-function updateRescheduleDay(){
-  const date=parseInt(document.getElementById('reschedule-date').value);
-  const month=parseInt(document.getElementById('reschedule-month').value);
-  const year=parseInt(document.getElementById('reschedule-year').value);
-  const preview=document.getElementById('reschedule-day-preview');
-  if(date&&month&&year&&date>=1&&date<=31){
-    const d=new Date(year,month-1,date);
-    if(d.getDate()===date&&d.getMonth()===month-1){
-      document.getElementById('reschedule-day-value').textContent=DAYS_FULL[d.getDay()];
-      preview.classList.add('visible');return;
-    }
-  }
-  preview.classList.remove('visible');
+// ── DELETE ──
+function askDelete(id,name){
+  pendingId=id;
+  document.getElementById('confirm-text').textContent='Are you sure you want to delete the meeting with "'+name+'"? This cannot be undone.';
+  document.getElementById('confirm-overlay').classList.add('show');
+}
+async function confirmDelete(){
+  if(pendingId===null)return;
+  const id=pendingId;pendingId=null;
+  meetings=meetings.filter(m=>m.id!=id);
+  closeOverlay('confirm-overlay');renderAll();
+  await deleteMeetingFromFirebase(id);
+  toast('Meeting deleted.');
 }
 
+// ── RESCHEDULE ──
 function openReschedule(id,name){
-  pendingRescheduleId=id;
-  const m=meetings.find(x=>x.id==id);
-  if(!m)return;
-  document.getElementById('reschedule-client-label').textContent='👤 '+name;
-  document.getElementById('reschedule-date').value=m.date;
-  document.getElementById('reschedule-month').value=m.month;
-  document.getElementById('reschedule-year').value=m.year;
-  document.getElementById('reschedule-hour').value=parseInt(m.time.split(':')[0]);
-  document.getElementById('reschedule-min').value=parseInt(m.time.split(':')[1]);
-  document.getElementById('reschedule-error').classList.remove('show');
-  ['reschedule-date','reschedule-month','reschedule-year','reschedule-hour','reschedule-min'].forEach(id=>document.getElementById(id).classList.remove('error-field'));
-  // Pre-fill existing guests
-  document.getElementById('reschedule-guest-rows').innerHTML='';
-  if(m.guests&&m.guests.length) m.guests.forEach(g=>addRescheduleGuestRow(g));
-  updateRescheduleDay();
+  pendingId=id;
+  const m=meetings.find(x=>x.id==id);if(!m)return;
+  document.getElementById('reschedule-label').textContent='Meeting with '+name;
+  document.getElementById('rs-date').value=m.date;
+  document.getElementById('rs-month').value=m.month;
+  document.getElementById('rs-year').value=m.year;
+  document.getElementById('rs-hour').value=parseInt(m.time.split(':')[0]);
+  document.getElementById('rs-min').value=parseInt(m.time.split(':')[1]);
+  document.getElementById('rs-error').classList.remove('show');
+  document.getElementById('rs-day-preview').classList.remove('visible');
+  updateOverlayDay('rs');
   document.getElementById('reschedule-overlay').classList.add('show');
 }
-
-function closeReschedule(){
-  pendingRescheduleId=null;
-  document.getElementById('reschedule-overlay').classList.remove('show');
-}
-
 async function saveReschedule(){
-  if(pendingRescheduleId===null)return;
-  const dateEl=document.getElementById('reschedule-date');
-  const monthEl=document.getElementById('reschedule-month');
-  const yearEl=document.getElementById('reschedule-year');
-  const hourEl=document.getElementById('reschedule-hour');
-  const minEl=document.getElementById('reschedule-min');
-  const errEl=document.getElementById('reschedule-error');
-  const date=parseInt(dateEl.value);
-  const month=parseInt(monthEl.value);
-  const year=parseInt(yearEl.value);
-  const hour=hourEl.value.trim();
-  const min=minEl.value.trim();
-  ['reschedule-date','reschedule-month','reschedule-year','reschedule-hour','reschedule-min'].forEach(id=>document.getElementById(id).classList.remove('error-field'));
+  const date=parseInt(document.getElementById('rs-date').value);
+  const month=parseInt(document.getElementById('rs-month').value);
+  const year=parseInt(document.getElementById('rs-year').value);
+  const hour=document.getElementById('rs-hour').value.trim();
+  const min=document.getElementById('rs-min').value.trim();
+  const errEl=document.getElementById('rs-error');
   errEl.classList.remove('show');
-  if(!dateEl.value||isNaN(date)||date<1||date>31){dateEl.classList.add('error-field');errEl.textContent='Please enter a valid date (1-31).';errEl.classList.add('show');dateEl.focus();return;}
-  if(!monthEl.value||isNaN(month)){monthEl.classList.add('error-field');errEl.textContent='Please select a month.';errEl.classList.add('show');monthEl.focus();return;}
-  if(!yearEl.value||isNaN(year)||year<2020||year>2100){yearEl.classList.add('error-field');errEl.textContent='Please enter a valid year.';errEl.classList.add('show');yearEl.focus();return;}
+  if(!date||date<1||date>31){errEl.textContent='Enter a valid date.';errEl.classList.add('show');return;}
+  if(!month){errEl.textContent='Select a month.';errEl.classList.add('show');return;}
+  if(!year||year<2020||year>2100){errEl.textContent='Enter a valid year.';errEl.classList.add('show');return;}
   const testDate=new Date(year,month-1,date);
-  if(testDate.getDate()!==date||testDate.getMonth()!==month-1){dateEl.classList.add('error-field');monthEl.classList.add('error-field');errEl.textContent=date+' '+MONTHS[month-1]+' '+year+' is not a valid date.';errEl.classList.add('show');return;}
-  if(hour===''){hourEl.classList.add('error-field');errEl.textContent='Please enter the hour (0-23).';errEl.classList.add('show');hourEl.focus();return;}
-  if(parseInt(hour)<0||parseInt(hour)>23){hourEl.classList.add('error-field');errEl.textContent='Hour must be between 0 and 23.';errEl.classList.add('show');hourEl.focus();return;}
-  if(min===''){minEl.classList.add('error-field');errEl.textContent='Please enter the minutes (0-59).';errEl.classList.add('show');minEl.focus();return;}
-  if(parseInt(min)<0||parseInt(min)>59){minEl.classList.add('error-field');errEl.textContent='Minutes must be between 0 and 59.';errEl.classList.add('show');minEl.focus();return;}
-  const dayName=DAYS_FULL[testDate.getDay()];
-  const hh=String(parseInt(hour)).padStart(2,'0');
-  const mm=String(parseInt(min)).padStart(2,'0');
-  const idx=meetings.findIndex(x=>x.id===pendingRescheduleId);
-  if(idx===-1)return;
-  const guests=getRescheduleGuests();
-  meetings[idx]={...meetings[idx],day:dayName,date,month,year,time:hh+':'+mm,guests};
-  meetings.sort((a,b)=>new Date(a.year,a.month-1,a.date,...a.time.split(':').map(Number))-new Date(b.year,b.month-1,b.date,...b.time.split(':').map(Number)));
-  const updated=meetings[meetings.findIndex(x=>x.id===pendingRescheduleId)];
-  calYear=year;calMonth=month-1;selectedDay=date;
-  saveCalState();
-  closeReschedule();
-  renderAll();
-  await saveMeetingToFirebase(updated);
-  toast('Meeting rescheduled to '+dayName+', '+date+' '+MONTHS[month-1]+' '+year+'!','success');
-}
-document.getElementById('reschedule-overlay').addEventListener('click',function(e){if(e.target===this)closeReschedule();});
-
-let pendingEditGuestsId=null;
-
-function addEditGuestRow(val=''){
-  const container=document.getElementById('editguests-rows');
-  const row=document.createElement('div');
-  row.className='guest-row';
-  row.innerHTML=`<input type="text" placeholder="Guest name" value="${escHtml(val)}"/><button class="btn-remove-guest" onclick="this.parentElement.remove()">Remove</button>`;
-  container.appendChild(row);
+  if(testDate.getDate()!==date||testDate.getMonth()!==month-1){errEl.textContent='Invalid date.';errEl.classList.add('show');return;}
+  if(hour===''||parseInt(hour)<0||parseInt(hour)>23){errEl.textContent='Enter hour (0-23).';errEl.classList.add('show');return;}
+  if(min===''||parseInt(min)<0||parseInt(min)>59){errEl.textContent='Enter minutes (0-59).';errEl.classList.add('show');return;}
+  const idx=meetings.findIndex(x=>x.id==pendingId);if(idx===-1)return;
+  meetings[idx]={...meetings[idx],day:DAYS[testDate.getDay()],date,month,year,time:pad(parseInt(hour))+':'+pad(parseInt(min))};
+  calYear=year;calMonth=month-1;selectedDay=date;saveCalState();
+  closeOverlay('reschedule-overlay');renderAll();
+  await saveMeetingToFirebase(meetings[idx]);
+  toast('Meeting rescheduled!','success');
 }
 
-function openEditGuests(id,name){
-  pendingEditGuestsId=id;
-  const m=meetings.find(x=>x.id==id);
-  if(!m)return;
-  document.getElementById('editguests-client-label').textContent='Meeting with '+name;
-  document.getElementById('editguests-rows').innerHTML='';
-  if(m.guests&&m.guests.length) m.guests.forEach(g=>addEditGuestRow(g));
-  document.getElementById('editguests-overlay').classList.add('show');
-  setTimeout(()=>{
-    const first=document.querySelector('#editguests-rows .guest-row input');
-    if(first) first.focus();
-  },100);
+// ── GUESTS EDIT ──
+function openGuestsEdit(id,name){
+  pendingId=id;
+  const m=meetings.find(x=>x.id==id);if(!m)return;
+  document.getElementById('guests-label').textContent='Meeting with '+name;
+  document.getElementById('guests-edit-rows').innerHTML='';
+  if(m.guests&&m.guests.length)m.guests.forEach(function(g){addEditGuestRow(g);});
+  document.getElementById('guests-overlay').classList.add('show');
 }
-
-function closeEditGuests(){
-  pendingEditGuestsId=null;
-  document.getElementById('editguests-overlay').classList.remove('show');
-}
-
-async function saveEditGuests(){
-  if(pendingEditGuestsId===null)return;
-  const guests=Array.from(document.querySelectorAll('#editguests-rows .guest-row input')).map(i=>i.value.trim()).filter(Boolean);
-  const idx=meetings.findIndex(x=>x.id===pendingEditGuestsId);
-  if(idx===-1)return;
-  meetings[idx]={...meetings[idx],guests};
-  const updated=meetings[idx];
-  closeEditGuests();
-  renderAll();
-  await saveMeetingToFirebase(updated);
+async function saveGuests(){
+  const idx=meetings.findIndex(x=>x.id==pendingId);if(idx===-1)return;
+  meetings[idx]={...meetings[idx],guests:getGuests('guests-edit-rows')};
+  closeOverlay('guests-overlay');renderAll();
+  await saveMeetingToFirebase(meetings[idx]);
   toast('Guests updated!','success');
 }
-document.getElementById('editguests-overlay').addEventListener('click',function(e){if(e.target===this)closeEditGuests();});
 
 // ── NOTES ──
-let pendingNotesId=null;
 function openNotes(id,name){
-  pendingNotesId=id;
-  const m=meetings.find(x=>x.id==id);
-  if(!m)return;
-  document.getElementById('notes-meeting-label').textContent='Meeting with '+name;
+  pendingId=id;
+  const m=meetings.find(x=>x.id==id);if(!m)return;
+  document.getElementById('notes-label').textContent='Meeting with '+name;
   const ta=document.getElementById('notes-textarea');
   ta.value=m.notes||'';
   document.getElementById('notes-char-count').textContent=(m.notes||'').length+' characters';
   document.getElementById('notes-overlay').classList.add('show');
-  setTimeout(()=>ta.focus(),100);
-}
-function closeNotes(){
-  pendingNotesId=null;
-  document.getElementById('notes-overlay').classList.remove('show');
-}
-async function saveNotes(){
-  if(pendingNotesId===null)return;
-  const notes=document.getElementById('notes-textarea').value.trim();
-  const idx=meetings.findIndex(x=>x.id===pendingNotesId);
-  if(idx===-1)return;
-  meetings[idx]={...meetings[idx],notes};
-  const updated=meetings[idx];
-  closeNotes();
-  renderAll();
-  await saveMeetingToFirebase(updated);
-  toast('Meeting notes saved!','success');
+  setTimeout(function(){ta.focus();},100);
 }
 document.getElementById('notes-textarea').addEventListener('input',function(){
   document.getElementById('notes-char-count').textContent=this.value.length+' characters';
 });
-document.getElementById('notes-overlay').addEventListener('click',function(e){if(e.target===this)closeNotes();});
+async function saveNotes(){
+  const idx=meetings.findIndex(x=>x.id==pendingId);if(idx===-1)return;
+  meetings[idx]={...meetings[idx],notes:document.getElementById('notes-textarea').value.trim()};
+  closeOverlay('notes-overlay');renderAll();
+  await saveMeetingToFirebase(meetings[idx]);
+  toast('Notes saved!','success');
+}
 
 // ── LINKS ──
-let pendingLinksId=null;
-function addLinkRow(label='',url=''){
-  const container=document.getElementById('links-rows');
-  const row=document.createElement('div');
-  row.className='link-row';
-  row.innerHTML=`<input type="text" placeholder="Label (e.g. Zoom)" value="${escHtml(label)}"/><input type="url" placeholder="https://..." value="${escHtml(url)}"/><button class="btn-remove-link" onclick="this.parentElement.remove()">Remove</button>`;
-  container.appendChild(row);
-}
 function openLinks(id,name){
-  pendingLinksId=id;
-  const m=meetings.find(x=>x.id==id);
-  if(!m)return;
-  document.getElementById('links-meeting-label').textContent='Meeting with '+name;
+  pendingId=id;
+  const m=meetings.find(x=>x.id==id);if(!m)return;
+  document.getElementById('links-label').textContent='Meeting with '+name;
   document.getElementById('links-rows').innerHTML='';
-  if(m.links&&m.links.length) m.links.forEach(l=>addLinkRow(l.label,l.url));
+  if(m.links&&m.links.length)m.links.forEach(function(l){addLinkRow(l.label,l.url);});
   document.getElementById('links-overlay').classList.add('show');
 }
-function closeLinks(){
-  pendingLinksId=null;
-  document.getElementById('links-overlay').classList.remove('show');
+function addLinkRow(label,url){
+  label=label||'';url=url||'';
+  const row=document.createElement('div');row.className='link-row';
+  row.innerHTML='<input type="text" placeholder="Label (e.g. Zoom)" value="'+escHtml(label)+'"/>'
+    +'<input type="url" placeholder="https://..." value="'+escHtml(url)+'"/>';
+  const btn=document.createElement('button');btn.className='btn-remove-link';btn.textContent='Remove';
+  btn.onclick=function(){row.remove();};
+  row.appendChild(btn);
+  document.getElementById('links-rows').appendChild(row);
 }
 async function saveLinks(){
-  if(pendingLinksId===null)return;
   const rows=document.querySelectorAll('#links-rows .link-row');
-  const links=Array.from(rows).map(row=>{
+  const links=Array.from(rows).map(function(row){
     const inputs=row.querySelectorAll('input');
     return {label:inputs[0].value.trim(),url:inputs[1].value.trim()};
-  }).filter(l=>l.url);
-  const idx=meetings.findIndex(x=>x.id===pendingLinksId);
-  if(idx===-1)return;
+  }).filter(function(l){return l.url;});
+  const idx=meetings.findIndex(x=>x.id==pendingId);if(idx===-1)return;
   meetings[idx]={...meetings[idx],links};
-  const updated=meetings[idx];
-  closeLinks();
-  renderAll();
-  await saveMeetingToFirebase(updated);
+  closeOverlay('links-overlay');renderAll();
+  await saveMeetingToFirebase(meetings[idx]);
   toast('Links saved!','success');
 }
-document.getElementById('links-overlay').addEventListener('click',function(e){if(e.target===this)closeLinks();});
 
 // ── DEADLINE ──
-let pendingDeadlineId=null;
-
-function updateDeadlineDay(){
-  const date=parseInt(document.getElementById('deadline-date').value);
-  const month=parseInt(document.getElementById('deadline-month').value);
-  const year=parseInt(document.getElementById('deadline-year').value);
-  const preview=document.getElementById('deadline-day-preview');
-  if(date&&month&&year&&date>=1&&date<=31){
-    const d=new Date(year,month-1,date);
-    if(d.getDate()===date&&d.getMonth()===month-1){
-      document.getElementById('deadline-day-value').textContent=DAYS_FULL[d.getDay()];
-      preview.classList.add('visible');return;
-    }
-  }
-  preview.classList.remove('visible');
-}
-
 function openDeadline(id,name){
-  pendingDeadlineId=id;
-  const m=meetings.find(x=>x.id==id);
-  if(!m)return;
-  document.getElementById('deadline-meeting-label').textContent='Meeting with '+name;
-  document.getElementById('deadline-task').value='';
-  document.getElementById('deadline-date').value='';
-  document.getElementById('deadline-month').value='';
-  document.getElementById('deadline-year').value='2026';
-  document.getElementById('deadline-error').classList.remove('show');
-  document.getElementById('deadline-day-preview').classList.remove('visible');
-  ['deadline-task','deadline-date','deadline-month','deadline-year'].forEach(function(id){document.getElementById(id).classList.remove('error-field');});
+  pendingId=id;
+  document.getElementById('deadline-label').textContent='Meeting with '+name;
+  document.getElementById('dl-task').value='';
+  document.getElementById('dl-date').value='';
+  document.getElementById('dl-month').value='';
+  document.getElementById('dl-year').value='2026';
+  document.getElementById('dl-error').classList.remove('show');
+  document.getElementById('dl-day-preview').classList.remove('visible');
   document.getElementById('deadline-overlay').classList.add('show');
-  setTimeout(function(){document.getElementById('deadline-task').focus();},100);
+  setTimeout(function(){document.getElementById('dl-task').focus();},100);
 }
-
-function closeDeadline(){
-  pendingDeadlineId=null;
-  document.getElementById('deadline-overlay').classList.remove('show');
-}
-
 async function saveDeadline(){
-  if(pendingDeadlineId===null)return;
-  const taskEl=document.getElementById('deadline-task');
-  const dateEl=document.getElementById('deadline-date');
-  const monthEl=document.getElementById('deadline-month');
-  const yearEl=document.getElementById('deadline-year');
-  const errEl=document.getElementById('deadline-error');
-  const task=taskEl.value.trim();
-  const date=parseInt(dateEl.value);
-  const month=parseInt(monthEl.value);
-  const year=parseInt(yearEl.value);
-  ['deadline-task','deadline-date','deadline-month','deadline-year'].forEach(function(id){document.getElementById(id).classList.remove('error-field');});
+  const task=document.getElementById('dl-task').value.trim();
+  const date=parseInt(document.getElementById('dl-date').value);
+  const month=parseInt(document.getElementById('dl-month').value);
+  const year=parseInt(document.getElementById('dl-year').value);
+  const errEl=document.getElementById('dl-error');
   errEl.classList.remove('show');
-  if(!task){taskEl.classList.add('error-field');errEl.textContent='Please enter what the deadline is for.';errEl.classList.add('show');taskEl.focus();return;}
-  if(!dateEl.value||isNaN(date)||date<1||date>31){dateEl.classList.add('error-field');errEl.textContent='Please enter a valid date (1-31).';errEl.classList.add('show');dateEl.focus();return;}
-  if(!monthEl.value||isNaN(month)){monthEl.classList.add('error-field');errEl.textContent='Please select a month.';errEl.classList.add('show');monthEl.focus();return;}
-  if(!yearEl.value||isNaN(year)||year<2020||year>2100){yearEl.classList.add('error-field');errEl.textContent='Please enter a valid year.';errEl.classList.add('show');yearEl.focus();return;}
+  if(!task){errEl.textContent='Please enter what the deadline is for.';errEl.classList.add('show');document.getElementById('dl-task').focus();return;}
+  if(!date||date<1||date>31){errEl.textContent='Enter a valid date.';errEl.classList.add('show');return;}
+  if(!month){errEl.textContent='Select a month.';errEl.classList.add('show');return;}
+  if(!year||year<2020||year>2100){errEl.textContent='Enter a valid year.';errEl.classList.add('show');return;}
   const testDate=new Date(year,month-1,date);
-  if(testDate.getDate()!==date||testDate.getMonth()!==month-1){dateEl.classList.add('error-field');monthEl.classList.add('error-field');errEl.textContent=date+' '+MONTHS[month-1]+' '+year+' is not a valid date.';errEl.classList.add('show');return;}
-  const dayName=DAYS_FULL[testDate.getDay()];
-  const idx=meetings.findIndex(x=>x.id==pendingDeadlineId);
-  if(idx===-1)return;
+  if(testDate.getDate()!==date||testDate.getMonth()!==month-1){errEl.textContent='Invalid date.';errEl.classList.add('show');return;}
+  const idx=meetings.findIndex(x=>x.id==pendingId);if(idx===-1)return;
   const deadlines=meetings[idx].deadlines||[];
-  deadlines.push({task,date,month,year,day:dayName,time:'09:00'});
+  deadlines.push({task,date,month,year,day:DAYS[testDate.getDay()],time:'09:00'});
   meetings[idx]={...meetings[idx],deadlines};
-  const updated=meetings[idx];
-  closeDeadline();
-  renderAll();
-  await saveMeetingToFirebase(updated);
-  toast('⏰ Deadline set for '+dayName+', '+date+' '+MONTHS[month-1]+' '+year+' at 9:00 AM!','success');
-}
-document.getElementById('deadline-overlay').addEventListener('click',function(e){if(e.target===this)closeDeadline();});
-
-// ── TABS ──
-function switchMainTab(tab){
-  document.querySelectorAll('.tab-btn').forEach(function(b,i){b.classList.toggle('active',(tab==='scheduler'?0:1)===i);});
-  document.getElementById('tab-scheduler').classList.toggle('active', tab==='scheduler');
-  document.getElementById('tab-reports').classList.toggle('active', tab==='reports');
-  if(tab==='reports'){renderReportsList();document.getElementById('reports-main').innerHTML='<div class="report-empty"><div class="big">📊</div><p>Select a client to view their full report.</p></div>';}
+  closeOverlay('deadline-overlay');renderAll();
+  await saveMeetingToFirebase(meetings[idx]);
+  toast('⏰ Deadline set for '+date+' '+MONTHS[month-1]+' '+year+'!','success');
 }
 
 // ── CLIENT REPORTS ──
-let activeReportClient=null;
-
 function renderReportsList(){
   const search=(document.getElementById('reports-search').value||'').trim().toLowerCase();
-  // Get unique client names
   const clientMap={};
   meetings.forEach(function(m){
     const key=m.name.toLowerCase();
-    if(!clientMap[key]) clientMap[key]={name:m.name,count:0};
+    if(!clientMap[key])clientMap[key]={name:m.name,count:0};
     clientMap[key].count++;
   });
   const clients=Object.values(clientMap).filter(function(c){return !search||c.name.toLowerCase().includes(search);});
   clients.sort(function(a,b){return a.name.localeCompare(b.name);});
   const list=document.getElementById('reports-client-list');
   if(!clients.length){list.innerHTML='<div class="no-clients-msg">No clients found.</div>';return;}
-  list.innerHTML=clients.map(function(c){
+  list.innerHTML='';
+  clients.forEach(function(c){
+    const item=document.createElement('div');
     const isActive=activeReportClient&&activeReportClient.toLowerCase()===c.name.toLowerCase();
-    return '<div class="client-report-item'+(isActive?' active':'')+'" onclick="showClientReport(''+escHtml(c.name).replace(/'/g,'&#39;')+'')">'
-      +'<div class="cr-name">'+escHtml(c.name)+'</div>'
-      +'<div class="cr-count">'+c.count+' meeting'+(c.count!==1?'s':'')+'</div>'
-      +'</div>';
-  }).join('');
+    item.className='client-report-item'+(isActive?' active':'');
+    item.innerHTML='<div class="cr-name">'+escHtml(c.name)+'</div>'
+      +'<div class="cr-count">'+c.count+' meeting'+(c.count!==1?'s':'')+'</div>';
+    item.addEventListener('click',function(){showClientReport(c.name);});
+    list.appendChild(item);
+  });
 }
-
 function showClientReport(name){
   activeReportClient=name;
   renderReportsList();
   const now=new Date();
-  const clientMeetings=meetings.filter(function(m){return m.name.toLowerCase()===name.toLowerCase();});
-  clientMeetings.sort(function(a,b){return new Date(a.year,a.month-1,a.date)-new Date(b.year,b.month-1,b.date);});
-  const upcoming=clientMeetings.filter(function(m){return new Date(m.year,m.month-1,m.date,parseInt(m.time),parseInt(m.time.split(':')[1]))>=now;});
-  const past=clientMeetings.filter(function(m){return new Date(m.year,m.month-1,m.date,parseInt(m.time),parseInt(m.time.split(':')[1]))<now;});
-  const total=clientMeetings.length;
+  const cm=meetings.filter(function(m){return m.name.toLowerCase()===name.toLowerCase();});
+  cm.sort(cmpMeeting);
+  const upcoming=cm.filter(function(m){return new Date(m.year,m.month-1,m.date,parseInt(m.time),parseInt(m.time.split(':')[1]))>=now;});
+  const past=cm.filter(function(m){return new Date(m.year,m.month-1,m.date,parseInt(m.time),parseInt(m.time.split(':')[1]))<now;});
 
-  function buildMeetingRow(m,type){
-    const dateStr=m.day+', '+m.date+' '+MONTHS[m.month-1]+' '+m.year;
-    var html='<div class="report-meeting-row '+type+'">';
-    html+='<div class="report-meeting-top"><div class="report-meeting-date">'+dateStr+'</div><div class="report-meeting-time">🕐 '+m.time+'</div></div>';
-    if(m.guests&&m.guests.length){
-      html+='<div class="report-guests">👥 Guests: '+m.guests.map(function(g){return escHtml(g);}).join(', ')+'</div>';
-    }
-    if(m.notes){
-      html+='<div class="report-notes-box">📝 '+escHtml(m.notes)+'</div>';
-    }
-    if(m.deadlines&&m.deadlines.length){
-      m.deadlines.forEach(function(dl){
-        html+='<div class="report-deadline-box">⏰ '+escHtml(dl.task)+' &mdash; '+dl.date+' '+MONTHS[dl.month-1].slice(0,3)+' '+dl.year+' at 9:00 AM</div>';
-      });
-    }
+  function buildRow(m,type){
+    let html='<div class="report-meeting-row '+type+'">';
+    html+='<div class="report-meeting-top">';
+    html+='<div class="report-meeting-date">'+m.day+', '+m.date+' '+MONTHS[m.month-1]+' '+m.year+'</div>';
+    html+='<div class="report-meeting-time">🕐 '+m.time+'</div>';
+    html+='</div>';
+    if(m.guests&&m.guests.length)html+='<div class="report-guests">👥 '+m.guests.map(function(g){return escHtml(g);}).join(', ')+'</div>';
+    if(m.notes)html+='<div class="report-notes-box">📝 '+escHtml(m.notes)+'</div>';
+    if(m.deadlines&&m.deadlines.length)m.deadlines.forEach(function(dl){html+='<div class="report-deadline-box">⏰ '+escHtml(dl.task)+' — '+dl.date+' '+MONTHS[dl.month-1].slice(0,3)+' '+dl.year+' at 9:00 AM</div>';});
     if(m.links&&m.links.length){
-      html+='<div class="report-detail-row">';
-      m.links.forEach(function(l){
-        html+='<a class="report-link-chip" href="'+escHtml(l.url)+'" target="_blank">🔗 '+escHtml(l.label||l.url)+'</a>';
-      });
+      html+='<div style="margin-top:6px;">';
+      m.links.forEach(function(l){html+='<a class="report-link-chip" href="'+escHtml(l.url)+'" target="_blank">🔗 '+escHtml(l.label||l.url)+'</a>';});
       html+='</div>';
     }
     html+='</div>';
     return html;
   }
 
-  var html='<div class="report-card">';
+  const main=document.getElementById('reports-main');
+  let html='<div class="report-card">';
   html+='<div class="report-card-header">';
   html+='<div class="report-client-name">👤 '+escHtml(name)+'</div>';
   html+='<div class="report-stats">';
-  html+='<span class="stat-badge stat-total">'+total+' Total</span>';
+  html+='<span class="stat-badge stat-total">'+cm.length+' Total</span>';
   html+='<span class="stat-badge stat-upcoming">'+upcoming.length+' Upcoming</span>';
   html+='<span class="stat-badge stat-past">'+past.length+' Past</span>';
   html+='</div></div>';
-
-  if(upcoming.length){
-    html+='<div class="report-section">';
-    html+='<div class="report-section-title">🟢 Upcoming Meetings</div>';
-    upcoming.forEach(function(m){html+=buildMeetingRow(m,'upcoming');});
-    html+='</div>';
-  }
-
-  if(past.length){
-    html+='<div class="report-section">';
-    html+='<div class="report-section-title">🕐 Past Meetings</div>';
-    past.slice().reverse().forEach(function(m){html+=buildMeetingRow(m,'past');});
-    html+='</div>';
-  }
-
+  if(upcoming.length){html+='<div class="report-section"><div class="report-section-title">🟢 Upcoming Meetings</div>';upcoming.forEach(function(m){html+=buildRow(m,'upcoming');});html+='</div>';}
+  if(past.length){html+='<div class="report-section"><div class="report-section-title">🕐 Past Meetings</div>';past.slice().reverse().forEach(function(m){html+=buildRow(m,'past');});html+='</div>';}
   html+='</div>';
-  document.getElementById('reports-main').innerHTML=html;
-  document.getElementById('reports-main').scrollTop=0;
+  main.innerHTML=html;
+  main.scrollTop=0;
 }
-
-function saveCalState(){
-  localStorage.setItem('md_calstate',JSON.stringify({calYear,calMonth,selectedDay}));
-}
-function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-function toast(msg,type=''){const e=document.getElementById('toast');e.textContent=msg;e.className='show'+(type?' '+type:'');setTimeout(()=>{e.className='';},3000);}
-// Restore session on page load
-(function restoreSession(){
-  const saved=localStorage.getItem('md_session');
-  if(saved){
-    try{
-      const s=JSON.parse(saved);
-      if(s.email&&accounts[s.email]){
-        // restore calendar position
-        const cs=localStorage.getItem('md_calstate');
-        if(cs){try{const c=JSON.parse(cs);calYear=c.calYear;calMonth=c.calMonth;selectedDay=c.selectedDay;}catch(e){}}
-        loginAs(s.email,s.displayName,true);
-        return;
-      }
-    }catch(e){localStorage.removeItem('md_session');}
-  }
-  renderCalendar();
-})();
 </script>
 </body>
 </html>
