@@ -112,6 +112,34 @@ select.field-input{cursor:pointer;}
 .btn-minutes:hover{background:#ca8a04;color:white;}
 .btn-links{display:block;width:100%;padding:7px 12px;background:#f5f3ff;color:#7c3aed;border:none;border-top:1px solid #ddd6fe;font-size:0.78rem;font-weight:700;cursor:pointer;text-align:center;transition:all 0.2s;min-width:0;}
 .btn-links:hover{background:#7c3aed;color:white;}
+.btn-deadline{display:block;width:100%;padding:7px 12px;background:#fff7ed;color:#ea580c;border:none;border-top:1px solid #fed7aa;font-size:0.78rem;font-weight:700;cursor:pointer;text-align:center;transition:all 0.2s;min-width:0;}
+.btn-deadline:hover{background:#ea580c;color:white;}
+.deadline-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:200;display:none;align-items:center;justify-content:center;padding:20px;}
+.deadline-overlay.show{display:flex;}
+.deadline-box{background:white;border-radius:20px;padding:28px 24px 22px;width:100%;max-width:380px;box-shadow:0 20px 50px rgba(0,0,0,0.2);}
+.deadline-box h4{font-size:1.05rem;font-weight:800;color:#ea580c;margin-bottom:4px;}
+.deadline-meeting-label{font-size:0.85rem;font-weight:700;color:var(--text);margin-bottom:16px;padding:10px 12px;background:#fff7ed;border-radius:10px;}
+.deadline-field{margin-bottom:14px;}
+.deadline-field label{display:block;font-size:0.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:5px;}
+.deadline-field input{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:0.92rem;outline:none;transition:border 0.2s;background:var(--bg);}
+.deadline-field input:focus{border-color:#ea580c;background:white;}
+.deadline-field input.error-field{border-color:var(--danger)!important;background:#fff5f5;}
+.deadline-date-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;}
+.deadline-date-row input,.deadline-date-row select{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:0.92rem;outline:none;transition:border 0.2s;background:var(--bg);}
+.deadline-date-row input:focus,.deadline-date-row select:focus{border-color:#ea580c;background:white;}
+.deadline-date-row input.error-field,.deadline-date-row select.error-field{border-color:var(--danger)!important;background:#fff5f5;}
+.deadline-time-note{font-size:0.78rem;color:var(--muted);background:var(--bg);border-radius:8px;padding:8px 12px;margin-bottom:14px;text-align:center;}
+.deadline-day-preview{display:none;align-items:center;gap:8px;background:#fff7ed;border-radius:10px;padding:8px 12px;margin-bottom:14px;}
+.deadline-day-preview.visible{display:flex;}
+.deadline-error{color:#b91c1c;font-size:0.8rem;background:#fef2f2;border:1px solid #fca5a5;padding:7px 11px;border-radius:8px;display:none;line-height:1.4;margin-bottom:12px;}
+.deadline-error.show{display:block!important;}
+.deadline-btns{display:flex;gap:10px;margin-top:6px;}
+.deadline-btns button{flex:1;padding:11px;border-radius:10px;font-size:0.92rem;font-weight:700;cursor:pointer;border:none;transition:all 0.2s;}
+.btn-deadline-cancel{background:var(--bg);color:var(--text);border:1.5px solid var(--border)!important;}
+.btn-deadline-cancel:hover{background:var(--border);}
+.btn-deadline-save{background:linear-gradient(135deg,#ea580c,#f59e0b);color:white;}
+.btn-deadline-save:hover{opacity:0.9;}
+.deadline-preview{background:#fff7ed;border-radius:8px;padding:8px 10px;font-size:0.8rem;color:#9a3412;margin-top:6px;border-left:3px solid #ea580c;display:flex;align-items:center;gap:6px;}
 .notes-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:200;display:none;align-items:center;justify-content:center;padding:20px;}
 .notes-overlay.show{display:flex;}
 .notes-box{background:white;border-radius:20px;padding:28px 24px 22px;width:100%;max-width:420px;box-shadow:0 20px 50px rgba(0,0,0,0.2);}
@@ -417,6 +445,42 @@ select.field-input{cursor:pointer;}
     <div class="links-btns">
       <button class="btn-links-cancel" onclick="closeLinks()">Cancel</button>
       <button class="btn-links-save" onclick="saveLinks()">Save Links</button>
+    </div>
+  </div>
+</div>
+
+<div class="deadline-overlay" id="deadline-overlay">
+  <div class="deadline-box">
+    <h4>⏰ Add Deadline</h4>
+    <div class="deadline-meeting-label" id="deadline-meeting-label">Meeting</div>
+    <div class="deadline-field">
+      <label>What is the deadline for?</label>
+      <input type="text" id="deadline-task" placeholder="e.g. Submit proposal, Send report..."/>
+    </div>
+    <div class="deadline-field">
+      <label>Deadline Date</label>
+      <div class="deadline-date-row">
+        <input type="number" id="deadline-date" min="1" max="31" placeholder="DD" oninput="updateDeadlineDay()"/>
+        <select id="deadline-month" onchange="updateDeadlineDay()">
+          <option value="">MM</option>
+          <option value="1">Jan</option><option value="2">Feb</option><option value="3">Mar</option>
+          <option value="4">Apr</option><option value="5">May</option><option value="6">Jun</option>
+          <option value="7">Jul</option><option value="8">Aug</option><option value="9">Sep</option>
+          <option value="10">Oct</option><option value="11">Nov</option><option value="12">Dec</option>
+        </select>
+        <input type="number" id="deadline-year" placeholder="YYYY" value="2026" oninput="updateDeadlineDay()"/>
+      </div>
+    </div>
+    <div class="deadline-day-preview" id="deadline-day-preview">
+      <span>📅</span>
+      <span style="font-size:0.78rem;color:var(--muted);font-weight:600;">Falls on</span>
+      <span style="font-size:0.9rem;font-weight:800;color:#ea580c;" id="deadline-day-value">—</span>
+    </div>
+    <div class="deadline-time-note">🕘 Reminder will be set for <strong>9:00 AM</strong> on the deadline date</div>
+    <div class="deadline-error" id="deadline-error"></div>
+    <div class="deadline-btns">
+      <button class="btn-deadline-cancel" onclick="closeDeadline()">Cancel</button>
+      <button class="btn-deadline-save" onclick="saveDeadline()">Set Deadline</button>
     </div>
   </div>
 </div>
@@ -764,6 +828,7 @@ function makeMeetingButtons(id,safeName){
     +'<button class="btn-edit-guests" data-fn="openEditGuests" style="border-top:none;border-bottom:1px solid #bbf7d0;">👥 Guests</button>'
     +'<button class="btn-minutes" data-fn="openNotes" style="border-top:none;border-bottom:1px solid #fde68a;">📝 Minutes of Meeting</button>'
     +'<button class="btn-links" data-fn="openLinks" style="border-top:none;border-bottom:1px solid #ddd6fe;">🔗 Meeting Links</button>'
+    +'<button class="btn-deadline" data-fn="openDeadline" style="border-top:none;border-bottom:1px solid #fed7aa;">⏰ Deadline</button>'
     +'<button class="btn-delete-meeting" data-fn="askDelete" style="border-top:none;">🗑️ Delete</button>'
     +'</div>';
 }
@@ -781,6 +846,7 @@ function attachMeetingButtons(container){
         else if(fn==='openEditGuests') openEditGuests(id,name);
         else if(fn==='openNotes') openNotes(id,name);
         else if(fn==='openLinks') openLinks(id,name);
+        else if(fn==='openDeadline') openDeadline(id,name);
         else if(fn==='askDelete') askDelete(id,name);
       });
     });
@@ -843,6 +909,7 @@ function renderDetail(){
     const safeName=escHtml(m.name).replace(/'/g,'&#39;');
     const guestHtml=m.guests&&m.guests.length?'<div class="guests-display" style="margin-top:4px;">'+m.guests.map(g=>'<span class="guest-tag">👤 '+escHtml(g)+'</span>').join('')+'</div>':'';
     const notesHtml=m.notes?'<div class="notes-preview">📝 '+escHtml(m.notes)+'</div>':'';
+    const deadlineHtml=m.deadlines&&m.deadlines.length?'<div style="margin-top:6px;">'+m.deadlines.map(function(dl){return '<div class="deadline-preview">⏰ '+escHtml(dl.task)+' &mdash; '+dl.date+' '+MONTHS[dl.month-1].slice(0,3)+' '+dl.year+' at 9:00 AM</div>';}).join('')+'</div>':'';
     const linksHtml=m.links&&m.links.length?'<div class="links-preview">'+m.links.map(l=>'<a class="link-chip" href="'+escHtml(l.url)+'" target="_blank">🔗 '+escHtml(l.label||l.url)+'</a>').join('')+'</div>':'';
     return '<div class="meeting-card">'
       +'<div class="meeting-card-top">'
@@ -850,7 +917,7 @@ function renderDetail(){
       +'<div class="meeting-info">'
       +'<div class="meeting-client">'+escHtml(m.name)+'</div>'
       +'<div class="meeting-meta">'+m.day+'</div>'
-      +guestHtml+notesHtml+linksHtml
+      +guestHtml+notesHtml+deadlineHtml+linksHtml
       +'</div>'
       +'<div class="meeting-time-badge">🕐 '+m.time+'</div>'
       +'</div>'
@@ -1160,6 +1227,78 @@ async function saveLinks(){
   toast('Links saved!','success');
 }
 document.getElementById('links-overlay').addEventListener('click',function(e){if(e.target===this)closeLinks();});
+
+// ── DEADLINE ──
+let pendingDeadlineId=null;
+
+function updateDeadlineDay(){
+  const date=parseInt(document.getElementById('deadline-date').value);
+  const month=parseInt(document.getElementById('deadline-month').value);
+  const year=parseInt(document.getElementById('deadline-year').value);
+  const preview=document.getElementById('deadline-day-preview');
+  if(date&&month&&year&&date>=1&&date<=31){
+    const d=new Date(year,month-1,date);
+    if(d.getDate()===date&&d.getMonth()===month-1){
+      document.getElementById('deadline-day-value').textContent=DAYS_FULL[d.getDay()];
+      preview.classList.add('visible');return;
+    }
+  }
+  preview.classList.remove('visible');
+}
+
+function openDeadline(id,name){
+  pendingDeadlineId=id;
+  const m=meetings.find(x=>x.id==id);
+  if(!m)return;
+  document.getElementById('deadline-meeting-label').textContent='Meeting with '+name;
+  document.getElementById('deadline-task').value='';
+  document.getElementById('deadline-date').value='';
+  document.getElementById('deadline-month').value='';
+  document.getElementById('deadline-year').value='2026';
+  document.getElementById('deadline-error').classList.remove('show');
+  document.getElementById('deadline-day-preview').classList.remove('visible');
+  ['deadline-task','deadline-date','deadline-month','deadline-year'].forEach(function(id){document.getElementById(id).classList.remove('error-field');});
+  document.getElementById('deadline-overlay').classList.add('show');
+  setTimeout(function(){document.getElementById('deadline-task').focus();},100);
+}
+
+function closeDeadline(){
+  pendingDeadlineId=null;
+  document.getElementById('deadline-overlay').classList.remove('show');
+}
+
+async function saveDeadline(){
+  if(pendingDeadlineId===null)return;
+  const taskEl=document.getElementById('deadline-task');
+  const dateEl=document.getElementById('deadline-date');
+  const monthEl=document.getElementById('deadline-month');
+  const yearEl=document.getElementById('deadline-year');
+  const errEl=document.getElementById('deadline-error');
+  const task=taskEl.value.trim();
+  const date=parseInt(dateEl.value);
+  const month=parseInt(monthEl.value);
+  const year=parseInt(yearEl.value);
+  ['deadline-task','deadline-date','deadline-month','deadline-year'].forEach(function(id){document.getElementById(id).classList.remove('error-field');});
+  errEl.classList.remove('show');
+  if(!task){taskEl.classList.add('error-field');errEl.textContent='Please enter what the deadline is for.';errEl.classList.add('show');taskEl.focus();return;}
+  if(!dateEl.value||isNaN(date)||date<1||date>31){dateEl.classList.add('error-field');errEl.textContent='Please enter a valid date (1-31).';errEl.classList.add('show');dateEl.focus();return;}
+  if(!monthEl.value||isNaN(month)){monthEl.classList.add('error-field');errEl.textContent='Please select a month.';errEl.classList.add('show');monthEl.focus();return;}
+  if(!yearEl.value||isNaN(year)||year<2020||year>2100){yearEl.classList.add('error-field');errEl.textContent='Please enter a valid year.';errEl.classList.add('show');yearEl.focus();return;}
+  const testDate=new Date(year,month-1,date);
+  if(testDate.getDate()!==date||testDate.getMonth()!==month-1){dateEl.classList.add('error-field');monthEl.classList.add('error-field');errEl.textContent=date+' '+MONTHS[month-1]+' '+year+' is not a valid date.';errEl.classList.add('show');return;}
+  const dayName=DAYS_FULL[testDate.getDay()];
+  const idx=meetings.findIndex(x=>x.id==pendingDeadlineId);
+  if(idx===-1)return;
+  const deadlines=meetings[idx].deadlines||[];
+  deadlines.push({task,date,month,year,day:dayName,time:'09:00'});
+  meetings[idx]={...meetings[idx],deadlines};
+  const updated=meetings[idx];
+  closeDeadline();
+  renderAll();
+  await saveMeetingToFirebase(updated);
+  toast('⏰ Deadline set for '+dayName+', '+date+' '+MONTHS[month-1]+' '+year+' at 9:00 AM!','success');
+}
+document.getElementById('deadline-overlay').addEventListener('click',function(e){if(e.target===this)closeDeadline();});
 
 function saveCalState(){
   localStorage.setItem('md_calstate',JSON.stringify({calYear,calMonth,selectedDay}));
