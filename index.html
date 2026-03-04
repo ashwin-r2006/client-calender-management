@@ -1208,14 +1208,14 @@ function showClientReport(name){
       +'</div>';
     // Detail panel — shown only on click
     let detail='<div class="report-meeting-detail-panel" id="panel-'+uid+'">';
-    detail+='<div class="rmd-row"><span class="rmd-label">👤 Client</span><span class="rmd-value" style="font-weight:700;">'+escHtml(m.name)+'</span></div>';
-    detail+='<div class="rmd-row"><span class="rmd-label">📅 Day</span><span class="rmd-value">'+m.day+'</span></div>';
-    detail+='<div class="rmd-row"><span class="rmd-label">📆 Date</span><span class="rmd-value">'+m.date+' '+MONTHS[m.month-1]+' '+m.year+'</span></div>';
-    detail+='<div class="rmd-row"><span class="rmd-label">🕐 Time</span><span class="rmd-value">'+m.time+'</span></div>';
-    if(m.guests&&m.guests.length)detail+='<div class="rmd-row"><span class="rmd-label">👥 Guests</span><span class="rmd-value">'+m.guests.map(function(g){return escHtml(g);}).join(', ')+'</span></div>';
-    if(m.notes)detail+='<div class="rmd-row"><span class="rmd-label">📝 Notes</span><span class="rmd-value" style="white-space:pre-wrap;background:#fefce8;border-left:3px solid #f59e0b;border-radius:6px;padding:6px 10px;">'+escHtml(m.notes)+'</span></div>';
-    if(m.deadlines&&m.deadlines.length)detail+='<div class="rmd-row"><span class="rmd-label">⏰ Deadline</span><span class="rmd-value">'+m.deadlines.map(function(dl){return '<div style="background:#fff7ed;border-left:3px solid #ea580c;border-radius:6px;padding:5px 9px;margin-bottom:4px;"><strong>'+escHtml(dl.task)+'</strong><br/>'+dl.date+' '+MONTHS[dl.month-1]+' '+dl.year+' at 9:00 AM</div>';}).join('')+'</span></div>';
-    if(m.links&&m.links.length)detail+='<div class="rmd-row"><span class="rmd-label">🔗 Links</span><span class="rmd-value">'+m.links.map(function(l){return '<a class="report-link-chip" href="'+escHtml(l.url)+'" target="_blank">🔗 '+escHtml(l.label||l.url)+'</a>';}).join('')+'</span></div>';
+    detail+='<div class="rmd-row"><div class="rmd-label">👤 Client</div><div class="rmd-value" style="font-weight:700;">'+escHtml(m.name)+'</div></div>';
+    detail+='<div class="rmd-row"><div class="rmd-label">📅 Day</div><div class="rmd-value">'+m.day+'</div></div>';
+    detail+='<div class="rmd-row"><div class="rmd-label">📆 Date</div><div class="rmd-value">'+m.date+' '+MONTHS[m.month-1]+' '+m.year+'</div></div>';
+    detail+='<div class="rmd-row"><div class="rmd-label">🕐 Time</div><div class="rmd-value">'+m.time+'</div></div>';
+    if(m.guests&&m.guests.length)detail+='<div class="rmd-row"><div class="rmd-label">👥 Guests</div><div class="rmd-value">'+m.guests.map(function(g){return escHtml(g);}).join(', ')+'</div></div>';
+    if(m.notes)detail+='<div class="rmd-row"><div class="rmd-label">📝 Notes</div><div class="rmd-value" style="white-space:pre-wrap;background:#fefce8;border-left:3px solid #f59e0b;border-radius:6px;padding:6px 10px;">'+escHtml(m.notes)+'</div></div>';
+    if(m.deadlines&&m.deadlines.length)detail+='<div class="rmd-row"><div class="rmd-label">⏰ Deadline</div><div class="rmd-value">'+m.deadlines.map(function(dl){return '<div style="background:#fff7ed;border-left:3px solid #ea580c;border-radius:6px;padding:5px 9px;margin-bottom:4px;"><strong>'+escHtml(dl.task)+'</strong><br/>'+dl.date+' '+MONTHS[dl.month-1]+' '+dl.year+' at 9:00 AM</div>';}).join('')+'</div></div>';
+    if(m.links&&m.links.length)detail+='<div class="rmd-row"><div class="rmd-label">🔗 Links</div><div class="rmd-value">'+m.links.map(function(l){return '<a class="report-link-chip" href="'+escHtml(l.url)+'" target="_blank">🔗 '+escHtml(l.label||l.url)+'</a>';}).join('')+'</div></div>';
     detail+='</div>';
     return '<div class="report-meeting-row '+type+'" style="padding:0;overflow:hidden;">'+summaryHtml+detail+'</div>';
   }
