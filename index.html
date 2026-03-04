@@ -758,24 +758,32 @@ document.getElementById('confirm-overlay').addEventListener('click',function(e){
 function renderAll(){renderClientList();renderCalendar();renderDetail();}
 
 function makeMeetingButtons(id,safeName){
-  var d=document.createElement('div');
-  d.style.cssText='display:flex;flex-direction:column;border-top:1px solid #e2e8f0;';
-  var btns=[
-    ['btn-reschedule-meeting','1px solid #bfdbfe','🔄 Reschedule','openReschedule'],
-    ['btn-edit-guests','1px solid #bbf7d0','👥 Guests','openEditGuests'],
-    ['btn-minutes','1px solid #fde68a','📝 Minutes of Meeting','openNotes'],
-    ['btn-links','1px solid #ddd6fe','🔗 Meeting Links','openLinks'],
-    ['btn-delete-meeting','none','🗑️ Delete','askDelete']
-  ];
-  btns.forEach(function(b){
-    var btn=document.createElement('button');
-    btn.className=b[0];
-    btn.style.cssText='border-top:none;border-bottom:'+b[1]+';';
-    btn.textContent=b[2];
-    btn.onclick=(function(fn,mid,sn){return function(){window[fn](mid,sn);};})(b[3],id,safeName);
-    d.appendChild(btn);
+  // returns html with data attributes; attachMeetingButtons wires up events after render
+  return '<div class="meeting-action-btns" data-id="'+id+'" data-name="'+safeName+'" style="display:flex;flex-direction:column;border-top:1px solid #e2e8f0;">'
+    +'<button class="btn-reschedule-meeting" data-fn="openReschedule" style="border-top:none;border-bottom:1px solid #bfdbfe;">🔄 Reschedule</button>'
+    +'<button class="btn-edit-guests" data-fn="openEditGuests" style="border-top:none;border-bottom:1px solid #bbf7d0;">👥 Guests</button>'
+    +'<button class="btn-minutes" data-fn="openNotes" style="border-top:none;border-bottom:1px solid #fde68a;">📝 Minutes of Meeting</button>'
+    +'<button class="btn-links" data-fn="openLinks" style="border-top:none;border-bottom:1px solid #ddd6fe;">🔗 Meeting Links</button>'
+    +'<button class="btn-delete-meeting" data-fn="askDelete" style="border-top:none;">🗑️ Delete</button>'
+    +'</div>';
+}
+
+function attachMeetingButtons(container){
+  container.querySelectorAll('.meeting-action-btns').forEach(function(wrap){
+    var id=parseInt(wrap.dataset.id);
+    var name=wrap.dataset.name;
+    wrap.querySelectorAll('button[data-fn]').forEach(function(btn){
+      btn.addEventListener('click',function(e){
+        e.stopPropagation();
+        var fn=btn.dataset.fn;
+        if(fn==='openReschedule') openReschedule(id,name);
+        else if(fn==='openEditGuests') openEditGuests(id,name);
+        else if(fn==='openNotes') openNotes(id,name);
+        else if(fn==='openLinks') openLinks(id,name);
+        else if(fn==='askDelete') askDelete(id,name);
+      });
+    });
   });
-  return d.outerHTML;
 }
 
 function renderClientList(){
@@ -787,6 +795,7 @@ function renderClientList(){
       +'<div class="client-time">'+m.day+', '+m.date+' '+MONTHS[m.month-1].slice(0,3)+' '+m.year+' &middot; '+m.time+'</div>'
       +'</div>';
   }).join('');
+  attachMeetingButtons(list);
 }
 
 function jumpToMeeting(id){
@@ -849,6 +858,7 @@ function renderDetail(){
       +'</div>';
   }).join('')
   :'<div class="no-meetings-day"><div class="big">☕</div>No meetings on this day.</div>';
+  attachMeetingButtons(b);
 }
 
 function changeMonth(dir){
