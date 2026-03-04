@@ -89,9 +89,9 @@ select.field-input{cursor:pointer;}
 .client-info{flex:1;min-width:0;}
 .client-name{font-weight:600;font-size:0.86rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .client-time{font-size:0.74rem;color:var(--muted);margin-top:2px;}
-.btn-delete-meeting{display:block;width:100%;padding:7px 12px;background:#fef2f2;color:#dc2626;border:none;border-top:1px solid #fecaca;font-size:0.78rem;font-weight:700;cursor:pointer;text-align:center;transition:all 0.2s;}
+.btn-delete-meeting{display:block;width:100%;padding:7px 12px;background:#fef2f2;color:#dc2626;border:none;border-top:1px solid #fecaca;font-size:0.78rem;font-weight:700;cursor:pointer;text-align:center;transition:all 0.2s;min-width:0;}
 .btn-delete-meeting:hover{background:#dc2626;color:white;}
-.btn-reschedule-meeting{display:block;width:100%;padding:7px 12px;background:#eff6ff;color:#2563eb;border:none;border-top:1px solid #bfdbfe;font-size:0.78rem;font-weight:700;cursor:pointer;text-align:center;transition:all 0.2s;}
+.btn-reschedule-meeting{display:block;width:100%;padding:7px 12px;background:#eff6ff;color:#2563eb;border:none;border-top:1px solid #bfdbfe;font-size:0.78rem;font-weight:700;cursor:pointer;text-align:center;transition:all 0.2s;min-width:0;}
 .btn-reschedule-meeting:hover{background:#2563eb;color:white;}
 .empty-clients{color:var(--muted);font-size:0.84rem;text-align:center;padding:18px 0;}
 .main{flex:1;padding:24px;overflow-y:auto;}
@@ -632,19 +632,21 @@ function renderAll(){renderClientList();renderCalendar();renderDetail();}
 function renderClientList(){
   const list=document.getElementById('client-list');
   if(!meetings.length){list.innerHTML='<div class="empty-clients">No meetings yet.</div>';return;}
-  list.innerHTML=meetings.map(m=>`
-    <div class="client-item">
+  list.innerHTML=meetings.map(m=>{
+    const safeName=escHtml(m.name).replace(/'/g,'&#39;');
+    return `<div class="client-item">
       <div class="client-top" onclick="jumpToMeeting(${m.id})">
         <div class="client-info">
           <div class="client-name">${escHtml(m.name)}</div>
           <div class="client-time">${m.day}, ${m.date} ${MONTHS[m.month-1].slice(0,3)} ${m.year} &middot; ${m.time}</div>
         </div>
       </div>
-      <div style="display:flex;">
-        <button class="btn-reschedule-meeting" style="flex:1;border-right:1px solid #bfdbfe;" onclick="openReschedule(${m.id},'${escHtml(m.name).replace(/'/g,"\\'")}')">🔄 Reschedule</button>
-        <button class="btn-delete-meeting" style="flex:1;" onclick="askDelete(${m.id},'${escHtml(m.name).replace(/'/g,"\\'")}')">Delete</button>
+      <div style="display:flex;border-top:1px solid #e2e8f0;">
+        <button class="btn-reschedule-meeting" style="flex:1;border-top:none;border-right:1px solid #bfdbfe;" onclick="openReschedule(${m.id},'${safeName}')">🔄 Reschedule</button>
+        <button class="btn-delete-meeting" style="flex:1;border-top:none;" onclick="askDelete(${m.id},'${safeName}')">Delete</button>
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 }
 
 function jumpToMeeting(id){
@@ -683,8 +685,9 @@ function renderDetail(){
   const dm=meetings.filter(m=>m.year===calYear&&m.month===calMonth+1&&m.date===selectedDay);
   const dayName=DAYS_FULL[new Date(calYear,calMonth,selectedDay).getDay()];
   t.textContent='📅 '+dayName+', '+selectedDay+' '+MONTHS[calMonth]+' '+calYear;
-  b.innerHTML=dm.length?dm.map(m=>`
-    <div class="meeting-card">
+  b.innerHTML=dm.length?dm.map(m=>{
+    const safeName=escHtml(m.name).replace(/'/g,'&#39;');
+    return `<div class="meeting-card">
       <div class="meeting-card-top">
         <div class="meeting-dot"></div>
         <div class="meeting-info">
@@ -693,11 +696,12 @@ function renderDetail(){
         </div>
         <div class="meeting-time-badge">🕐 ${m.time}</div>
       </div>
-      <div style="display:flex;">
-        <button class="btn-reschedule-meeting" style="flex:1;border-right:1px solid #bfdbfe;" onclick="openReschedule(${m.id},'${escHtml(m.name).replace(/'/g,"\\'")}')">🔄 Reschedule</button>
-        <button class="btn-delete-meeting" style="flex:1;" onclick="askDelete(${m.id},'${escHtml(m.name).replace(/'/g,"\\'")}')">Delete</button>
+      <div style="display:flex;border-top:1px solid #e2e8f0;">
+        <button class="btn-reschedule-meeting" style="flex:1;border-top:none;border-right:1px solid #bfdbfe;" onclick="openReschedule(${m.id},'${safeName}')">🔄 Reschedule</button>
+        <button class="btn-delete-meeting" style="flex:1;border-top:none;" onclick="askDelete(${m.id},'${safeName}')">Delete</button>
       </div>
-    </div>`).join('')
+    </div>`;
+  }).join('')
   :'<div class="no-meetings-day"><div class="big">☕</div>No meetings on this day.</div>';
 }
 
