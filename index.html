@@ -757,27 +757,42 @@ document.getElementById('confirm-overlay').addEventListener('click',function(e){
 
 function renderAll(){renderClientList();renderCalendar();renderDetail();}
 
+function makeMeetingButtons(id,safeName){
+  var d=document.createElement('div');
+  d.style.cssText='display:flex;flex-direction:column;border-top:1px solid #e2e8f0;';
+  var btns=[
+    ['btn-reschedule-meeting','1px solid #bfdbfe','🔄 Reschedule','openReschedule'],
+    ['btn-edit-guests','1px solid #bbf7d0','👥 Guests','openEditGuests'],
+    ['btn-minutes','1px solid #fde68a','📝 Minutes of Meeting','openNotes'],
+    ['btn-links','1px solid #ddd6fe','🔗 Meeting Links','openLinks'],
+    ['btn-delete-meeting','none','🗑️ Delete','askDelete']
+  ];
+  btns.forEach(function(b){
+    var btn=document.createElement('button');
+    btn.className=b[0];
+    btn.style.cssText='border-top:none;border-bottom:'+b[1]+';';
+    btn.textContent=b[2];
+    btn.onclick=(function(fn,mid,sn){return function(){window[fn](mid,sn);};})(b[3],id,safeName);
+    d.appendChild(btn);
+  });
+  return d.outerHTML;
+}
+
 function renderClientList(){
   const list=document.getElementById('client-list');
   if(!meetings.length){list.innerHTML='<div class="empty-clients">No meetings yet.</div>';return;}
   list.innerHTML=meetings.map(m=>{
     const safeName=escHtml(m.name).replace(/'/g,'&#39;');
-    return `<div class="client-item">
-      <div class="client-top" onclick="jumpToMeeting(${m.id})">
-        <div class="client-info">
-          <div class="client-name">${escHtml(m.name)}</div>
-          <div class="client-time">${m.day}, ${m.date} ${MONTHS[m.month-1].slice(0,3)} ${m.year} &middot; ${m.time}</div>
-          ${m.guests&&m.guests.length?'<div class="guests-display">'+m.guests.map(g=>'<span class="guest-tag">👤 '+escHtml(g)+'</span>').join('')+'</div>':''}
-        </div>
-      </div>
-      <div style="display:flex;flex-direction:column;border-top:1px solid #e2e8f0;">
-        <button class="btn-reschedule-meeting" style="border-top:none;border-bottom:1px solid #bfdbfe;" onclick="openReschedule(${m.id},'${safeName}')">🔄 Reschedule</button>
-        <button class="btn-edit-guests" style="border-top:none;border-bottom:1px solid #bbf7d0;" onclick="openEditGuests(${m.id},'${safeName}')">👥 Guests</button>
-        <button class="btn-minutes" style="border-top:none;border-bottom:1px solid #fde68a;" onclick="openNotes(${m.id},'${safeName}')">📝 Minutes of Meeting</button>
-        <button class="btn-links" style="border-top:none;border-bottom:1px solid #ddd6fe;" onclick="openLinks(${m.id},'${safeName}')">🔗 Meeting Links</button>
-        <button class="btn-delete-meeting" style="border-top:none;" onclick="askDelete(${m.id},'${safeName}')">🗑️ Delete</button>
-      </div>
-    </div>`;
+    const guestHtml=m.guests&&m.guests.length?'<div class="guests-display">'+m.guests.map(g=>'<span class="guest-tag">👤 '+escHtml(g)+'</span>').join('')+'</div>':'';
+    return '<div class="client-item">'
+      +'<div class="client-top" onclick="jumpToMeeting('+m.id+')">'
+      +'<div class="client-info">'
+      +'<div class="client-name">'+escHtml(m.name)+'</div>'
+      +'<div class="client-time">'+m.day+', '+m.date+' '+MONTHS[m.month-1].slice(0,3)+' '+m.year+' &middot; '+m.time+'</div>'
+      +guestHtml
+      +'</div></div>'
+      +makeMeetingButtons(m.id,safeName)
+      +'</div>';
   }).join('');
 }
 
@@ -819,26 +834,21 @@ function renderDetail(){
   t.textContent='📅 '+dayName+', '+selectedDay+' '+MONTHS[calMonth]+' '+calYear;
   b.innerHTML=dm.length?dm.map(m=>{
     const safeName=escHtml(m.name).replace(/'/g,'&#39;');
-    return `<div class="meeting-card">
-      <div class="meeting-card-top">
-        <div class="meeting-dot"></div>
-        <div class="meeting-info">
-          <div class="meeting-client">${escHtml(m.name)}</div>
-          <div class="meeting-meta">${m.day}</div>
-          ${m.guests&&m.guests.length?'<div class="guests-display" style="margin-top:4px;">'+m.guests.map(g=>'<span class="guest-tag">👤 '+escHtml(g)+'</span>').join('')+'</div>':''}
-          ${m.notes?'<div class="notes-preview">📝 '+escHtml(m.notes)+'</div>':''}
-          ${m.links&&m.links.length?'<div class="links-preview">'+m.links.map(l=>'<a class="link-chip" href="'+escHtml(l.url)+'" target="_blank">🔗 '+escHtml(l.label||l.url)+'</a>').join('')+'</div>':''}
-        </div>
-        <div class="meeting-time-badge">🕐 ${m.time}</div>
-      </div>
-      <div style="display:flex;flex-direction:column;border-top:1px solid #e2e8f0;">
-        <button class="btn-reschedule-meeting" style="border-top:none;border-bottom:1px solid #bfdbfe;" onclick="openReschedule(${m.id},'${safeName}')">🔄 Reschedule</button>
-        <button class="btn-edit-guests" style="border-top:none;border-bottom:1px solid #bbf7d0;" onclick="openEditGuests(${m.id},'${safeName}')">👥 Guests</button>
-        <button class="btn-minutes" style="border-top:none;border-bottom:1px solid #fde68a;" onclick="openNotes(${m.id},'${safeName}')">📝 Minutes of Meeting</button>
-        <button class="btn-links" style="border-top:none;border-bottom:1px solid #ddd6fe;" onclick="openLinks(${m.id},'${safeName}')">🔗 Meeting Links</button>
-        <button class="btn-delete-meeting" style="border-top:none;" onclick="askDelete(${m.id},'${safeName}')">🗑️ Delete</button>
-      </div>
-    </div>`;
+    const guestHtml=m.guests&&m.guests.length?'<div class="guests-display" style="margin-top:4px;">'+m.guests.map(g=>'<span class="guest-tag">👤 '+escHtml(g)+'</span>').join('')+'</div>':'';
+    const notesHtml=m.notes?'<div class="notes-preview">📝 '+escHtml(m.notes)+'</div>':'';
+    const linksHtml=m.links&&m.links.length?'<div class="links-preview">'+m.links.map(l=>'<a class="link-chip" href="'+escHtml(l.url)+'" target="_blank">🔗 '+escHtml(l.label||l.url)+'</a>').join('')+'</div>':'';
+    return '<div class="meeting-card">'
+      +'<div class="meeting-card-top">'
+      +'<div class="meeting-dot"></div>'
+      +'<div class="meeting-info">'
+      +'<div class="meeting-client">'+escHtml(m.name)+'</div>'
+      +'<div class="meeting-meta">'+m.day+'</div>'
+      +guestHtml+notesHtml+linksHtml
+      +'</div>'
+      +'<div class="meeting-time-badge">🕐 '+m.time+'</div>'
+      +'</div>'
+      +makeMeetingButtons(m.id,safeName)
+      +'</div>';
   }).join('')
   :'<div class="no-meetings-day"><div class="big">☕</div>No meetings on this day.</div>';
 }
