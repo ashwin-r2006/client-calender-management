@@ -700,6 +700,8 @@ async function loginAs(email,displayName,silent){
   };
   if(window._dbReady)await doLoad();
   else window.addEventListener('firebase-ready',doLoad,{once:true});
+  // Init notifications
+  setTimeout(initNotifications, 500);
 }
 function signOut(){
   currentUser=null;meetings=[];
@@ -1329,12 +1331,7 @@ function startNotificationChecker(){
   }, 60000);
 }
 
-// Init notifications after login
-const _origLoginAs = loginAs;
-async function loginAs(email, displayName, silent){
-  await _origLoginAs(email, displayName, silent);
-  initNotifications();
-}
+
 </script>
 </body>
 </html>
