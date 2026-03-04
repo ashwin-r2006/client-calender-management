@@ -696,7 +696,7 @@ function renderClientList(){
         <div class="client-info">
           <div class="client-name">${escHtml(m.name)}</div>
           <div class="client-time">${m.day}, ${m.date} ${MONTHS[m.month-1].slice(0,3)} ${m.year} &middot; ${m.time}</div>
-          ${m.guests&&m.guests.length?'<div class="guests-display">'+m.guests.map(g=>`<span class="guest-tag">👤 ${escHtml(g)}</span>`).join('')+'</div>':''}
+          ${m.guests&&m.guests.length?'<div class="guests-display">'+m.guests.map(g=>'<span class="guest-tag">👤 '+escHtml(g)+'</span>').join('')+'</div>':''}
         </div>
       </div>
       <div style="display:flex;border-top:1px solid #e2e8f0;">
@@ -752,7 +752,7 @@ function renderDetail(){
         <div class="meeting-info">
           <div class="meeting-client">${escHtml(m.name)}</div>
           <div class="meeting-meta">${m.day}</div>
-          ${m.guests&&m.guests.length?'<div class="guests-display" style="margin-top:4px;">'+m.guests.map(g=>`<span class="guest-tag">👤 ${escHtml(g)}</span>`).join('')+'</div>':''}
+          ${m.guests&&m.guests.length?'<div class="guests-display" style="margin-top:4px;">'+m.guests.map(g=>'<span class="guest-tag">👤 '+escHtml(g)+'</span>').join('')+'</div>':''}
         </div>
         <div class="meeting-time-badge">🕐 ${m.time}</div>
       </div>
