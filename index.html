@@ -830,7 +830,7 @@ function renderCalendar(){
 
 function selectDay(d){
   selectedDay=d;saveCalState();renderCalendar();renderDetail();
-  openQuick(d);
+  setTimeout(function(){ openQuick(d); }, 50);
 }
 
 function renderDetail(){
