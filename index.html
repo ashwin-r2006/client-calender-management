@@ -251,6 +251,12 @@ select.field-input{cursor:pointer;}
 .btn-add-link{width:100%;padding:7px;border:1.5px dashed var(--border);background:transparent;border-radius:9px;color:var(--muted);font-size:0.8rem;font-weight:600;cursor:pointer;transition:all 0.2s;margin-top:2px;}
 .btn-add-link:hover{border-color:#7c3aed;color:#7c3aed;background:#f5f3ff;}
 
+/* ── NOTIFICATIONS ── */
+.notif-banner{background:#f0fdf4;border:1.5px solid #86efac;border-radius:12px;padding:12px 16px;font-size:0.85rem;color:#166534;display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.notif-banner button{margin-left:auto;padding:5px 12px;border-radius:8px;border:none;background:#16a34a;color:white;font-size:0.78rem;font-weight:700;cursor:pointer;}
+.notif-blocked{background:#fef2f2;border-color:#fca5a5;color:#991b1b;}
+.notif-blocked button{background:#dc2626;}
+
 /* ── TOAST ── */
 #toast{position:fixed;bottom:24px;right:16px;left:16px;max-width:360px;margin:0 auto;background:#1e293b;color:white;padding:12px 18px;border-radius:12px;font-size:0.88rem;font-weight:600;box-shadow:0 8px 30px rgba(0,0,0,0.2);z-index:9999;transform:translateY(80px);opacity:0;transition:all 0.3s;pointer-events:none;text-align:center;}
 #toast.show{transform:translateY(0);opacity:1;}
@@ -379,6 +385,7 @@ select.field-input{cursor:pointer;}
           </div>
         </div>
         <div class="add-error" id="add-error"></div>
+        <div id="notif-banner"></div>
         <button class="btn-add" onclick="addMeeting()">+ Schedule Meeting</button>
         <div class="sync-status" id="sync-status"></div>
         <div class="client-section">
@@ -1200,6 +1207,133 @@ function showClientReport(name){
   html+='</div>';
   main.innerHTML=html;
   main.scrollTop=0;
+}
+
+// ── BROWSER NOTIFICATIONS ──
+let notifCheckInterval = null;
+
+function initNotifications(){
+  const banner = document.getElementById('notif-banner');
+  if(!('Notification' in window)){
+    banner.innerHTML = '<div class="notif-banner notif-blocked">🔔 Your browser does not support notifications.</div>';
+    return;
+  }
+  if(Notification.permission === 'granted'){
+    banner.innerHTML = '';
+    startNotificationChecker();
+  } else if(Notification.permission === 'denied'){
+    banner.innerHTML = '<div class="notif-banner notif-blocked">🔕 Notifications blocked. Please enable in browser settings.<button onclick="requestNotifPermission()">Try Again</button></div>';
+  } else {
+    banner.innerHTML = '<div class="notif-banner">🔔 Enable notifications to get deadline reminders at 9AM.<button onclick="requestNotifPermission()">Enable</button></div>';
+  }
+}
+
+function requestNotifPermission(){
+  Notification.requestPermission().then(function(permission){
+    initNotifications();
+    if(permission === 'granted'){
+      toast('✅ Notifications enabled! You will be reminded at 9AM on deadline days.','success');
+      // Send a test notification
+      setTimeout(function(){
+        new Notification('MeetingDesk ✅', {
+          body: 'Notifications are working! You will be reminded at 9:00 AM on deadline days.',
+          icon: 'https://ashwin-r2006.github.io/client-calender-management/favicon.ico'
+        });
+      }, 500);
+    }
+  });
+}
+
+function startNotificationChecker(){
+  checkDeadlinesNow();
+  // Check every minute
+  if(notifCheckInterval) clearInterval(notifCheckInterval);
+  notifCheckInterval = setInterval(checkDeadlinesNow, 60000);
+}
+
+function checkDeadlinesNow(){
+  if(Notification.permission !== 'granted') return;
+  if(!currentUser) return;
+  const now = new Date();
+  const todayDate = now.getDate();
+  const todayMonth = now.getMonth() + 1;
+  const todayYear = now.getFullYear();
+  const currentHour = now.getHours();
+  const currentMin = now.getMinutes();
+
+  // Only fire between 9:00 and 9:01 AM
+  if(currentHour !== 9 || currentMin !== 0) return;
+
+  meetings.forEach(function(m){
+    if(!m.deadlines || !m.deadlines.length) return;
+    m.deadlines.forEach(function(dl){
+      if(dl.date === todayDate && dl.month === todayMonth && dl.year === todayYear){
+        // Check if already notified today
+        const notifKey = 'notified_' + m.id + '_' + dl.task + '_' + todayDate + '_' + todayMonth + '_' + todayYear;
+        if(localStorage.getItem(notifKey)) return;
+        localStorage.setItem(notifKey, '1');
+        new Notification('⏰ Deadline Today — MeetingDesk', {
+          body: dl.task + '\nMeeting with ' + m.name + ' | Due today at 9:00 AM',
+          icon: 'https://ashwin-r2006.github.io/client-calender-management/favicon.ico',
+          tag: notifKey,
+          requireInteraction: true
+        });
+      }
+    });
+  });
+}
+
+// Also check for upcoming deadlines (tomorrow) at 9PM the day before
+function checkUpcomingDeadlines(){
+  if(Notification.permission !== 'granted') return;
+  if(!currentUser) return;
+  const now = new Date();
+  const currentHour = now.getHours();
+  const currentMin = now.getMinutes();
+
+  // Fire reminder at 9PM the evening before
+  if(currentHour !== 21 || currentMin !== 0) return;
+
+  const tomorrow = new Date(now);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  const tDate = tomorrow.getDate();
+  const tMonth = tomorrow.getMonth() + 1;
+  const tYear = tomorrow.getFullYear();
+
+  meetings.forEach(function(m){
+    if(!m.deadlines || !m.deadlines.length) return;
+    m.deadlines.forEach(function(dl){
+      if(dl.date === tDate && dl.month === tMonth && dl.year === tYear){
+        const notifKey = 'notified_eve_' + m.id + '_' + dl.task + '_' + tDate + '_' + tMonth + '_' + tYear;
+        if(localStorage.getItem(notifKey)) return;
+        localStorage.setItem(notifKey, '1');
+        new Notification('📅 Deadline Tomorrow — MeetingDesk', {
+          body: dl.task + '\nMeeting with ' + m.name + ' | Due tomorrow at 9:00 AM',
+          icon: 'https://ashwin-r2006.github.io/client-calender-management/favicon.ico',
+          tag: notifKey,
+          requireInteraction: true
+        });
+      }
+    });
+  });
+}
+
+// Merge both checks into one interval
+function startNotificationChecker(){
+  checkDeadlinesNow();
+  checkUpcomingDeadlines();
+  if(notifCheckInterval) clearInterval(notifCheckInterval);
+  notifCheckInterval = setInterval(function(){
+    checkDeadlinesNow();
+    checkUpcomingDeadlines();
+  }, 60000);
+}
+
+// Init notifications after login
+const _origLoginAs = loginAs;
+async function loginAs(email, displayName, silent){
+  await _origLoginAs(email, displayName, silent);
+  initNotifications();
 }
 </script>
 </body>
