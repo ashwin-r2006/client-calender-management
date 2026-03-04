@@ -1304,12 +1304,7 @@ function requestNotifPermission(){
   });
 }
 
-function startNotificationChecker(){
-  checkDeadlinesNow();
-  // Check every minute
-  if(notifCheckInterval) clearInterval(notifCheckInterval);
-  notifCheckInterval = setInterval(checkDeadlinesNow, 60000);
-}
+// startNotificationChecker defined below
 
 function checkDeadlinesNow(){
   if(Notification.permission !== 'granted') return;
