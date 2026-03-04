@@ -58,6 +58,50 @@ header{background:white;border-bottom:1px solid var(--border);padding:0 20px;hei
 .btn-signout{padding:6px 12px;border:1.5px solid var(--border);background:white;border-radius:8px;font-size:0.78rem;font-weight:600;cursor:pointer;color:var(--muted);transition:all 0.2s;}
 .btn-signout:hover{border-color:var(--danger);color:var(--danger);}
 .app-body{display:flex;flex:1;}
+.tab-bar{background:white;border-bottom:1px solid var(--border);display:flex;padding:0 20px;gap:0;}
+.tab-btn{padding:12px 22px;font-size:0.88rem;font-weight:700;color:var(--muted);border:none;background:transparent;cursor:pointer;border-bottom:3px solid transparent;transition:all 0.2s;margin-bottom:-1px;}
+.tab-btn.active{color:var(--primary);border-bottom-color:var(--primary);}
+.tab-btn:hover:not(.active){color:var(--text);background:var(--bg);}
+.tab-content{display:none;}
+.tab-content.active{display:flex;flex:1;}
+/* Client Reports Tab */
+#reports-tab{flex:1;padding:24px;overflow-y:auto;display:flex;gap:20px;}
+.reports-sidebar{width:260px;min-width:220px;background:white;border-radius:16px;box-shadow:var(--shadow);padding:16px;height:fit-content;position:sticky;top:24px;}
+.reports-sidebar h3{font-size:0.85rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:12px;}
+.reports-search{width:100%;padding:8px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:0.88rem;outline:none;margin-bottom:12px;transition:border 0.2s;}
+.reports-search:focus{border-color:var(--primary);}
+.client-report-item{padding:10px 12px;border-radius:10px;cursor:pointer;transition:all 0.2s;border:1.5px solid transparent;margin-bottom:4px;}
+.client-report-item:hover{background:var(--primary-light);border-color:var(--primary);}
+.client-report-item.active{background:var(--primary);color:white;}
+.client-report-item .cr-name{font-weight:700;font-size:0.9rem;}
+.client-report-item .cr-count{font-size:0.75rem;opacity:0.7;margin-top:2px;}
+.reports-main{flex:1;}
+.report-empty{background:white;border-radius:16px;box-shadow:var(--shadow);padding:40px;text-align:center;color:var(--muted);}
+.report-empty .big{font-size:2.5rem;margin-bottom:12px;}
+.report-card{background:white;border-radius:16px;box-shadow:var(--shadow);padding:22px;margin-bottom:16px;}
+.report-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--border);}
+.report-client-name{font-size:1.2rem;font-weight:800;color:var(--primary);}
+.report-stats{display:flex;gap:10px;flex-wrap:wrap;}
+.stat-badge{padding:5px 12px;border-radius:20px;font-size:0.78rem;font-weight:700;}
+.stat-total{background:var(--primary-light);color:var(--primary);}
+.stat-upcoming{background:#dcfce7;color:#16a34a;}
+.stat-past{background:#f1f5f9;color:var(--muted);}
+.report-section{margin-bottom:18px;}
+.report-section-title{font-size:0.75rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.report-meeting-row{border:1.5px solid var(--border);border-radius:12px;padding:14px;margin-bottom:8px;transition:border-color 0.2s;}
+.report-meeting-row:hover{border-color:var(--primary);}
+.report-meeting-row.upcoming{border-left:4px solid var(--success);}
+.report-meeting-row.past{border-left:4px solid var(--border);}
+.report-meeting-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.report-meeting-date{font-weight:700;font-size:0.92rem;}
+.report-meeting-time{background:var(--primary-light);color:var(--primary);border-radius:8px;padding:3px 9px;font-size:0.78rem;font-weight:700;}
+.report-detail-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;}
+.report-guests{font-size:0.8rem;color:var(--muted);margin-bottom:4px;}
+.report-notes-box{background:#fefce8;border-left:3px solid #f59e0b;border-radius:6px;padding:8px 10px;font-size:0.82rem;color:#92400e;white-space:pre-wrap;margin-top:6px;}
+.report-deadline-box{background:#fff7ed;border-left:3px solid #ea580c;border-radius:6px;padding:7px 10px;font-size:0.8rem;color:#9a3412;margin-top:4px;}
+.report-link-chip{display:inline-flex;align-items:center;gap:4px;background:#f5f3ff;color:#7c3aed;border-radius:20px;padding:3px 10px;font-size:0.78rem;font-weight:600;text-decoration:none;border:1px solid #ddd6fe;transition:all 0.2s;margin:2px;}
+.report-link-chip:hover{background:#7c3aed;color:white;}
+.no-clients-msg{text-align:center;color:var(--muted);font-size:0.88rem;padding:20px 0;}
 .sidebar{width:300px;min-width:280px;background:white;border-right:1px solid var(--border);padding:20px 16px;display:flex;flex-direction:column;gap:14px;height:calc(100vh - 60px);overflow-y:auto;position:sticky;top:60px;}
 .sidebar h2{font-size:0.95rem;font-weight:700;}
 .form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;}
@@ -339,6 +383,11 @@ select.field-input{cursor:pointer;}
       <button class="btn-signout" onclick="signOut()">Sign Out</button>
     </div>
   </header>
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="switchMainTab('scheduler')">📅 Meeting Scheduler</button>
+    <button class="tab-btn" onclick="switchMainTab('reports')">📊 Client Reports</button>
+  </div>
+  <div class="tab-content active" id="tab-scheduler">
   <div class="app-body">
     <aside class="sidebar">
       <h2>➕ Add Meeting</h2>
@@ -416,6 +465,21 @@ select.field-input{cursor:pointer;}
       </div>
     </main>
   </div>
+  </div><!-- end tab-scheduler -->
+
+  <div class="tab-content" id="tab-reports">
+    <div id="reports-tab">
+      <div class="reports-sidebar">
+        <h3>👥 Clients</h3>
+        <input class="reports-search" id="reports-search" type="text" placeholder="Search client..." oninput="renderReportsList()"/>
+        <div id="reports-client-list"><div class="no-clients-msg">No meetings yet.</div></div>
+      </div>
+      <div class="reports-main" id="reports-main">
+        <div class="report-empty"><div class="big">📊</div><p>Select a client to view their full report.</p></div>
+      </div>
+    </div>
+  </div><!-- end tab-reports -->
+
 </div>
 
 <div class="notes-overlay" id="notes-overlay">
@@ -1299,6 +1363,103 @@ async function saveDeadline(){
   toast('⏰ Deadline set for '+dayName+', '+date+' '+MONTHS[month-1]+' '+year+' at 9:00 AM!','success');
 }
 document.getElementById('deadline-overlay').addEventListener('click',function(e){if(e.target===this)closeDeadline();});
+
+// ── TABS ──
+function switchMainTab(tab){
+  document.querySelectorAll('.tab-btn').forEach(function(b,i){b.classList.toggle('active',(tab==='scheduler'?0:1)===i);});
+  document.getElementById('tab-scheduler').classList.toggle('active', tab==='scheduler');
+  document.getElementById('tab-reports').classList.toggle('active', tab==='reports');
+  if(tab==='reports'){renderReportsList();document.getElementById('reports-main').innerHTML='<div class="report-empty"><div class="big">📊</div><p>Select a client to view their full report.</p></div>';}
+}
+
+// ── CLIENT REPORTS ──
+let activeReportClient=null;
+
+function renderReportsList(){
+  const search=(document.getElementById('reports-search').value||'').trim().toLowerCase();
+  // Get unique client names
+  const clientMap={};
+  meetings.forEach(function(m){
+    const key=m.name.toLowerCase();
+    if(!clientMap[key]) clientMap[key]={name:m.name,count:0};
+    clientMap[key].count++;
+  });
+  const clients=Object.values(clientMap).filter(function(c){return !search||c.name.toLowerCase().includes(search);});
+  clients.sort(function(a,b){return a.name.localeCompare(b.name);});
+  const list=document.getElementById('reports-client-list');
+  if(!clients.length){list.innerHTML='<div class="no-clients-msg">No clients found.</div>';return;}
+  list.innerHTML=clients.map(function(c){
+    const isActive=activeReportClient&&activeReportClient.toLowerCase()===c.name.toLowerCase();
+    return '<div class="client-report-item'+(isActive?' active':'')+'" onclick="showClientReport(''+escHtml(c.name).replace(/'/g,'&#39;')+'')">'
+      +'<div class="cr-name">'+escHtml(c.name)+'</div>'
+      +'<div class="cr-count">'+c.count+' meeting'+(c.count!==1?'s':'')+'</div>'
+      +'</div>';
+  }).join('');
+}
+
+function showClientReport(name){
+  activeReportClient=name;
+  renderReportsList();
+  const now=new Date();
+  const clientMeetings=meetings.filter(function(m){return m.name.toLowerCase()===name.toLowerCase();});
+  clientMeetings.sort(function(a,b){return new Date(a.year,a.month-1,a.date)-new Date(b.year,b.month-1,b.date);});
+  const upcoming=clientMeetings.filter(function(m){return new Date(m.year,m.month-1,m.date,parseInt(m.time),parseInt(m.time.split(':')[1]))>=now;});
+  const past=clientMeetings.filter(function(m){return new Date(m.year,m.month-1,m.date,parseInt(m.time),parseInt(m.time.split(':')[1]))<now;});
+  const total=clientMeetings.length;
+
+  function buildMeetingRow(m,type){
+    const dateStr=m.day+', '+m.date+' '+MONTHS[m.month-1]+' '+m.year;
+    var html='<div class="report-meeting-row '+type+'">';
+    html+='<div class="report-meeting-top"><div class="report-meeting-date">'+dateStr+'</div><div class="report-meeting-time">🕐 '+m.time+'</div></div>';
+    if(m.guests&&m.guests.length){
+      html+='<div class="report-guests">👥 Guests: '+m.guests.map(function(g){return escHtml(g);}).join(', ')+'</div>';
+    }
+    if(m.notes){
+      html+='<div class="report-notes-box">📝 '+escHtml(m.notes)+'</div>';
+    }
+    if(m.deadlines&&m.deadlines.length){
+      m.deadlines.forEach(function(dl){
+        html+='<div class="report-deadline-box">⏰ '+escHtml(dl.task)+' &mdash; '+dl.date+' '+MONTHS[dl.month-1].slice(0,3)+' '+dl.year+' at 9:00 AM</div>';
+      });
+    }
+    if(m.links&&m.links.length){
+      html+='<div class="report-detail-row">';
+      m.links.forEach(function(l){
+        html+='<a class="report-link-chip" href="'+escHtml(l.url)+'" target="_blank">🔗 '+escHtml(l.label||l.url)+'</a>';
+      });
+      html+='</div>';
+    }
+    html+='</div>';
+    return html;
+  }
+
+  var html='<div class="report-card">';
+  html+='<div class="report-card-header">';
+  html+='<div class="report-client-name">👤 '+escHtml(name)+'</div>';
+  html+='<div class="report-stats">';
+  html+='<span class="stat-badge stat-total">'+total+' Total</span>';
+  html+='<span class="stat-badge stat-upcoming">'+upcoming.length+' Upcoming</span>';
+  html+='<span class="stat-badge stat-past">'+past.length+' Past</span>';
+  html+='</div></div>';
+
+  if(upcoming.length){
+    html+='<div class="report-section">';
+    html+='<div class="report-section-title">🟢 Upcoming Meetings</div>';
+    upcoming.forEach(function(m){html+=buildMeetingRow(m,'upcoming');});
+    html+='</div>';
+  }
+
+  if(past.length){
+    html+='<div class="report-section">';
+    html+='<div class="report-section-title">🕐 Past Meetings</div>';
+    past.slice().reverse().forEach(function(m){html+=buildMeetingRow(m,'past');});
+    html+='</div>';
+  }
+
+  html+='</div>';
+  document.getElementById('reports-main').innerHTML=html;
+  document.getElementById('reports-main').scrollTop=0;
+}
 
 function saveCalState(){
   localStorage.setItem('md_calstate',JSON.stringify({calYear,calMonth,selectedDay}));
