@@ -782,16 +782,9 @@ function renderClientList(){
   const list=document.getElementById('client-list');
   if(!meetings.length){list.innerHTML='<div class="empty-clients">No meetings yet.</div>';return;}
   list.innerHTML=meetings.map(m=>{
-    const safeName=escHtml(m.name).replace(/'/g,'&#39;');
-    const guestHtml=m.guests&&m.guests.length?'<div class="guests-display">'+m.guests.map(g=>'<span class="guest-tag">👤 '+escHtml(g)+'</span>').join('')+'</div>':'';
-    return '<div class="client-item">'
-      +'<div class="client-top" onclick="jumpToMeeting('+m.id+')">'
-      +'<div class="client-info">'
+    return '<div class="client-item" onclick="jumpToMeeting('+m.id+')" style="cursor:pointer;padding:10px 12px;">'
       +'<div class="client-name">'+escHtml(m.name)+'</div>'
       +'<div class="client-time">'+m.day+', '+m.date+' '+MONTHS[m.month-1].slice(0,3)+' '+m.year+' &middot; '+m.time+'</div>'
-      +guestHtml
-      +'</div></div>'
-      +makeMeetingButtons(m.id,safeName)
       +'</div>';
   }).join('');
 }
@@ -800,7 +793,12 @@ function jumpToMeeting(id){
   const m=meetings.find(x=>x.id===id);
   if(!m)return;
   calYear=m.year;calMonth=m.month-1;selectedDay=m.date;
-  renderCalendar();renderDetail();
+  saveCalState();renderCalendar();renderDetail();
+  // Scroll to detail panel
+  setTimeout(()=>{
+    const detail=document.querySelector('.meeting-detail');
+    if(detail) detail.scrollIntoView({behavior:'smooth',block:'start'});
+  },100);
 }
 
 function renderCalendar(){
