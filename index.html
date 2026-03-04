@@ -66,6 +66,10 @@ header{background:white;border-bottom:1px solid var(--border);padding:0 20px;hei
 .username{font-weight:600;font-size:0.88rem;}
 .btn-signout{padding:6px 12px;border:1.5px solid var(--border);background:white;border-radius:8px;font-size:0.78rem;font-weight:600;cursor:pointer;color:var(--muted);transition:all 0.2s;}
 .btn-signout:hover{border-color:var(--danger);color:var(--danger);}
+.btn-notif{padding:6px 10px;border:1.5px solid var(--border);background:white;border-radius:8px;font-size:0.88rem;font-weight:700;cursor:pointer;color:var(--muted);transition:all 0.2s;display:flex;align-items:center;gap:5px;}
+.btn-notif:hover{border-color:var(--primary);color:var(--primary);}
+.btn-notif.enabled{border-color:#16a34a;color:#16a34a;background:#f0fdf4;}
+.btn-notif.blocked{border-color:#dc2626;color:#dc2626;background:#fef2f2;}
 
 /* ── TABS ── */
 .tab-bar{background:white;border-bottom:1px solid var(--border);display:flex;padding:0 20px;}
@@ -323,6 +327,7 @@ select.field-input{cursor:pointer;}
     <div class="header-user">
       <div class="avatar" id="user-avatar">A</div>
       <span class="username" id="user-name">User</span>
+      <button class="btn-notif" id="notif-btn" onclick="requestNotifPermission()" title="Notification status">🔔 Notifications</button>
       <button class="btn-signout" onclick="signOut()">Sign Out</button>
     </div>
   </header>
@@ -385,7 +390,6 @@ select.field-input{cursor:pointer;}
           </div>
         </div>
         <div class="add-error" id="add-error"></div>
-        <div id="notif-banner"></div>
         <button class="btn-add" onclick="addMeeting()">+ Schedule Meeting</button>
         <div class="sync-status" id="sync-status"></div>
         <div class="client-section">
@@ -1215,18 +1219,32 @@ function showClientReport(name){
 let notifCheckInterval = null;
 
 function initNotifications(){
-  const banner = document.getElementById('notif-banner');
+  const btn = document.getElementById('notif-btn');
+  if(!btn) return;
   if(!('Notification' in window)){
-    banner.innerHTML = '<div class="notif-banner notif-blocked">🔔 Your browser does not support notifications.</div>';
+    btn.textContent = '🔕 Not Supported';
+    btn.classList.add('blocked');
+    btn.onclick = null;
     return;
   }
   if(Notification.permission === 'granted'){
-    banner.innerHTML = '';
+    btn.innerHTML = '🔔 Notifications <span style="font-size:0.7rem;background:#16a34a;color:white;border-radius:20px;padding:1px 7px;margin-left:2px;">ON</span>';
+    btn.classList.add('enabled');
+    btn.classList.remove('blocked');
+    btn.title = 'Notifications are ON — you will be reminded at 9AM on deadline days';
+    btn.onclick = null;
     startNotificationChecker();
   } else if(Notification.permission === 'denied'){
-    banner.innerHTML = '<div class="notif-banner notif-blocked">🔕 Notifications blocked. Please enable in browser settings.<button onclick="requestNotifPermission()">Try Again</button></div>';
+    btn.innerHTML = '🔕 Notifications <span style="font-size:0.7rem;background:#dc2626;color:white;border-radius:20px;padding:1px 7px;margin-left:2px;">BLOCKED</span>';
+    btn.classList.add('blocked');
+    btn.classList.remove('enabled');
+    btn.title = 'Notifications are blocked — enable in browser settings';
+    btn.onclick = null;
   } else {
-    banner.innerHTML = '<div class="notif-banner">🔔 Enable notifications to get deadline reminders at 9AM.<button onclick="requestNotifPermission()">Enable</button></div>';
+    btn.innerHTML = '🔔 Notifications <span style="font-size:0.7rem;background:#f59e0b;color:white;border-radius:20px;padding:1px 7px;margin-left:2px;">OFF</span>';
+    btn.classList.remove('enabled','blocked');
+    btn.title = 'Click to enable deadline notifications';
+    btn.onclick = requestNotifPermission;
   }
 }
 
