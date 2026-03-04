@@ -108,6 +108,46 @@ select.field-input{cursor:pointer;}
 .guest-tag .remove-tag{background:none;border:none;color:var(--primary);cursor:pointer;font-size:0.85rem;padding:0;line-height:1;opacity:0.6;}
 .guest-tag .remove-tag:hover{opacity:1;}
 .guests-display{display:flex;flex-wrap:wrap;margin-top:4px;}
+.btn-minutes{display:block;width:100%;padding:7px 12px;background:#fefce8;color:#ca8a04;border:none;border-top:1px solid #fde68a;font-size:0.78rem;font-weight:700;cursor:pointer;text-align:center;transition:all 0.2s;min-width:0;}
+.btn-minutes:hover{background:#ca8a04;color:white;}
+.btn-links{display:block;width:100%;padding:7px 12px;background:#f5f3ff;color:#7c3aed;border:none;border-top:1px solid #ddd6fe;font-size:0.78rem;font-weight:700;cursor:pointer;text-align:center;transition:all 0.2s;min-width:0;}
+.btn-links:hover{background:#7c3aed;color:white;}
+.notes-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:200;display:none;align-items:center;justify-content:center;padding:20px;}
+.notes-overlay.show{display:flex;}
+.notes-box{background:white;border-radius:20px;padding:28px 24px 22px;width:100%;max-width:420px;box-shadow:0 20px 50px rgba(0,0,0,0.2);}
+.notes-box h4{font-size:1.05rem;font-weight:800;margin-bottom:4px;}
+.notes-meeting-label{font-size:0.85rem;font-weight:700;color:var(--text);margin-bottom:16px;padding:10px 12px;background:#fefce8;border-radius:10px;}
+.notes-box textarea{width:100%;height:160px;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:0.9rem;outline:none;resize:vertical;font-family:inherit;line-height:1.5;transition:border 0.2s;}
+.notes-box textarea:focus{border-color:#ca8a04;}
+.notes-char-count{font-size:0.72rem;color:var(--muted);text-align:right;margin-top:4px;}
+.notes-btns{display:flex;gap:10px;margin-top:14px;}
+.notes-btns button{flex:1;padding:11px;border-radius:10px;font-size:0.92rem;font-weight:700;cursor:pointer;border:none;transition:all 0.2s;}
+.btn-notes-cancel{background:var(--bg);color:var(--text);border:1.5px solid var(--border)!important;}
+.btn-notes-cancel:hover{background:var(--border);}
+.btn-notes-save{background:linear-gradient(135deg,#ca8a04,#f59e0b);color:white;}
+.btn-notes-save:hover{opacity:0.9;}
+.links-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:200;display:none;align-items:center;justify-content:center;padding:20px;}
+.links-overlay.show{display:flex;}
+.links-box{background:white;border-radius:20px;padding:28px 24px 22px;width:100%;max-width:420px;box-shadow:0 20px 50px rgba(0,0,0,0.2);max-height:90vh;overflow-y:auto;}
+.links-box h4{font-size:1.05rem;font-weight:800;color:#7c3aed;margin-bottom:4px;}
+.links-meeting-label{font-size:0.85rem;font-weight:700;color:var(--text);margin-bottom:16px;padding:10px 12px;background:#f5f3ff;border-radius:10px;}
+.link-row{display:grid;grid-template-columns:1fr 1fr auto;gap:6px;margin-bottom:8px;align-items:center;}
+.link-row input{padding:8px 10px;border:1.5px solid var(--border);border-radius:9px;font-size:0.84rem;outline:none;background:var(--bg);transition:border 0.2s;width:100%;}
+.link-row input:focus{border-color:#7c3aed;background:white;}
+.btn-remove-link{height:34px;padding:0 10px;border-radius:7px;border:1.5px solid #fecaca;background:#fef2f2;color:#dc2626;font-size:0.75rem;cursor:pointer;font-weight:700;white-space:nowrap;transition:all 0.2s;}
+.btn-remove-link:hover{background:#dc2626;color:white;border-color:#dc2626;}
+.btn-add-link{width:100%;padding:7px;border:1.5px dashed var(--border);background:transparent;border-radius:9px;color:var(--muted);font-size:0.8rem;font-weight:600;cursor:pointer;transition:all 0.2s;margin-top:2px;}
+.btn-add-link:hover{border-color:#7c3aed;color:#7c3aed;background:#f5f3ff;}
+.links-btns{display:flex;gap:10px;margin-top:14px;}
+.links-btns button{flex:1;padding:11px;border-radius:10px;font-size:0.92rem;font-weight:700;cursor:pointer;border:none;transition:all 0.2s;}
+.btn-links-cancel{background:var(--bg);color:var(--text);border:1.5px solid var(--border)!important;}
+.btn-links-cancel:hover{background:var(--border);}
+.btn-links-save{background:linear-gradient(135deg,#7c3aed,var(--accent));color:white;}
+.btn-links-save:hover{opacity:0.9;}
+.notes-preview{background:#fefce8;border-radius:8px;padding:8px 10px;font-size:0.8rem;color:#92400e;margin-top:6px;line-height:1.5;white-space:pre-wrap;border-left:3px solid #f59e0b;}
+.links-preview{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;}
+.link-chip{display:inline-flex;align-items:center;gap:4px;background:#f5f3ff;color:#7c3aed;border-radius:20px;padding:3px 10px;font-size:0.78rem;font-weight:600;text-decoration:none;border:1px solid #ddd6fe;transition:all 0.2s;}
+.link-chip:hover{background:#7c3aed;color:white;}
 .empty-clients{color:var(--muted);font-size:0.84rem;text-align:center;padding:18px 0;}
 .main{flex:1;padding:24px;overflow-y:auto;}
 .calendar-card{background:white;border-radius:16px;box-shadow:var(--shadow);padding:20px;max-width:680px;}
@@ -347,6 +387,37 @@ select.field-input{cursor:pointer;}
         </div>
       </div>
     </main>
+  </div>
+</div>
+
+<div class="notes-overlay" id="notes-overlay">
+  <div class="notes-box">
+    <h4>📝 Minutes of Meeting</h4>
+    <div class="notes-meeting-label" id="notes-meeting-label">Meeting</div>
+    <textarea id="notes-textarea" placeholder="Write your meeting notes, decisions, action items..."></textarea>
+    <div class="notes-char-count" id="notes-char-count">0 characters</div>
+    <div class="notes-btns">
+      <button class="btn-notes-cancel" onclick="closeNotes()">Cancel</button>
+      <button class="btn-notes-save" onclick="saveNotes()">Save Notes</button>
+    </div>
+  </div>
+</div>
+
+<div class="links-overlay" id="links-overlay">
+  <div class="links-box">
+    <h4>🔗 Meeting Links</h4>
+    <div class="links-meeting-label" id="links-meeting-label">Meeting</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:6px;margin-bottom:6px;">
+      <div style="font-size:0.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;">Label</div>
+      <div style="font-size:0.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;">URL</div>
+      <div></div>
+    </div>
+    <div id="links-rows"></div>
+    <button class="btn-add-link" onclick="addLinkRow()">+ Add Link</button>
+    <div class="links-btns">
+      <button class="btn-links-cancel" onclick="closeLinks()">Cancel</button>
+      <button class="btn-links-save" onclick="saveLinks()">Save Links</button>
+    </div>
   </div>
 </div>
 
@@ -699,10 +770,12 @@ function renderClientList(){
           ${m.guests&&m.guests.length?'<div class="guests-display">'+m.guests.map(g=>'<span class="guest-tag">👤 '+escHtml(g)+'</span>').join('')+'</div>':''}
         </div>
       </div>
-      <div style="display:flex;border-top:1px solid #e2e8f0;">
-        <button class="btn-reschedule-meeting" style="flex:1;border-top:none;border-right:1px solid #bfdbfe;" onclick="openReschedule(${m.id},'${safeName}')">🔄 Reschedule</button>
-        <button class="btn-edit-guests" style="flex:1;border-top:none;border-right:1px solid #bbf7d0;" onclick="openEditGuests(${m.id},'${safeName}')">👥 Guests</button>
-        <button class="btn-delete-meeting" style="flex:1;border-top:none;" onclick="askDelete(${m.id},'${safeName}')">Delete</button>
+      <div style="display:flex;flex-direction:column;border-top:1px solid #e2e8f0;">
+        <button class="btn-reschedule-meeting" style="border-top:none;border-bottom:1px solid #bfdbfe;" onclick="openReschedule(${m.id},'${safeName}')">🔄 Reschedule</button>
+        <button class="btn-edit-guests" style="border-top:none;border-bottom:1px solid #bbf7d0;" onclick="openEditGuests(${m.id},'${safeName}')">👥 Guests</button>
+        <button class="btn-minutes" style="border-top:none;border-bottom:1px solid #fde68a;" onclick="openNotes(${m.id},'${safeName}')">📝 Minutes of Meeting</button>
+        <button class="btn-links" style="border-top:none;border-bottom:1px solid #ddd6fe;" onclick="openLinks(${m.id},'${safeName}')">🔗 Meeting Links</button>
+        <button class="btn-delete-meeting" style="border-top:none;" onclick="askDelete(${m.id},'${safeName}')">🗑️ Delete</button>
       </div>
     </div>`;
   }).join('');
@@ -753,13 +826,17 @@ function renderDetail(){
           <div class="meeting-client">${escHtml(m.name)}</div>
           <div class="meeting-meta">${m.day}</div>
           ${m.guests&&m.guests.length?'<div class="guests-display" style="margin-top:4px;">'+m.guests.map(g=>'<span class="guest-tag">👤 '+escHtml(g)+'</span>').join('')+'</div>':''}
+          ${m.notes?'<div class="notes-preview">📝 '+escHtml(m.notes)+'</div>':''}
+          ${m.links&&m.links.length?'<div class="links-preview">'+m.links.map(l=>'<a class="link-chip" href="'+escHtml(l.url)+'" target="_blank">🔗 '+escHtml(l.label||l.url)+'</a>').join('')+'</div>':''}
         </div>
         <div class="meeting-time-badge">🕐 ${m.time}</div>
       </div>
-      <div style="display:flex;border-top:1px solid #e2e8f0;">
-        <button class="btn-reschedule-meeting" style="flex:1;border-top:none;border-right:1px solid #bfdbfe;" onclick="openReschedule(${m.id},'${safeName}')">🔄 Reschedule</button>
-        <button class="btn-edit-guests" style="flex:1;border-top:none;border-right:1px solid #bbf7d0;" onclick="openEditGuests(${m.id},'${safeName}')">👥 Guests</button>
-        <button class="btn-delete-meeting" style="flex:1;border-top:none;" onclick="askDelete(${m.id},'${safeName}')">Delete</button>
+      <div style="display:flex;flex-direction:column;border-top:1px solid #e2e8f0;">
+        <button class="btn-reschedule-meeting" style="border-top:none;border-bottom:1px solid #bfdbfe;" onclick="openReschedule(${m.id},'${safeName}')">🔄 Reschedule</button>
+        <button class="btn-edit-guests" style="border-top:none;border-bottom:1px solid #bbf7d0;" onclick="openEditGuests(${m.id},'${safeName}')">👥 Guests</button>
+        <button class="btn-minutes" style="border-top:none;border-bottom:1px solid #fde68a;" onclick="openNotes(${m.id},'${safeName}')">📝 Minutes of Meeting</button>
+        <button class="btn-links" style="border-top:none;border-bottom:1px solid #ddd6fe;" onclick="openLinks(${m.id},'${safeName}')">🔗 Meeting Links</button>
+        <button class="btn-delete-meeting" style="border-top:none;" onclick="askDelete(${m.id},'${safeName}')">🗑️ Delete</button>
       </div>
     </div>`;
   }).join('')
@@ -991,6 +1068,80 @@ async function saveEditGuests(){
   toast('Guests updated!','success');
 }
 document.getElementById('editguests-overlay').addEventListener('click',function(e){if(e.target===this)closeEditGuests();});
+
+// ── NOTES ──
+let pendingNotesId=null;
+function openNotes(id,name){
+  pendingNotesId=id;
+  const m=meetings.find(x=>x.id===id);
+  if(!m)return;
+  document.getElementById('notes-meeting-label').textContent='Meeting with '+name;
+  const ta=document.getElementById('notes-textarea');
+  ta.value=m.notes||'';
+  document.getElementById('notes-char-count').textContent=(m.notes||'').length+' characters';
+  document.getElementById('notes-overlay').classList.add('show');
+  setTimeout(()=>ta.focus(),100);
+}
+function closeNotes(){
+  pendingNotesId=null;
+  document.getElementById('notes-overlay').classList.remove('show');
+}
+async function saveNotes(){
+  if(pendingNotesId===null)return;
+  const notes=document.getElementById('notes-textarea').value.trim();
+  const idx=meetings.findIndex(x=>x.id===pendingNotesId);
+  if(idx===-1)return;
+  meetings[idx]={...meetings[idx],notes};
+  const updated=meetings[idx];
+  closeNotes();
+  renderAll();
+  await saveMeetingToFirebase(updated);
+  toast('Meeting notes saved!','success');
+}
+document.getElementById('notes-textarea').addEventListener('input',function(){
+  document.getElementById('notes-char-count').textContent=this.value.length+' characters';
+});
+document.getElementById('notes-overlay').addEventListener('click',function(e){if(e.target===this)closeNotes();});
+
+// ── LINKS ──
+let pendingLinksId=null;
+function addLinkRow(label='',url=''){
+  const container=document.getElementById('links-rows');
+  const row=document.createElement('div');
+  row.className='link-row';
+  row.innerHTML=`<input type="text" placeholder="Label (e.g. Zoom)" value="${escHtml(label)}"/><input type="url" placeholder="https://..." value="${escHtml(url)}"/><button class="btn-remove-link" onclick="this.parentElement.remove()">Remove</button>`;
+  container.appendChild(row);
+}
+function openLinks(id,name){
+  pendingLinksId=id;
+  const m=meetings.find(x=>x.id===id);
+  if(!m)return;
+  document.getElementById('links-meeting-label').textContent='Meeting with '+name;
+  document.getElementById('links-rows').innerHTML='';
+  if(m.links&&m.links.length) m.links.forEach(l=>addLinkRow(l.label,l.url));
+  document.getElementById('links-overlay').classList.add('show');
+}
+function closeLinks(){
+  pendingLinksId=null;
+  document.getElementById('links-overlay').classList.remove('show');
+}
+async function saveLinks(){
+  if(pendingLinksId===null)return;
+  const rows=document.querySelectorAll('#links-rows .link-row');
+  const links=Array.from(rows).map(row=>{
+    const inputs=row.querySelectorAll('input');
+    return {label:inputs[0].value.trim(),url:inputs[1].value.trim()};
+  }).filter(l=>l.url);
+  const idx=meetings.findIndex(x=>x.id===pendingLinksId);
+  if(idx===-1)return;
+  meetings[idx]={...meetings[idx],links};
+  const updated=meetings[idx];
+  closeLinks();
+  renderAll();
+  await saveMeetingToFirebase(updated);
+  toast('Links saved!','success');
+}
+document.getElementById('links-overlay').addEventListener('click',function(e){if(e.target===this)closeLinks();});
 
 function saveCalState(){
   localStorage.setItem('md_calstate',JSON.stringify({calYear,calMonth,selectedDay}));
