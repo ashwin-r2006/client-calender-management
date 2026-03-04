@@ -100,7 +100,7 @@ select.field-input{cursor:pointer;}
 .guest-row{display:flex;align-items:center;gap:6px;margin-bottom:6px;}
 .guest-row input{flex:1;padding:8px 9px;border:1.5px solid var(--border);border-radius:9px;font-size:0.84rem;outline:none;background:var(--bg);transition:border 0.2s;}
 .guest-row input:focus{border-color:var(--primary);background:white;}
-.btn-remove-guest{width:28px;height:28px;border-radius:7px;border:1.5px solid #fecaca;background:#fef2f2;color:#dc2626;font-size:0.9rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s;font-weight:700;padding:0;}
+.btn-remove-guest{height:34px;padding:0 10px;border-radius:7px;border:1.5px solid #fecaca;background:#fef2f2;color:#dc2626;font-size:0.75rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s;font-weight:700;white-space:nowrap;}
 .btn-remove-guest:hover{background:#dc2626;color:white;border-color:#dc2626;}
 .btn-add-guest{width:100%;padding:7px;border:1.5px dashed var(--border);background:transparent;border-radius:9px;color:var(--muted);font-size:0.8rem;font-weight:600;cursor:pointer;transition:all 0.2s;margin-top:2px;}
 .btn-add-guest:hover{border-color:var(--primary);color:var(--primary);background:var(--primary-light);}
@@ -778,7 +778,7 @@ function addGuestRow(val=''){
   const container=document.getElementById('guest-rows');
   const row=document.createElement('div');
   row.className='guest-row';
-  row.innerHTML=`<input type="text" placeholder="Guest name" value="${escHtml(val)}"/><button class="btn-remove-guest" onclick="this.parentElement.remove()">✕</button>`;
+  row.innerHTML=`<input type="text" placeholder="Guest name" value="${escHtml(val)}"/><button class="btn-remove-guest" onclick="this.parentElement.remove()">Remove</button>`;
   container.appendChild(row);
   row.querySelector('input').focus();
 }
@@ -793,7 +793,7 @@ function addQuickGuestRow(val=''){
   const container=document.getElementById('quick-guest-rows');
   const row=document.createElement('div');
   row.className='guest-row';
-  row.innerHTML=`<input type="text" placeholder="Guest name" value="${escHtml(val)}"/><button class="btn-remove-guest" onclick="this.parentElement.remove()">✕</button>`;
+  row.innerHTML=`<input type="text" placeholder="Guest name" value="${escHtml(val)}"/><button class="btn-remove-guest" onclick="this.parentElement.remove()">Remove</button>`;
   container.appendChild(row);
   row.querySelector('input').focus();
 }
@@ -861,7 +861,7 @@ function addRescheduleGuestRow(val=''){
   const container=document.getElementById('reschedule-guest-rows');
   const row=document.createElement('div');
   row.className='guest-row';
-  row.innerHTML=`<input type="text" placeholder="Guest name" value="${escHtml(val)}"/><button class="btn-remove-guest" onclick="this.parentElement.remove()">✕</button>`;
+  row.innerHTML=`<input type="text" placeholder="Guest name" value="${escHtml(val)}"/><button class="btn-remove-guest" onclick="this.parentElement.remove()">Remove</button>`;
   container.appendChild(row);
 }
 function getRescheduleGuests(){
@@ -955,7 +955,7 @@ function addEditGuestRow(val=''){
   const container=document.getElementById('editguests-rows');
   const row=document.createElement('div');
   row.className='guest-row';
-  row.innerHTML=`<input type="text" placeholder="Guest name" value="${escHtml(val)}"/><button class="btn-remove-guest" onclick="this.parentElement.remove()">✕</button>`;
+  row.innerHTML=`<input type="text" placeholder="Guest name" value="${escHtml(val)}"/><button class="btn-remove-guest" onclick="this.parentElement.remove()">Remove</button>`;
   container.appendChild(row);
 }
 
