@@ -140,6 +140,8 @@ select.field-input{cursor:pointer;}
 .cal-day.selected-day{background:var(--primary)!important;color:white!important;}
 .cal-day.selected-day::after{background:white;}
 .cal-day.empty{cursor:default;}
+.cal-day.has-deadline::after{content:'⏰';position:absolute;bottom:1px;left:50%;transform:translateX(-50%);font-size:0.45rem;line-height:1;}
+.cal-day.has-deadline{outline:1.5px solid #ea580c;}
 .meeting-detail{margin-top:20px;background:white;border-radius:16px;box-shadow:var(--shadow);padding:18px 20px;max-width:680px;}
 .meeting-detail h3{font-size:0.95rem;font-weight:700;margin-bottom:12px;}
 .meeting-card{border-radius:10px;border:1.5px solid var(--border);margin-bottom:9px;overflow:hidden;transition:border-color 0.2s;}
@@ -268,16 +270,21 @@ select.field-input{cursor:pointer;}
 .rmd-label{font-weight:700;color:var(--muted);font-size:0.7rem;text-transform:uppercase;letter-spacing:0.05em;}
 .rmd-value{line-height:1.5;color:var(--text);}
 
-/* ── AI SUMMARY ── */
-.ai-summary-box{background:linear-gradient(135deg,#f5f3ff,#ede9fe);border:1.5px solid #c4b5fd;border-radius:14px;padding:16px 18px;margin-bottom:18px;}
-.ai-summary-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;gap:10px;flex-wrap:wrap;}
-.ai-summary-title{font-size:0.82rem;font-weight:800;color:#7c3aed;text-transform:uppercase;letter-spacing:0.05em;display:flex;align-items:center;gap:6px;}
-.ai-summary-btn{padding:6px 14px;border-radius:8px;border:none;background:#7c3aed;color:white;font-size:0.78rem;font-weight:700;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:5px;}
-.ai-summary-btn:hover{background:#6d28d9;}
-.ai-summary-btn:disabled{opacity:0.6;cursor:not-allowed;}
-.ai-summary-content{font-size:0.85rem;color:#4c1d95;line-height:1.7;white-space:pre-wrap;}
-.ai-summary-content.loading{color:#7c3aed;font-style:italic;}
-.ai-summary-empty{font-size:0.82rem;color:#a78bfa;font-style:italic;}
+/* ── CLIENT SUMMARY ── */
+.client-summary-box{background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:1.5px solid #86efac;border-radius:14px;padding:18px 20px;margin-bottom:18px;}
+.cs-title{font-size:0.82rem;font-weight:800;color:#15803d;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:14px;display:flex;align-items:center;gap:6px;}
+.cs-section{margin-bottom:14px;}
+.cs-section-title{font-size:0.72rem;font-weight:800;color:#166534;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid #bbf7d0;}
+.cs-row{font-size:0.84rem;color:#14532d;padding:3px 0;display:flex;align-items:flex-start;gap:6px;line-height:1.5;}
+.cs-row .cs-bullet{flex-shrink:0;margin-top:2px;}
+.cs-row .cs-text{flex:1;}
+.cs-stat-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:4px;}
+.cs-stat{background:white;border-radius:8px;padding:6px 12px;font-size:0.8rem;font-weight:700;color:#166534;border:1px solid #bbf7d0;text-align:center;}
+.cs-stat span{display:block;font-size:1rem;font-weight:800;color:#15803d;}
+.cs-empty{font-size:0.82rem;color:#86efac;font-style:italic;}
+.cs-link{color:#7c3aed;text-decoration:none;font-weight:600;}
+.cs-link:hover{text-decoration:underline;}
+.cs-no-data{font-size:0.82rem;color:#94a3b8;font-style:italic;padding:4px 0;}
 
 /* ── INLINE EDIT IN REPORT ── */
 .rmd-edit-textarea{width:100%;padding:8px 10px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:0.84rem;font-family:inherit;resize:vertical;min-height:70px;outline:none;background:#fff;transition:border 0.2s;line-height:1.5;}
@@ -880,14 +887,31 @@ function renderCalendar(){
   const grid=document.getElementById('cal-grid');
   const today=new Date();
   const mdays=new Set(meetings.filter(m=>m.year===calYear&&m.month===calMonth+1).map(m=>m.date));
+  // Build deadline days map: date -> list of {task, meetingDate}
+  const ddMap={};
+  meetings.forEach(function(m){
+    if(!m.deadlines||!m.deadlines.length)return;
+    m.deadlines.forEach(function(dl){
+      if(dl.year===calYear&&dl.month===calMonth+1){
+        if(!ddMap[dl.date])ddMap[dl.date]=[];
+        ddMap[dl.date].push({task:dl.task,fromDate:m.date,fromMonth:m.month,fromYear:m.year,client:m.name});
+      }
+    });
+  });
   const firstDay=new Date(calYear,calMonth,1).getDay();
   const dim=new Date(calYear,calMonth+1,0).getDate();
   let html=DAYS_S.map(d=>'<div class="cal-dow">'+d+'</div>').join('');
   for(let i=0;i<firstDay;i++)html+='<div class="cal-day empty"></div>';
   for(let d=1;d<=dim;d++){
     const isT=d===today.getDate()&&calMonth===today.getMonth()&&calYear===today.getFullYear();
-    const cls=['cal-day',isT?'today':'',mdays.has(d)?'has-meeting':'',d===selectedDay?'selected-day':''].filter(Boolean).join(' ');
-    html+='<div class="'+cls+'" onclick="selectDay('+d+')">'+d+'</div>';
+    const hasDeadline=!!ddMap[d];
+    // Build tooltip for deadline days
+    let title='';
+    if(hasDeadline){
+      title=ddMap[d].map(function(x){return 'Deadline: '+x.task+' ('+x.client+', discussed on '+x.fromDate+' '+MONTHS[x.fromMonth-1].slice(0,3)+')';}).join(' | ');
+    }
+    const cls=['cal-day',isT?'today':'',mdays.has(d)?'has-meeting':'',hasDeadline?'has-deadline':'',d===selectedDay?'selected-day':''].filter(Boolean).join(' ');
+    html+='<div class="'+cls+'" onclick="selectDay('+d+')"'+(title?' title="'+title+'"':'')+'>'+d+'</div>';
   }
   grid.innerHTML=html;
 }
@@ -911,8 +935,33 @@ function renderDetail(){
   const dm=meetings.filter(m=>m.year===calYear&&m.month===calMonth+1&&m.date===selectedDay);
   const dayName=DAYS[new Date(calYear,calMonth,selectedDay).getDay()];
   t.textContent='📅 '+dayName+', '+selectedDay+' '+MONTHS[calMonth]+' '+calYear;
-  if(!dm.length){b.innerHTML='<div class="no-meetings-day"><div class="big">☕</div>No meetings on this day.</div>';return;}
   b.innerHTML='';
+  // Show deadlines falling on this day from ANY meeting
+  const dayDeadlines=[];
+  meetings.forEach(function(m){
+    if(!m.deadlines||!m.deadlines.length)return;
+    m.deadlines.forEach(function(dl){
+      if(dl.date===selectedDay&&dl.month===calMonth+1&&dl.year===calYear){
+        dayDeadlines.push({task:dl.task,client:m.name,fromDate:m.date,fromMonth:m.month,fromYear:m.year});
+      }
+    });
+  });
+  if(dayDeadlines.length){
+    const dlBox=document.createElement('div');
+    dlBox.style.cssText='background:#fff7ed;border:1.5px solid #ea580c;border-radius:12px;padding:14px 16px;margin-bottom:14px;';
+    dlBox.innerHTML='<div style="font-size:0.78rem;font-weight:800;color:#ea580c;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;">⏰ Deadlines Due Today</div>'
+      +dayDeadlines.map(function(dl){
+        return '<div style="background:white;border-radius:8px;padding:8px 12px;margin-bottom:6px;border-left:3px solid #ea580c;">'
+          +'<div style="font-weight:700;font-size:0.88rem;color:#9a3412;">'+dl.task+'</div>'
+          +'<div style="font-size:0.78rem;color:#94a3b8;margin-top:2px;">👤 '+dl.client+' · Discussed on '+dl.fromDate+' '+MONTHS[dl.fromMonth-1].slice(0,3)+' '+dl.fromYear+'</div>'
+          +'</div>';
+      }).join('');
+    b.appendChild(dlBox);
+  }
+  if(!dm.length){
+    if(!dayDeadlines.length)b.innerHTML='<div class="no-meetings-day"><div class="big">☕</div>No meetings on this day.</div>';
+    return;
+  }
   dm.forEach(function(m){
     const card=document.createElement('div');
     card.className='meeting-card';
@@ -1271,11 +1320,6 @@ function showClientReport(name){
   }
 
   const main=document.getElementById('reports-main');
-  // Check if any notes exist for AI summary
-  const allNotes=cm.filter(function(m){return m.notes&&m.notes.trim();}).map(function(m){
-    return m.date+' '+MONTHS[m.month-1]+' '+m.year+': '+m.notes.trim();
-  });
-
   let html='<div class="report-card">';
   html+='<div class="report-card-header">';
   html+='<div class="report-client-name">👤 '+escHtml(name)+'</div>';
@@ -1285,20 +1329,8 @@ function showClientReport(name){
   html+='<span class="stat-badge stat-past">'+past.length+' Past</span>';
   html+='</div></div>';
 
-  // AI Summary box
-  html+='<div class="ai-summary-box">';
-  html+='<div class="ai-summary-header">';
-  html+='<div class="ai-summary-title">✨ AI Notes Summary</div>';
-  if(allNotes.length){
-    html+='<button class="ai-summary-btn" id="ai-summary-btn" data-client="'+escHtml(name)+'">✨ Generate Summary</button>';
-  }
-  html+='</div>';
-  if(allNotes.length){
-    html+='<div class="ai-summary-content" id="ai-summary-content"><span class="ai-summary-empty">Click "Generate Summary" to get an AI summary of all notes for this client.</span></div>';
-  } else {
-    html+='<div class="ai-summary-content"><span class="ai-summary-empty">No notes added yet for this client. Add notes to meetings to see an AI summary here.</span></div>';
-  }
-  html+='</div>';
+  // Instant client summary
+  html+=buildClientSummary(name);
 
   if(today.length){html+='<div class="report-section"><div class="report-section-title">🔴 Today</div>';today.forEach(function(m){html+=buildItem(m,'upcoming');});html+='</div>';}
   if(upcoming.length){html+='<div class="report-section"><div class="report-section-title">🟢 Upcoming</div>';upcoming.forEach(function(m){html+=buildItem(m,'upcoming');});html+='</div>';}
@@ -1345,38 +1377,123 @@ async function saveReportEdits(mid){
   toast('Changes saved!','success');
 }
 
-async function generateAISummary(clientName){
-  const btn=document.getElementById('ai-summary-btn');
-  const content=document.getElementById('ai-summary-content');
-  if(!btn||!content)return;
+function buildClientSummary(clientName){
   const cm=meetings.filter(function(m){return m.name.toLowerCase()===clientName.toLowerCase();});
-  const notesData=cm.filter(function(m){return m.notes&&m.notes.trim();}).map(function(m){
-    return 'Meeting on '+m.date+' '+MONTHS[m.month-1]+' '+m.year+' at '+m.time+':\n'+m.notes.trim();
-  });
-  if(!notesData.length){content.innerHTML='<span class="ai-summary-empty">No notes to summarize.</span>';return;}
-  btn.disabled=true;btn.textContent='⏳ Generating...';
-  content.className='ai-summary-content loading';
-  content.textContent='Analyzing notes...';
-  try{
-    const prompt='You are a business assistant. Below are meeting notes for client "'+clientName+'". Please provide a concise summary covering: key topics discussed, action items, decisions made, and any patterns or trends. Keep it professional and under 200 words.\n\nNotes:\n'+notesData.join('\n\n');
-    const response=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
-        max_tokens:1000,
-        messages:[{role:'user',content:prompt}]
-      })
+  if(!cm.length)return'';
+  cm.sort(cmpMeeting);
+  const now=new Date();
+  const todayMidnight=new Date();todayMidnight.setHours(0,0,0,0);
+
+  // Stats
+  const upcoming=cm.filter(function(m){return new Date(m.year,m.month-1,m.date)>=todayMidnight;});
+  const past=cm.filter(function(m){return new Date(m.year,m.month-1,m.date)<todayMidnight;});
+  const first=cm[0];
+  const last=cm[cm.length-1];
+
+  // Deadlines
+  const allDeadlines=[];
+  cm.forEach(function(m){
+    if(!m.deadlines||!m.deadlines.length)return;
+    m.deadlines.forEach(function(dl){
+      allDeadlines.push({task:dl.task,date:dl.date,month:dl.month,year:dl.year,
+        isPast:new Date(dl.year,dl.month-1,dl.date)<todayMidnight,
+        fromDate:m.date,fromMonth:m.month,fromYear:m.year});
     });
-    const data=await response.json();
-    const text=data.content&&data.content[0]&&data.content[0].text?data.content[0].text:'Could not generate summary.';
-    content.className='ai-summary-content';
-    content.textContent=text;
-  }catch(e){
-    content.className='ai-summary-content';
-    content.textContent='Could not generate summary. Check your internet connection.';
+  });
+  const openDeadlines=allDeadlines.filter(function(d){return !d.isPast;});
+  const pastDeadlines=allDeadlines.filter(function(d){return d.isPast;});
+
+  // Notes
+  const allNotes=cm.filter(function(m){return m.notes&&m.notes.trim();});
+
+  // Links — deduplicate by url
+  const linkMap={};
+  cm.forEach(function(m){
+    if(!m.links||!m.links.length)return;
+    m.links.forEach(function(l){if(l.url)linkMap[l.url]={label:l.label||l.url,url:l.url};});
+  });
+  const allLinks=Object.values(linkMap);
+
+  // Guests — deduplicate
+  const guestSet=new Set();
+  cm.forEach(function(m){if(m.guests&&m.guests.length)m.guests.forEach(function(g){if(g)guestSet.add(g);});});
+  const allGuests=[...guestSet];
+
+  // Build HTML
+  let html='<div class="client-summary-box">';
+  html+='<div class="cs-title">📋 Client Summary — '+escHtml(clientName)+'</div>';
+
+  // Overview stats
+  html+='<div class="cs-section">';
+  html+='<div class="cs-section-title">📊 Overview</div>';
+  html+='<div class="cs-stat-row">';
+  html+='<div class="cs-stat"><span>'+cm.length+'</span>Total</div>';
+  html+='<div class="cs-stat"><span>'+upcoming.length+'</span>Upcoming</div>';
+  html+='<div class="cs-stat"><span>'+past.length+'</span>Past</div>';
+  html+='<div class="cs-stat"><span>'+allDeadlines.length+'</span>Deadlines</div>';
+  html+='</div>';
+  if(cm.length>1){
+    html+='<div class="cs-row" style="margin-top:6px;font-size:0.8rem;color:#166534;">';
+    html+='First: '+first.date+' '+MONTHS[first.month-1].slice(0,3)+' '+first.year;
+    html+=' &nbsp;·&nbsp; Latest: '+last.date+' '+MONTHS[last.month-1].slice(0,3)+' '+last.year;
+    html+='</div>';
   }
-  btn.disabled=false;btn.textContent='✨ Regenerate';
+  html+='</div>';
+
+  // Open deadlines
+  html+='<div class="cs-section">';
+  html+='<div class="cs-section-title">⏰ Open Deadlines</div>';
+  if(openDeadlines.length){
+    openDeadlines.forEach(function(dl){
+      html+='<div class="cs-row"><span class="cs-bullet">•</span><span class="cs-text"><strong>'+escHtml(dl.task)+'</strong> — due '+dl.date+' '+MONTHS[dl.month-1]+' '+dl.year+'<br/><span style="font-size:0.75rem;color:#6b7280;">Discussed on '+dl.fromDate+' '+MONTHS[dl.fromMonth-1].slice(0,3)+' '+dl.fromYear+'</span></span></div>';
+    });
+  } else {
+    html+='<div class="cs-no-data">No open deadlines.</div>';
+  }
+  html+='</div>';
+
+  // Past deadlines
+  if(pastDeadlines.length){
+    html+='<div class="cs-section">';
+    html+='<div class="cs-section-title">✅ Past Deadlines</div>';
+    pastDeadlines.forEach(function(dl){
+      html+='<div class="cs-row"><span class="cs-bullet">•</span><span class="cs-text">'+escHtml(dl.task)+' — was due '+dl.date+' '+MONTHS[dl.month-1].slice(0,3)+' '+dl.year+'</span></div>';
+    });
+    html+='</div>';
+  }
+
+  // Notes across all meetings
+  html+='<div class="cs-section">';
+  html+='<div class="cs-section-title">📝 Notes Across All Meetings</div>';
+  if(allNotes.length){
+    allNotes.forEach(function(m){
+      html+='<div class="cs-row"><span class="cs-bullet">•</span><span class="cs-text"><span style="font-size:0.75rem;font-weight:700;color:#15803d;">'+m.date+' '+MONTHS[m.month-1].slice(0,3)+' '+m.year+':</span> '+escHtml(m.notes)+'</span></div>';
+    });
+  } else {
+    html+='<div class="cs-no-data">No notes added yet.</div>';
+  }
+  html+='</div>';
+
+  // All links
+  if(allLinks.length){
+    html+='<div class="cs-section">';
+    html+='<div class="cs-section-title">🔗 All Links</div>';
+    allLinks.forEach(function(l){
+      html+='<div class="cs-row"><span class="cs-bullet">•</span><span class="cs-text"><a class="cs-link" href="'+escHtml(l.url)+'" target="_blank">'+escHtml(l.label)+'</a></span></div>';
+    });
+    html+='</div>';
+  }
+
+  // All guests
+  if(allGuests.length){
+    html+='<div class="cs-section">';
+    html+='<div class="cs-section-title">👥 All Guests</div>';
+    html+='<div class="cs-row"><span class="cs-bullet"></span><span class="cs-text">'+allGuests.map(function(g){return escHtml(g);}).join(', ')+'</span></div>';
+    html+='</div>';
+  }
+
+  html+='</div>';
+  return html;
 }
 
 function toggleReportRow(uid){
@@ -1398,9 +1515,7 @@ document.addEventListener('click',function(e){
   if(e.target.dataset.action==='remove-link'){e.target.closest('.rmd-link-edit-row').remove();return;}
   // Add link row
   if(e.target.dataset.action==='add-link'){addRmdLinkRow('links-edit-'+e.target.dataset.uid);return;}
-  // AI summary button
-  const aiBtn=e.target.closest('#ai-summary-btn');
-  if(aiBtn&&aiBtn.dataset.client){generateAISummary(aiBtn.dataset.client);return;}
+
 });
 
 // ── BROWSER NOTIFICATIONS ──
