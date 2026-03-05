@@ -285,6 +285,7 @@ select.field-input{cursor:pointer;}
 .cs-link{color:#7c3aed;text-decoration:none;font-weight:600;}
 .cs-link:hover{text-decoration:underline;}
 .cs-no-data{font-size:0.82rem;color:#94a3b8;font-style:italic;padding:4px 0;}
+.cs-item{font-size:0.84rem;color:#14532d;padding:5px 0;border-bottom:1px solid #dcfce7;line-height:1.5;display:block;width:100%;}
 
 /* ── INLINE EDIT IN REPORT ── */
 .rmd-edit-textarea{width:100%;padding:8px 10px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:0.84rem;font-family:inherit;resize:vertical;min-height:70px;outline:none;background:#fff;transition:border 0.2s;line-height:1.5;}
@@ -1418,13 +1419,13 @@ function buildClientSummary(clientName){
   // Overview stats — single column rows
   html+='<div class="cs-section">';
   html+='<div class="cs-section-title">📊 Overview</div>';
-  html+='<div class="cs-row"><span class="cs-bullet">•</span><span class="cs-text">Total Meetings: <strong>'+cm.length+'</strong></span></div>';
-  html+='<div class="cs-row"><span class="cs-bullet">•</span><span class="cs-text">Upcoming: <strong>'+upcoming.length+'</strong></span></div>';
-  html+='<div class="cs-row"><span class="cs-bullet">•</span><span class="cs-text">Past: <strong>'+past.length+'</strong></span></div>';
-  html+='<div class="cs-row"><span class="cs-bullet">•</span><span class="cs-text">Total Deadlines: <strong>'+allDeadlines.length+'</strong></span></div>';
+  html+='<p class="cs-item">Total Meetings: <strong>'+cm.length+'</strong></p>';
+  html+='<p class="cs-item">Upcoming: <strong>'+upcoming.length+'</strong></p>';
+  html+='<p class="cs-item">Past: <strong>'+past.length+'</strong></p>';
+  html+='<p class="cs-item">Total Deadlines: <strong>'+allDeadlines.length+'</strong></p>';
   if(cm.length>1){
-    html+='<div class="cs-row"><span class="cs-bullet">•</span><span class="cs-text">First Meeting: <strong>'+first.date+' '+MONTHS[first.month-1].slice(0,3)+' '+first.year+'</strong></span></div>';
-    html+='<div class="cs-row"><span class="cs-bullet">•</span><span class="cs-text">Latest Meeting: <strong>'+last.date+' '+MONTHS[last.month-1].slice(0,3)+' '+last.year+'</strong></span></div>';
+    html+='<p class="cs-item">First Meeting: <strong>'+first.date+' '+MONTHS[first.month-1].slice(0,3)+' '+first.year+'</strong></p>';
+    html+='<p class="cs-item">Latest Meeting: <strong>'+last.date+' '+MONTHS[last.month-1].slice(0,3)+' '+last.year+'</strong></p>';
   }
   html+='</div>';
 
@@ -1433,10 +1434,10 @@ function buildClientSummary(clientName){
   html+='<div class="cs-section-title">⏰ Open Deadlines</div>';
   if(openDeadlines.length){
     openDeadlines.forEach(function(dl){
-      html+='<div class="cs-row"><span class="cs-bullet">•</span><span class="cs-text"><strong>'+escHtml(dl.task)+'</strong> — due '+dl.date+' '+MONTHS[dl.month-1]+' '+dl.year+'<br/><span style="font-size:0.75rem;color:#6b7280;">Discussed on '+dl.fromDate+' '+MONTHS[dl.fromMonth-1].slice(0,3)+' '+dl.fromYear+'</span></span></div>';
+      html+='<p class="cs-item"><strong>'+escHtml(dl.task)+'</strong> — due '+dl.date+' '+MONTHS[dl.month-1]+' '+dl.year+'<br/><span style="font-size:0.75rem;color:#6b7280;">Discussed on '+dl.fromDate+' '+MONTHS[dl.fromMonth-1].slice(0,3)+' '+dl.fromYear+'</span></p>';
     });
   } else {
-    html+='<div class="cs-no-data">No open deadlines.</div>';
+    html+='<p class="cs-item" style="color:#94a3b8;font-style:italic;">No open deadlines.</p>';
   }
   html+='</div>';
 
@@ -1445,7 +1446,7 @@ function buildClientSummary(clientName){
     html+='<div class="cs-section">';
     html+='<div class="cs-section-title">✅ Past Deadlines</div>';
     pastDeadlines.forEach(function(dl){
-      html+='<div class="cs-row"><span class="cs-bullet">•</span><span class="cs-text">'+escHtml(dl.task)+' — was due '+dl.date+' '+MONTHS[dl.month-1].slice(0,3)+' '+dl.year+'</span></div>';
+      html+='<p class="cs-item">'+escHtml(dl.task)+' — was due '+dl.date+' '+MONTHS[dl.month-1].slice(0,3)+' '+dl.year+'</p>';
     });
     html+='</div>';
   }
@@ -1455,7 +1456,7 @@ function buildClientSummary(clientName){
     html+='<div class="cs-section">';
     html+='<div class="cs-section-title">👥 All Guests</div>';
     allGuests.forEach(function(g){
-      html+='<div class="cs-row"><span class="cs-bullet">•</span><span class="cs-text">'+escHtml(g)+'</span></div>';
+      html+='<p class="cs-item">'+escHtml(g)+'</p>';
     });
     html+='</div>';
   }
