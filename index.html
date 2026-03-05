@@ -1419,14 +1419,16 @@ function buildClientSummary(clientName){
   // Overview stats — single column rows
   html+='<div class="cs-section">';
   html+='<div class="cs-section-title">📊 Overview</div>';
-  html+='<p class="cs-item">Total Meetings: <strong>'+cm.length+'</strong></p>';
-  html+='<p class="cs-item">Upcoming: <strong>'+upcoming.length+'</strong></p>';
-  html+='<p class="cs-item">Past: <strong>'+past.length+'</strong></p>';
-  html+='<p class="cs-item">Total Deadlines: <strong>'+allDeadlines.length+'</strong></p>';
+  html+='<table style="width:100%;border-collapse:collapse;">';
+  html+='<tr><td style="padding:5px 0;border-bottom:1px solid #bbf7d0;font-size:0.84rem;color:#166534;">Total Meetings</td><td style="padding:5px 0;border-bottom:1px solid #bbf7d0;font-size:0.84rem;font-weight:700;color:#14532d;text-align:right;">'+cm.length+'</td></tr>';
+  html+='<tr><td style="padding:5px 0;border-bottom:1px solid #bbf7d0;font-size:0.84rem;color:#166534;">Upcoming</td><td style="padding:5px 0;border-bottom:1px solid #bbf7d0;font-size:0.84rem;font-weight:700;color:#14532d;text-align:right;">'+upcoming.length+'</td></tr>';
+  html+='<tr><td style="padding:5px 0;border-bottom:1px solid #bbf7d0;font-size:0.84rem;color:#166534;">Past</td><td style="padding:5px 0;border-bottom:1px solid #bbf7d0;font-size:0.84rem;font-weight:700;color:#14532d;text-align:right;">'+past.length+'</td></tr>';
+  html+='<tr><td style="padding:5px 0;border-bottom:1px solid #bbf7d0;font-size:0.84rem;color:#166534;">Total Deadlines</td><td style="padding:5px 0;border-bottom:1px solid #bbf7d0;font-size:0.84rem;font-weight:700;color:#14532d;text-align:right;">'+allDeadlines.length+'</td></tr>';
   if(cm.length>1){
-    html+='<p class="cs-item">First Meeting: <strong>'+first.date+' '+MONTHS[first.month-1].slice(0,3)+' '+first.year+'</strong></p>';
-    html+='<p class="cs-item">Latest Meeting: <strong>'+last.date+' '+MONTHS[last.month-1].slice(0,3)+' '+last.year+'</strong></p>';
+    html+='<tr><td style="padding:5px 0;border-bottom:1px solid #bbf7d0;font-size:0.84rem;color:#166534;">First Meeting</td><td style="padding:5px 0;border-bottom:1px solid #bbf7d0;font-size:0.84rem;font-weight:700;color:#14532d;text-align:right;">'+first.date+' '+MONTHS[first.month-1].slice(0,3)+' '+first.year+'</td></tr>';
+    html+='<tr><td style="padding:5px 0;font-size:0.84rem;color:#166534;">Latest Meeting</td><td style="padding:5px 0;font-size:0.84rem;font-weight:700;color:#14532d;text-align:right;">'+last.date+' '+MONTHS[last.month-1].slice(0,3)+' '+last.year+'</td></tr>';
   }
+  html+='</table>';
   html+='</div>';
 
   // Open deadlines
@@ -1434,7 +1436,7 @@ function buildClientSummary(clientName){
   html+='<div class="cs-section-title">⏰ Open Deadlines</div>';
   if(openDeadlines.length){
     openDeadlines.forEach(function(dl){
-      html+='<p class="cs-item"><strong>'+escHtml(dl.task)+'</strong> — due '+dl.date+' '+MONTHS[dl.month-1]+' '+dl.year+'<br/><span style="font-size:0.75rem;color:#6b7280;">Discussed on '+dl.fromDate+' '+MONTHS[dl.fromMonth-1].slice(0,3)+' '+dl.fromYear+'</span></p>';
+      html+='<div style="padding:6px 0;border-bottom:1px solid #bbf7d0;font-size:0.84rem;color:#14532d;"><strong>'+escHtml(dl.task)+'</strong> — due '+dl.date+' '+MONTHS[dl.month-1]+' '+dl.year+'<br/><span style="font-size:0.75rem;color:#6b7280;">Discussed on '+dl.fromDate+' '+MONTHS[dl.fromMonth-1].slice(0,3)+' '+dl.fromYear+'</span></div>';
     });
   } else {
     html+='<p class="cs-item" style="color:#94a3b8;font-style:italic;">No open deadlines.</p>';
@@ -1446,7 +1448,7 @@ function buildClientSummary(clientName){
     html+='<div class="cs-section">';
     html+='<div class="cs-section-title">✅ Past Deadlines</div>';
     pastDeadlines.forEach(function(dl){
-      html+='<p class="cs-item">'+escHtml(dl.task)+' — was due '+dl.date+' '+MONTHS[dl.month-1].slice(0,3)+' '+dl.year+'</p>';
+      html+='<div style="padding:5px 0;border-bottom:1px solid #bbf7d0;font-size:0.84rem;color:#14532d;">'+escHtml(dl.task)+' — was due '+dl.date+' '+MONTHS[dl.month-1].slice(0,3)+' '+dl.year+'</div>';
     });
     html+='</div>';
   }
@@ -1455,9 +1457,12 @@ function buildClientSummary(clientName){
   if(allGuests.length){
     html+='<div class="cs-section">';
     html+='<div class="cs-section-title">👥 All Guests</div>';
-    allGuests.forEach(function(g){
-      html+='<p class="cs-item">'+escHtml(g)+'</p>';
+    html+='<table style="width:100%;border-collapse:collapse;">';
+    allGuests.forEach(function(g,i){
+      const border=i<allGuests.length-1?'border-bottom:1px solid #bbf7d0;':'';
+      html+='<tr><td style="padding:5px 0;'+border+'font-size:0.84rem;color:#14532d;">'+escHtml(g)+'</td></tr>';
     });
+    html+='</table>';
     html+='</div>';
   }
 
