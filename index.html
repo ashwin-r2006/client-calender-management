@@ -268,6 +268,30 @@ select.field-input{cursor:pointer;}
 .rmd-label{font-weight:700;color:var(--muted);font-size:0.7rem;text-transform:uppercase;letter-spacing:0.05em;}
 .rmd-value{line-height:1.5;color:var(--text);}
 
+/* ── AI SUMMARY ── */
+.ai-summary-box{background:linear-gradient(135deg,#f5f3ff,#ede9fe);border:1.5px solid #c4b5fd;border-radius:14px;padding:16px 18px;margin-bottom:18px;}
+.ai-summary-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;gap:10px;flex-wrap:wrap;}
+.ai-summary-title{font-size:0.82rem;font-weight:800;color:#7c3aed;text-transform:uppercase;letter-spacing:0.05em;display:flex;align-items:center;gap:6px;}
+.ai-summary-btn{padding:6px 14px;border-radius:8px;border:none;background:#7c3aed;color:white;font-size:0.78rem;font-weight:700;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:5px;}
+.ai-summary-btn:hover{background:#6d28d9;}
+.ai-summary-btn:disabled{opacity:0.6;cursor:not-allowed;}
+.ai-summary-content{font-size:0.85rem;color:#4c1d95;line-height:1.7;white-space:pre-wrap;}
+.ai-summary-content.loading{color:#7c3aed;font-style:italic;}
+.ai-summary-empty{font-size:0.82rem;color:#a78bfa;font-style:italic;}
+
+/* ── INLINE EDIT IN REPORT ── */
+.rmd-edit-textarea{width:100%;padding:8px 10px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:0.84rem;font-family:inherit;resize:vertical;min-height:70px;outline:none;background:#fff;transition:border 0.2s;line-height:1.5;}
+.rmd-edit-textarea:focus{border-color:var(--primary);}
+.rmd-link-edit-row{display:flex;gap:6px;margin-bottom:6px;align-items:center;}
+.rmd-link-edit-row input{flex:1;padding:7px 9px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:0.82rem;outline:none;background:#fff;transition:border 0.2s;}
+.rmd-link-edit-row input:focus{border-color:#7c3aed;}
+.rmd-link-remove{height:30px;padding:0 8px;border-radius:6px;border:1.5px solid #fecaca;background:#fef2f2;color:#dc2626;font-size:0.72rem;cursor:pointer;font-weight:700;white-space:nowrap;}
+.rmd-link-remove:hover{background:#dc2626;color:white;}
+.rmd-add-link{width:100%;padding:6px;border:1.5px dashed #e2e8f0;background:transparent;border-radius:8px;color:#94a3b8;font-size:0.78rem;font-weight:600;cursor:pointer;margin-top:2px;transition:all 0.2s;}
+.rmd-add-link:hover{border-color:#7c3aed;color:#7c3aed;}
+.rmd-save-btn{margin-top:10px;padding:7px 16px;border-radius:8px;border:none;background:var(--primary);color:white;font-size:0.82rem;font-weight:700;cursor:pointer;transition:all 0.2s;}
+.rmd-save-btn:hover{background:var(--primary-dark);}
+
 /* ── NOTIFICATIONS ── */
 .notif-banner{background:#f0fdf4;border:1.5px solid #86efac;border-radius:12px;padding:12px 16px;font-size:0.85rem;color:#166534;display:flex;align-items:center;gap:10px;margin-bottom:14px;}
 .notif-banner button{margin-left:auto;padding:5px 12px;border-radius:8px;border:none;background:#16a34a;color:white;font-size:0.78rem;font-weight:700;cursor:pointer;}
@@ -1188,7 +1212,6 @@ function renderReportsList(){
 function showClientReport(name){
   activeReportClient=name;
   renderReportsList();
-  const now=new Date();
   const todayMidnight=new Date(); todayMidnight.setHours(0,0,0,0);
   const cm=meetings.filter(function(m){return m.name.toLowerCase()===name.toLowerCase();});
   cm.sort(cmpMeeting);
@@ -1198,7 +1221,6 @@ function showClientReport(name){
 
   function buildItem(m,type){
     const uid='rm-'+m.id;
-    // Summary line — just date + time, using data attribute to avoid quote issues
     const summaryHtml='<div class="report-meeting-summary" id="sum-'+uid+'" data-uid="'+uid+'">'
       +'<div class="rms-date">'+m.date+' '+MONTHS[m.month-1].slice(0,3)+' '+m.year+'</div>'
       +'<div style="display:flex;align-items:center;gap:6px;">'
@@ -1206,21 +1228,44 @@ function showClientReport(name){
       +'<span class="rms-arrow">▼</span>'
       +'</div>'
       +'</div>';
-    // Detail panel — shown only on click
     let detail='<div class="report-meeting-detail-panel" id="panel-'+uid+'">';
     detail+='<div class="rmd-row"><div class="rmd-label">👤 Client</div><div class="rmd-value" style="font-weight:700;">'+escHtml(m.name)+'</div></div>';
     detail+='<div class="rmd-row"><div class="rmd-label">📅 Day</div><div class="rmd-value">'+m.day+'</div></div>';
     detail+='<div class="rmd-row"><div class="rmd-label">📆 Date</div><div class="rmd-value">'+m.date+' '+MONTHS[m.month-1]+' '+m.year+'</div></div>';
     detail+='<div class="rmd-row"><div class="rmd-label">🕐 Time</div><div class="rmd-value">'+m.time+'</div></div>';
     if(m.guests&&m.guests.length)detail+='<div class="rmd-row"><div class="rmd-label">👥 Guests</div><div class="rmd-value">'+m.guests.map(function(g){return escHtml(g);}).join(', ')+'</div></div>';
-    if(m.notes)detail+='<div class="rmd-row"><div class="rmd-label">📝 Notes</div><div class="rmd-value" style="white-space:pre-wrap;background:#fefce8;border-left:3px solid #f59e0b;border-radius:6px;padding:6px 10px;">'+escHtml(m.notes)+'</div></div>';
     if(m.deadlines&&m.deadlines.length)detail+='<div class="rmd-row"><div class="rmd-label">⏰ Deadline</div><div class="rmd-value">'+m.deadlines.map(function(dl){return '<div style="background:#fff7ed;border-left:3px solid #ea580c;border-radius:6px;padding:5px 9px;margin-bottom:4px;"><strong>'+escHtml(dl.task)+'</strong><br/>'+dl.date+' '+MONTHS[dl.month-1]+' '+dl.year+' at 9:00 AM</div>';}).join('')+'</div></div>';
-    if(m.links&&m.links.length)detail+='<div class="rmd-row"><div class="rmd-label">🔗 Links</div><div class="rmd-value">'+m.links.map(function(l){return '<a class="report-link-chip" href="'+escHtml(l.url)+'" target="_blank">🔗 '+escHtml(l.label||l.url)+'</a>';}).join('')+'</div></div>';
+    // Editable notes
+    detail+='<div class="rmd-row"><div class="rmd-label">📝 Notes</div>'
+      +'<textarea class="rmd-edit-textarea" id="notes-edit-'+uid+'" placeholder="Add notes...">'+escHtml(m.notes||'')+'</textarea>'
+      +'</div>';
+    // Editable links
+    detail+='<div class="rmd-row"><div class="rmd-label">🔗 Links</div>'
+      +'<div id="links-edit-'+uid+'" class="rmd-links-container" data-uid="'+uid+'">';
+    if(m.links&&m.links.length){
+      m.links.forEach(function(l){
+        detail+='<div class="rmd-link-edit-row">'
+          +'<input type="text" placeholder="Label" value="'+escHtml(l.label||'')+'" />'
+          +'<input type="url" placeholder="https://..." value="'+escHtml(l.url||'')+'" />'
+          +'<button class="rmd-link-remove" data-action="remove-link">✕</button>'
+          +'</div>';
+      });
+    }
+    detail+='</div>'
+      +'<button class="rmd-add-link" data-action="add-link" data-uid="'+uid+'">+ Add Link</button>'
+      +'</div>';
+    // Save button
+    detail+='<button class="rmd-save-btn" data-mid="'+m.id+'">💾 Save Changes</button>';
     detail+='</div>';
     return '<div class="report-meeting-row '+type+'" style="padding:0;overflow:hidden;">'+summaryHtml+detail+'</div>';
   }
 
   const main=document.getElementById('reports-main');
+  // Check if any notes exist for AI summary
+  const allNotes=cm.filter(function(m){return m.notes&&m.notes.trim();}).map(function(m){
+    return m.date+' '+MONTHS[m.month-1]+' '+m.year+': '+m.notes.trim();
+  });
+
   let html='<div class="report-card">';
   html+='<div class="report-card-header">';
   html+='<div class="report-client-name">👤 '+escHtml(name)+'</div>';
@@ -1229,6 +1274,22 @@ function showClientReport(name){
   html+='<span class="stat-badge stat-upcoming">'+(today.length+upcoming.length)+' Upcoming</span>';
   html+='<span class="stat-badge stat-past">'+past.length+' Past</span>';
   html+='</div></div>';
+
+  // AI Summary box
+  html+='<div class="ai-summary-box">';
+  html+='<div class="ai-summary-header">';
+  html+='<div class="ai-summary-title">✨ AI Notes Summary</div>';
+  if(allNotes.length){
+    html+='<button class="ai-summary-btn" id="ai-summary-btn" data-client="'+escHtml(name)+'">✨ Generate Summary</button>';
+  }
+  html+='</div>';
+  if(allNotes.length){
+    html+='<div class="ai-summary-content" id="ai-summary-content"><span class="ai-summary-empty">Click "Generate Summary" to get an AI summary of all notes for this client.</span></div>';
+  } else {
+    html+='<div class="ai-summary-content"><span class="ai-summary-empty">No notes added yet for this client. Add notes to meetings to see an AI summary here.</span></div>';
+  }
+  html+='</div>';
+
   if(today.length){html+='<div class="report-section"><div class="report-section-title">🔴 Today</div>';today.forEach(function(m){html+=buildItem(m,'upcoming');});html+='</div>';}
   if(upcoming.length){html+='<div class="report-section"><div class="report-section-title">🟢 Upcoming</div>';upcoming.forEach(function(m){html+=buildItem(m,'upcoming');});html+='</div>';}
   if(past.length){html+='<div class="report-section"><div class="report-section-title">🕐 Past</div>';past.slice().reverse().forEach(function(m){html+=buildItem(m,'past');});html+='</div>';}
@@ -1236,6 +1297,76 @@ function showClientReport(name){
   html+='</div>';
   main.innerHTML=html;
   main.scrollTop=0;
+
+  // Attach save button listeners
+  document.querySelectorAll('.rmd-save-btn').forEach(function(btn){
+    btn.addEventListener('click',function(){saveReportEdits(this.dataset.mid);});
+  });
+}
+
+function addRmdLinkRow(containerId){
+  const container=document.getElementById(containerId);
+  if(!container)return;
+  const row=document.createElement('div');
+  row.className='rmd-link-edit-row';
+  row.innerHTML='<input type="text" placeholder="Label"/>'
+    +'<input type="url" placeholder="https://..."/>'
+    +'<button class="rmd-link-remove" data-action="remove-link">✕</button>';
+  container.appendChild(row);
+}
+
+async function saveReportEdits(mid){
+  const idx=meetings.findIndex(function(m){return String(m.id)===String(mid);});
+  if(idx===-1)return;
+  const uid='rm-'+mid;
+  const notesEl=document.getElementById('notes-edit-'+uid);
+  const linksContainer=document.getElementById('links-edit-'+uid);
+  if(!notesEl||!linksContainer)return;
+  const notes=notesEl.value.trim();
+  const linkRows=linksContainer.querySelectorAll('.rmd-link-edit-row');
+  const links=Array.from(linkRows).map(function(row){
+    const inputs=row.querySelectorAll('input');
+    return {label:inputs[0].value.trim(),url:inputs[1].value.trim()};
+  }).filter(function(l){return l.url;});
+  meetings[idx]={...meetings[idx],notes,links};
+  const btn=document.querySelector('.rmd-save-btn[data-mid="'+mid+'"]');
+  if(btn){btn.textContent='✅ Saved!';btn.style.background='#16a34a';setTimeout(function(){btn.textContent='💾 Save Changes';btn.style.background='';},2000);}
+  await saveMeetingToFirebase(meetings[idx]);
+  toast('Changes saved!','success');
+}
+
+async function generateAISummary(clientName){
+  const btn=document.getElementById('ai-summary-btn');
+  const content=document.getElementById('ai-summary-content');
+  if(!btn||!content)return;
+  const cm=meetings.filter(function(m){return m.name.toLowerCase()===clientName.toLowerCase();});
+  const notesData=cm.filter(function(m){return m.notes&&m.notes.trim();}).map(function(m){
+    return 'Meeting on '+m.date+' '+MONTHS[m.month-1]+' '+m.year+' at '+m.time+':\n'+m.notes.trim();
+  });
+  if(!notesData.length){content.innerHTML='<span class="ai-summary-empty">No notes to summarize.</span>';return;}
+  btn.disabled=true;btn.textContent='⏳ Generating...';
+  content.className='ai-summary-content loading';
+  content.textContent='Analyzing notes...';
+  try{
+    const prompt='You are a business assistant. Below are meeting notes for client "'+clientName+'". Please provide a concise summary covering: key topics discussed, action items, decisions made, and any patterns or trends. Keep it professional and under 200 words.\n\nNotes:\n'+notesData.join('\n\n');
+    const response=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        messages:[{role:'user',content:prompt}]
+      })
+    });
+    const data=await response.json();
+    const text=data.content&&data.content[0]&&data.content[0].text?data.content[0].text:'Could not generate summary.';
+    content.className='ai-summary-content';
+    content.textContent=text;
+  }catch(e){
+    content.className='ai-summary-content';
+    content.textContent='Could not generate summary. Check your internet connection.';
+  }
+  btn.disabled=false;btn.textContent='✨ Regenerate';
 }
 
 function toggleReportRow(uid){
@@ -1248,10 +1379,18 @@ function toggleReportRow(uid){
   if(!isOpen){sum.classList.add('open');panel.classList.add('open');}
 }
 
-// Event delegation for report meeting summaries
+// Event delegation for report meeting summaries + link actions + AI summary
 document.addEventListener('click',function(e){
+  // Toggle row
   const sum=e.target.closest('.report-meeting-summary');
-  if(sum&&sum.dataset.uid){toggleReportRow(sum.dataset.uid);}
+  if(sum&&sum.dataset.uid){toggleReportRow(sum.dataset.uid);return;}
+  // Remove link row
+  if(e.target.dataset.action==='remove-link'){e.target.closest('.rmd-link-edit-row').remove();return;}
+  // Add link row
+  if(e.target.dataset.action==='add-link'){addRmdLinkRow('links-edit-'+e.target.dataset.uid);return;}
+  // AI summary button
+  const aiBtn=e.target.closest('#ai-summary-btn');
+  if(aiBtn&&aiBtn.dataset.client){generateAISummary(aiBtn.dataset.client);return;}
 });
 
 // ── BROWSER NOTIFICATIONS ──
