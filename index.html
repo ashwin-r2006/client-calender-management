@@ -1292,22 +1292,20 @@ function showClientReport(name){
     }
     detail+='<textarea class="rmd-edit-textarea" id="notes-edit-'+uid+'" placeholder="Add or edit notes...">'+escHtml(m.notes||'')+'</textarea>'
       +'</div>';
-    // Editable links — shows existing links as clickable chips + editable rows
+    // Editable links — label header row + editable rows with remove button
     detail+='<div class="rmd-row"><div class="rmd-label">🔗 Links</div>';
-    if(m.links&&m.links.length){
-      detail+='<div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px;">';
-      m.links.forEach(function(l){
-        detail+='<a class="report-link-chip" href="'+escHtml(l.url)+'" target="_blank">🔗 '+escHtml(l.label||l.url)+'</a>';
-      });
-      detail+='</div>';
-    }
+    detail+='<div style="display:grid;grid-template-columns:1fr 1fr auto;gap:4px;margin-bottom:5px;">'
+      +'<div style="font-size:0.7rem;font-weight:700;color:#94a3b8;text-transform:uppercase;">Label</div>'
+      +'<div style="font-size:0.7rem;font-weight:700;color:#94a3b8;text-transform:uppercase;">URL</div>'
+      +'<div></div>'
+      +'</div>';
     detail+='<div id="links-edit-'+uid+'" class="rmd-links-container" data-uid="'+uid+'">';
     if(m.links&&m.links.length){
       m.links.forEach(function(l){
         detail+='<div class="rmd-link-edit-row">'
           +'<input type="text" placeholder="Label" value="'+escHtml(l.label||'')+'" />'
           +'<input type="url" placeholder="https://..." value="'+escHtml(l.url||'')+'" />'
-          +'<button class="rmd-link-remove" data-action="remove-link">✕</button>'
+          +'<button class="rmd-link-remove" data-action="remove-link" title="Remove">✕</button>'
           +'</div>';
       });
     }
