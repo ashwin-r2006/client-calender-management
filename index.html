@@ -1406,14 +1406,6 @@ function buildClientSummary(clientName){
   // Notes
   const allNotes=cm.filter(function(m){return m.notes&&m.notes.trim();});
 
-  // Links — deduplicate by url
-  const linkMap={};
-  cm.forEach(function(m){
-    if(!m.links||!m.links.length)return;
-    m.links.forEach(function(l){if(l.url)linkMap[l.url]={label:l.label||l.url,url:l.url};});
-  });
-  const allLinks=Object.values(linkMap);
-
   // Guests — deduplicate
   const guestSet=new Set();
   cm.forEach(function(m){if(m.guests&&m.guests.length)m.guests.forEach(function(g){if(g)guestSet.add(g);});});
@@ -1423,20 +1415,16 @@ function buildClientSummary(clientName){
   let html='<div class="client-summary-box">';
   html+='<div class="cs-title">📋 Client Summary — '+escHtml(clientName)+'</div>';
 
-  // Overview stats
+  // Overview stats — single column rows
   html+='<div class="cs-section">';
   html+='<div class="cs-section-title">📊 Overview</div>';
-  html+='<div class="cs-stat-row">';
-  html+='<div class="cs-stat"><span>'+cm.length+'</span>Total</div>';
-  html+='<div class="cs-stat"><span>'+upcoming.length+'</span>Upcoming</div>';
-  html+='<div class="cs-stat"><span>'+past.length+'</span>Past</div>';
-  html+='<div class="cs-stat"><span>'+allDeadlines.length+'</span>Deadlines</div>';
-  html+='</div>';
+  html+='<div class="cs-row"><span class="cs-bullet">•</span><span class="cs-text">Total Meetings: <strong>'+cm.length+'</strong></span></div>';
+  html+='<div class="cs-row"><span class="cs-bullet">•</span><span class="cs-text">Upcoming: <strong>'+upcoming.length+'</strong></span></div>';
+  html+='<div class="cs-row"><span class="cs-bullet">•</span><span class="cs-text">Past: <strong>'+past.length+'</strong></span></div>';
+  html+='<div class="cs-row"><span class="cs-bullet">•</span><span class="cs-text">Total Deadlines: <strong>'+allDeadlines.length+'</strong></span></div>';
   if(cm.length>1){
-    html+='<div class="cs-row" style="margin-top:6px;font-size:0.8rem;color:#166534;">';
-    html+='First: '+first.date+' '+MONTHS[first.month-1].slice(0,3)+' '+first.year;
-    html+=' &nbsp;·&nbsp; Latest: '+last.date+' '+MONTHS[last.month-1].slice(0,3)+' '+last.year;
-    html+='</div>';
+    html+='<div class="cs-row"><span class="cs-bullet">•</span><span class="cs-text">First Meeting: <strong>'+first.date+' '+MONTHS[first.month-1].slice(0,3)+' '+first.year+'</strong></span></div>';
+    html+='<div class="cs-row"><span class="cs-bullet">•</span><span class="cs-text">Latest Meeting: <strong>'+last.date+' '+MONTHS[last.month-1].slice(0,3)+' '+last.year+'</strong></span></div>';
   }
   html+='</div>';
 
@@ -1462,33 +1450,13 @@ function buildClientSummary(clientName){
     html+='</div>';
   }
 
-  // Notes across all meetings
-  html+='<div class="cs-section">';
-  html+='<div class="cs-section-title">📝 Notes Across All Meetings</div>';
-  if(allNotes.length){
-    allNotes.forEach(function(m){
-      html+='<div class="cs-row"><span class="cs-bullet">•</span><span class="cs-text"><span style="font-size:0.75rem;font-weight:700;color:#15803d;">'+m.date+' '+MONTHS[m.month-1].slice(0,3)+' '+m.year+':</span> '+escHtml(m.notes)+'</span></div>';
-    });
-  } else {
-    html+='<div class="cs-no-data">No notes added yet.</div>';
-  }
-  html+='</div>';
-
-  // All links
-  if(allLinks.length){
-    html+='<div class="cs-section">';
-    html+='<div class="cs-section-title">🔗 All Links</div>';
-    allLinks.forEach(function(l){
-      html+='<div class="cs-row"><span class="cs-bullet">•</span><span class="cs-text"><a class="cs-link" href="'+escHtml(l.url)+'" target="_blank">'+escHtml(l.label)+'</a></span></div>';
-    });
-    html+='</div>';
-  }
-
   // All guests
   if(allGuests.length){
     html+='<div class="cs-section">';
     html+='<div class="cs-section-title">👥 All Guests</div>';
-    html+='<div class="cs-row"><span class="cs-bullet"></span><span class="cs-text">'+allGuests.map(function(g){return escHtml(g);}).join(', ')+'</span></div>';
+    allGuests.forEach(function(g){
+      html+='<div class="cs-row"><span class="cs-bullet">•</span><span class="cs-text">'+escHtml(g)+'</span></div>';
+    });
     html+='</div>';
   }
 
