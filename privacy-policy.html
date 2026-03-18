@@ -1,1 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Privacy Policy — MeetingDesk</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#f8fafc;color:#1e293b;line-height:1.7;}
+header{background:linear-gradient(135deg,#4f46e5,#06b6d4);padding:40px 24px;text-align:center;color:white;}
+header h1{font-size:1.8rem;font-weight:800;margin-bottom:6px;}
+header p{font-size:0.92rem;opacity:0.85;}
+.container{max-width:760px;margin:40px auto;padding:0 24px 60px;}
+.card{background:white;border-radius:16px;padding:32px 36px;margin-bottom:24px;box-shadow:0 4px 24px rgba(79,70,229,0.07);border:1px solid #e2e8f0;}
+h2{font-size:1.1rem;font-weight:800;color:#4f46e5;margin-bottom:14px;padding-bottom:10px;border-bottom:2px solid #e0e7ff;}
+p{font-size:0.92rem;color:#334155;margin-bottom:12px;}
+ul{margin:8px 0 12px 20px;}
+ul li{font-size:0.92rem;color:#334155;margin-bottom:6px;}
+.highlight{background:#f0f9ff;border-left:4px solid #0891b2;border-radius:8px;padding:14px 18px;margin:14px 0;font-size:0.88rem;color:#0c4a6e;}
+.date{font-size:0.8rem;color:#94a3b8;margin-top:6px;}
+a{color:#4f46e5;text-decoration:none;}
+a:hover{text-decoration:underline;}
+footer{text-align:center;padding:24px;font-size:0.82rem;color:#94a3b8;}
+</style>
+</head>
+<body>
 
+<header>
+  <div style="font-size:2rem;margin-bottom:8px;">📅</div>
+  <h1>Privacy Policy</h1>
+  <p>MeetingDesk — Private Client Meeting Scheduler</p>
+  <p class="date" style="margin-top:8px;opacity:0.7;">Last updated: March 18, 2026</p>
+</header>
+
+<div class="container">
+
+  <div class="card">
+    <h2>1. Overview</h2>
+    <p>MeetingDesk ("the App") is a private client meeting scheduler built and operated by Ashwin Rajesh. This Privacy Policy explains how we collect, use, and protect your information when you use MeetingDesk at <a href="https://ashwin-r2006.github.io/client-calender-management/">https://ashwin-r2006.github.io/client-calender-management/</a>.</p>
+    <p>By using MeetingDesk, you agree to the terms described in this policy.</p>
+  </div>
+
+  <div class="card">
+    <h2>2. Information We Collect</h2>
+    <p>We collect the following types of information:</p>
+    <ul>
+      <li><strong>Account Information:</strong> Email address and display name when you sign in via email/password or Google OAuth.</li>
+      <li><strong>Meeting Data:</strong> Client names, meeting dates and times, guest names, agenda, notes, meeting links, and deadlines that you create within the app.</li>
+      <li><strong>Google Calendar Data:</strong> When you use the Sync Calendar feature, we access your Google Calendar events including event titles, dates, times, descriptions, attendees, and video call links. This data is only read — we never modify or delete your Google Calendar events.</li>
+      <li><strong>Usage Data:</strong> Basic session data stored locally in your browser (localStorage) to keep you signed in.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>3. How We Use Your Information</h2>
+    <ul>
+      <li>To display and manage your client meetings within the app.</li>
+      <li>To sync and import events from Google Calendar into MeetingDesk when you request it.</li>
+      <li>To store your meeting data securely in Firebase Firestore, linked to your account.</li>
+      <li>To send browser notifications for deadlines you have set.</li>
+    </ul>
+    <div class="highlight">
+      We do <strong>not</strong> sell, share, or transfer your data to any third parties. Your meeting and calendar data is only used to power MeetingDesk features for your personal use.
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>4. Google Calendar API Usage</h2>
+    <p>MeetingDesk uses the Google Calendar API with the <strong>calendar.readonly</strong> scope. This means:</p>
+    <ul>
+      <li>We can <strong>read</strong> your Google Calendar events only.</li>
+      <li>We <strong>cannot</strong> create, edit, or delete any events in your Google Calendar.</li>
+      <li>Calendar data is fetched only when you click the "Sync Calendar" button — we do not continuously monitor your calendar.</li>
+      <li>Imported events are stored in Firebase under your account for use within MeetingDesk only.</li>
+    </ul>
+    <div class="highlight">
+      MeetingDesk's use of Google Calendar data complies with the <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank">Google API Services User Data Policy</a>, including the Limited Use requirements.
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>5. Data Storage & Security</h2>
+    <ul>
+      <li>Meeting data is stored in <strong>Firebase Firestore</strong> (Google Cloud), protected by Firebase security rules tied to your account.</li>
+      <li>Only you can access your own meeting data — other users cannot view your data.</li>
+      <li>Authentication is handled by Google OAuth 2.0 — we never store your Google password.</li>
+      <li>Session data is stored locally in your browser and is cleared when you sign out.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>6. Data Retention & Deletion</h2>
+    <p>Your meeting data is retained in Firebase as long as you use the app. You can delete individual meetings at any time using the Delete button within the app.</p>
+    <p>To request complete deletion of all your data, contact us at the email below and we will remove your data from Firebase within 7 days.</p>
+  </div>
+
+  <div class="card">
+    <h2>7. Third-Party Services</h2>
+    <p>MeetingDesk uses the following third-party services:</p>
+    <ul>
+      <li><strong>Firebase (Google):</strong> Authentication and data storage — <a href="https://firebase.google.com/support/privacy" target="_blank">Firebase Privacy Policy</a></li>
+      <li><strong>Google OAuth 2.0:</strong> Sign-in and Google Calendar access — <a href="https://policies.google.com/privacy" target="_blank">Google Privacy Policy</a></li>
+      <li><strong>GitHub Pages:</strong> Website hosting — <a href="https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement" target="_blank">GitHub Privacy Statement</a></li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>8. Your Rights</h2>
+    <ul>
+      <li>You can sign out and clear your session at any time.</li>
+      <li>You can revoke MeetingDesk's access to your Google Calendar at any time via <a href="https://myaccount.google.com/permissions" target="_blank">Google Account Permissions</a>.</li>
+      <li>You can request deletion of all your data by contacting us.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>9. Children's Privacy</h2>
+    <p>MeetingDesk is not directed at children under 13. We do not knowingly collect personal information from children under 13.</p>
+  </div>
+
+  <div class="card">
+    <h2>10. Changes to This Policy</h2>
+    <p>We may update this Privacy Policy from time to time. The "Last updated" date at the top of this page will reflect any changes. Continued use of MeetingDesk after changes means you accept the updated policy.</p>
+  </div>
+
+  <div class="card">
+    <h2>11. Contact</h2>
+    <p>If you have any questions about this Privacy Policy or want to request data deletion, contact:</p>
+    <p><strong>Ashwin Rajesh</strong><br/>
+    Email: <a href="mailto:ashwinrajesh0612@gmail.com">ashwinrajesh0612@gmail.com</a><br/>
+    App: <a href="https://ashwin-r2006.github.io/client-calender-management/">MeetingDesk</a></p>
+  </div>
+
+</div>
+
+<footer>
+  © 2026 MeetingDesk by Ashwin Rajesh · <a href="https://ashwin-r2006.github.io/client-calender-management/">Back to App</a>
+</footer>
+
+</body>
+</html>
