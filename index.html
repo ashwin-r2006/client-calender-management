@@ -32,8 +32,6 @@ window.dispatchEvent(new Event('firebase-ready'));
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
-
-/* ── AUTH ── */
 #auth-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#4f46e5,#06b6d4);}
 .auth-card{background:white;border-radius:20px;padding:40px 36px;width:380px;box-shadow:0 20px 60px rgba(0,0,0,0.18);}
 .auth-logo{text-align:center;margin-bottom:28px;}
@@ -56,8 +54,6 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .forgot{text-align:right;margin-top:-8px;margin-bottom:14px;}
 .forgot a{font-size:0.82rem;color:var(--primary);text-decoration:none;}
 .error-msg{background:#fef2f2;color:var(--danger);border-radius:8px;padding:10px 14px;font-size:0.875rem;margin-bottom:14px;display:none;}
-
-/* ── APP SHELL ── */
 #app-screen{display:none;min-height:100vh;flex-direction:column;}
 header{background:white;border-bottom:1px solid var(--border);padding:0 20px;height:60px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 1px 8px rgba(0,0,0,0.05);position:sticky;top:0;z-index:100;}
 .header-brand{font-size:1.1rem;font-weight:800;color:var(--primary);}
@@ -70,16 +66,12 @@ header{background:white;border-bottom:1px solid var(--border);padding:0 20px;hei
 .btn-notif:hover{border-color:var(--primary);color:var(--primary);}
 .btn-notif.enabled{border-color:#16a34a;color:#16a34a;background:#f0fdf4;}
 .btn-notif.blocked{border-color:#dc2626;color:#dc2626;background:#fef2f2;}
-
-/* ── TABS ── */
 .tab-bar{background:white;border-bottom:1px solid var(--border);display:flex;padding:0 20px;position:sticky;top:60px;z-index:99;}
 .tab-btn{padding:12px 22px;font-size:0.88rem;font-weight:700;color:var(--muted);border:none;background:transparent;cursor:pointer;border-bottom:3px solid transparent;transition:all 0.2s;margin-bottom:-1px;}
 .tab-btn.active{color:var(--primary);border-bottom-color:var(--primary);}
 .tab-btn:hover:not(.active){color:var(--text);background:var(--bg);}
 .tab-pane{display:none;flex:1;}
 .tab-pane.active{display:flex;}
-
-/* ── SCHEDULER SIDEBAR ── */
 .app-body{display:flex;flex:1;}
 .sidebar{width:300px;min-width:280px;background:white;border-right:1px solid var(--border);padding:20px 16px;display:flex;flex-direction:column;gap:14px;height:calc(100vh - 116px);overflow-y:auto;position:sticky;top:116px;}
 .sidebar h2{font-size:0.95rem;font-weight:700;}
@@ -108,8 +100,6 @@ select.field-input{cursor:pointer;}
 .client-item .ci-name{font-weight:700;font-size:0.88rem;}
 .client-item .ci-time{font-size:0.74rem;color:var(--muted);margin-top:2px;}
 .empty-clients{color:var(--muted);font-size:0.84rem;text-align:center;padding:18px 0;}
-
-/* ── GUESTS ── */
 .guests-section{margin-top:2px;}
 .guests-label{font-size:0.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;}
 .guest-row{display:flex;align-items:center;gap:6px;margin-bottom:6px;}
@@ -121,8 +111,6 @@ select.field-input{cursor:pointer;}
 .btn-add-guest:hover{border-color:var(--primary);color:var(--primary);background:var(--primary-light);}
 .guest-tag{display:inline-flex;align-items:center;gap:5px;background:var(--primary-light);color:var(--primary);border-radius:20px;padding:3px 10px;font-size:0.78rem;font-weight:600;margin:2px 3px 2px 0;}
 .guests-display{display:flex;flex-wrap:wrap;margin-top:4px;}
-
-/* ── CALENDAR ── */
 .main{flex:1;padding:24px;overflow-y:auto;}
 .calendar-card{background:white;border-radius:16px;box-shadow:var(--shadow);padding:20px;max-width:680px;}
 .cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
@@ -159,8 +147,6 @@ select.field-input{cursor:pointer;}
 .deadline-preview{background:#fff7ed;border-radius:8px;padding:8px 10px;font-size:0.8rem;color:#9a3412;margin-top:6px;border-left:3px solid #ea580c;}
 .no-meetings-day{text-align:center;padding:24px;color:var(--muted);}
 .no-meetings-day .big{font-size:1.8rem;margin-bottom:8px;}
-
-/* ── MEETING ACTION BUTTONS ── */
 .meeting-actions{display:flex;flex-direction:column;}
 .m-btn{display:block;width:100%;padding:9px 14px;border:none;font-size:0.82rem;font-weight:700;cursor:pointer;text-align:left;transition:all 0.2s;border-top:1px solid var(--border);}
 .m-btn:hover{filter:brightness(0.93);}
@@ -176,8 +162,6 @@ select.field-input{cursor:pointer;}
 .m-btn-deadline:hover{background:#ea580c;color:white;}
 .m-btn-delete{background:#fef2f2;color:#dc2626;}
 .m-btn-delete:hover{background:#dc2626;color:white;}
-
-/* ── CLIENT REPORTS TAB ── */
 #reports-tab{flex:1;padding:24px;overflow-y:auto;display:flex;gap:20px;}
 .reports-sidebar{width:260px;min-width:220px;background:white;border-radius:16px;box-shadow:var(--shadow);padding:16px;height:fit-content;position:sticky;top:24px;}
 .reports-sidebar h3{font-size:0.85rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:12px;}
@@ -216,9 +200,6 @@ select.field-input{cursor:pointer;}
 .no-clients-msg{text-align:center;color:var(--muted);font-size:0.88rem;padding:20px 0;}
 .cr-total-badge{background:var(--primary-light);color:var(--primary);border-radius:20px;padding:2px 9px;font-size:0.75rem;font-weight:800;flex-shrink:0;}
 .client-report-item.active .cr-total-badge{background:rgba(255,255,255,0.25);color:white;}
-
-
-/* ── OVERLAYS ── */
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:200;display:none;align-items:center;justify-content:center;padding:20px;}
 .overlay.show{display:flex;}
 .overlay-box{background:white;border-radius:20px;padding:28px 24px 22px;width:100%;max-width:380px;box-shadow:0 20px 50px rgba(0,0,0,0.2);max-height:90vh;overflow-y:auto;}
@@ -256,8 +237,6 @@ select.field-input{cursor:pointer;}
 .btn-remove-link:hover{background:#dc2626;color:white;}
 .btn-add-link{width:100%;padding:7px;border:1.5px dashed var(--border);background:transparent;border-radius:9px;color:var(--muted);font-size:0.8rem;font-weight:600;cursor:pointer;transition:all 0.2s;margin-top:2px;}
 .btn-add-link:hover{border-color:#7c3aed;color:#7c3aed;background:#f5f3ff;}
-
-/* ── REPORT COLLAPSIBLE ROWS ── */
 .report-meeting-summary{display:flex;align-items:center;justify-content:space-between;cursor:pointer;padding:10px 14px;border-radius:10px;transition:background 0.2s;user-select:none;}
 .report-meeting-summary:hover{background:var(--primary-light);}
 .report-meeting-summary .rms-date{font-weight:700;font-size:0.9rem;color:var(--text);}
@@ -269,15 +248,11 @@ select.field-input{cursor:pointer;}
 .rmd-row{display:flex;flex-direction:column;gap:3px;margin-bottom:10px;font-size:0.84rem;color:var(--text);}
 .rmd-label{font-weight:700;color:var(--muted);font-size:0.7rem;text-transform:uppercase;letter-spacing:0.05em;}
 .rmd-value{line-height:1.5;color:var(--text);}
-
-/* ── CLIENT SUMMARY ── */
 .client-summary-box{background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:1.5px solid #86efac;border-radius:14px;padding:18px 20px;margin-bottom:18px;}
 .cs-title{font-size:0.82rem;font-weight:800;color:#15803d;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:14px;display:flex;align-items:center;gap:6px;}
 .cs-section{margin-bottom:14px;}
 .cs-section-title{font-size:0.72rem;font-weight:800;color:#166534;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid #bbf7d0;}
 .cs-row{font-size:0.84rem;color:#14532d;padding:6px 0;display:block;line-height:1.6;border-bottom:1px solid #dcfce7;}
-.cs-row .cs-bullet{display:none;}
-.cs-row .cs-text{display:block;}
 .cs-stat-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:4px;}
 .cs-stat{background:white;border-radius:8px;padding:6px 12px;font-size:0.8rem;font-weight:700;color:#166534;border:1px solid #bbf7d0;text-align:center;}
 .cs-stat span{display:block;font-size:1rem;font-weight:800;color:#15803d;}
@@ -286,8 +261,6 @@ select.field-input{cursor:pointer;}
 .cs-link:hover{text-decoration:underline;}
 .cs-no-data{font-size:0.82rem;color:#94a3b8;font-style:italic;padding:4px 0;}
 .cs-item{font-size:0.84rem;color:#14532d;padding:5px 0;border-bottom:1px solid #dcfce7;line-height:1.5;display:block;width:100%;}
-
-/* ── INLINE EDIT IN REPORT ── */
 .rmd-edit-textarea{width:100%;padding:8px 10px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:0.84rem;font-family:inherit;resize:vertical;min-height:70px;outline:none;background:#fff;transition:border 0.2s;line-height:1.5;}
 .rmd-edit-textarea:focus{border-color:var(--primary);}
 .rmd-link-edit-row{display:flex;gap:6px;margin-bottom:6px;align-items:center;}
@@ -299,19 +272,13 @@ select.field-input{cursor:pointer;}
 .rmd-add-link:hover{border-color:#7c3aed;color:#7c3aed;}
 .rmd-save-btn{margin-top:10px;padding:7px 16px;border-radius:8px;border:none;background:var(--primary);color:white;font-size:0.82rem;font-weight:700;cursor:pointer;transition:all 0.2s;}
 .rmd-save-btn:hover{background:var(--primary-dark);}
-
-/* ── NOTIFICATIONS ── */
 .notif-banner{background:#f0fdf4;border:1.5px solid #86efac;border-radius:12px;padding:12px 16px;font-size:0.85rem;color:#166534;display:flex;align-items:center;gap:10px;margin-bottom:14px;}
 .notif-banner button{margin-left:auto;padding:5px 12px;border-radius:8px;border:none;background:#16a34a;color:white;font-size:0.78rem;font-weight:700;cursor:pointer;}
 .notif-blocked{background:#fef2f2;border-color:#fca5a5;color:#991b1b;}
 .notif-blocked button{background:#dc2626;}
-
-/* ── TOAST ── */
 #toast{position:fixed;bottom:24px;right:16px;left:16px;max-width:360px;margin:0 auto;background:#1e293b;color:white;padding:12px 18px;border-radius:12px;font-size:0.88rem;font-weight:600;box-shadow:0 8px 30px rgba(0,0,0,0.2);z-index:9999;transform:translateY(80px);opacity:0;transition:all 0.3s;pointer-events:none;text-align:center;}
 #toast.show{transform:translateY(0);opacity:1;}
 #toast.success{background:var(--success);}
-
-/* ── RESPONSIVE ── */
 @media(max-width:768px){
   .app-body{flex-direction:column;}
   .sidebar{width:100%;height:auto;position:static;border-right:none;border-bottom:1px solid var(--border);}
@@ -325,11 +292,15 @@ select.field-input{cursor:pointer;}
   .form-row-3{grid-template-columns:1fr 1fr;}
   .form-row-3>div:last-child{grid-column:span 2;}
 }
+
+/* ── AGENDA ── */
+.agenda-badge{display:inline-block;background:#ecfeff;color:#0891b2;border:1px solid #a5f3fc;border-radius:20px;padding:3px 10px;font-size:0.78rem;font-weight:600;margin-top:4px;}
+.m-btn-agenda{background:#ecfeff;color:#0891b2;}
+.m-btn-agenda:hover{background:#0891b2;color:white;}
+
 </style>
 </head>
 <body>
-
-<!-- AUTH -->
 <div id="auth-screen">
   <div class="auth-card">
     <div class="auth-logo">
@@ -353,19 +324,12 @@ select.field-input{cursor:pointer;}
     <div class="forgot" id="forgot-row"><a href="#">Forgot password?</a></div>
     <button class="btn-primary" id="auth-btn" onclick="handleAuth()">Sign In</button>
     <div class="divider">OR</div>
-    <div id="g_id_onload"
-         data-client_id="922684760909-16mv3l7qoskp4eaqplcj9h4mr3ddnseh.apps.googleusercontent.com"
-         data-callback="handleGoogleCredential"
-         data-auto_prompt="false"></div>
+    <div id="g_id_onload" data-client_id="922684760909-16mv3l7qoskp4eaqplcj9h4mr3ddnseh.apps.googleusercontent.com" data-callback="handleGoogleCredential" data-auto_prompt="false"></div>
     <div class="google-btn-wrap">
-      <div class="g_id_signin" data-type="standard" data-shape="rectangular"
-           data-theme="outline" data-text="continue_with" data-size="large"
-           data-logo_alignment="left" data-width="308"></div>
+      <div class="g_id_signin" data-type="standard" data-shape="rectangular" data-theme="outline" data-text="continue_with" data-size="large" data-logo_alignment="left" data-width="308"></div>
     </div>
   </div>
 </div>
-
-<!-- APP -->
 <div id="app-screen">
   <header>
     <div class="header-brand">📅 MeetingDesk</div>
@@ -376,13 +340,10 @@ select.field-input{cursor:pointer;}
       <button class="btn-signout" onclick="signOut()">Sign Out</button>
     </div>
   </header>
-
   <div class="tab-bar">
     <button class="tab-btn active" id="tab-btn-scheduler" onclick="switchMainTab('scheduler')">📅 Meeting Scheduler</button>
     <button class="tab-btn" id="tab-btn-reports" onclick="switchMainTab('reports')">📊 Client Reports</button>
   </div>
-
-  <!-- SCHEDULER TAB -->
   <div class="tab-pane active" id="tab-scheduler">
     <div class="app-body">
       <aside class="sidebar">
@@ -391,18 +352,18 @@ select.field-input{cursor:pointer;}
           <div class="field-label">Client Name</div>
           <input class="field-input" id="client-name" placeholder="e.g. John Doe"/>
         </div>
+        <div>
+          <div class="field-label">Agenda</div>
+          <input class="field-input" id="meet-agenda" placeholder="e.g. Q3 review, project update..."/>
+        </div>
         <div class="guests-section">
           <div class="guests-label">Guest Names</div>
           <div id="guest-rows"></div>
           <button class="btn-add-guest" onclick="addGuestRow()">+ Add Guest</button>
         </div>
         <div class="form-row-3">
-          <div>
-            <div class="field-label">Date</div>
-            <input class="field-input" id="meet-date" type="number" min="1" max="31" placeholder="DD" oninput="updateDayPreview()"/>
-          </div>
-          <div>
-            <div class="field-label">Month</div>
+          <div><div class="field-label">Date</div><input class="field-input" id="meet-date" type="number" min="1" max="31" placeholder="DD" oninput="updateDayPreview()"/></div>
+          <div><div class="field-label">Month</div>
             <select class="field-input" id="meet-month" onchange="updateDayPreview()">
               <option value="">MM</option>
               <option value="1">Jan</option><option value="2">Feb</option><option value="3">Mar</option>
@@ -411,10 +372,7 @@ select.field-input{cursor:pointer;}
               <option value="10">Oct</option><option value="11">Nov</option><option value="12">Dec</option>
             </select>
           </div>
-          <div>
-            <div class="field-label">Year</div>
-            <input class="field-input" id="meet-year" type="number" placeholder="YYYY" value="2026" oninput="updateDayPreview()"/>
-          </div>
+          <div><div class="field-label">Year</div><input class="field-input" id="meet-year" type="number" placeholder="YYYY" value="2026" oninput="updateDayPreview()"/></div>
         </div>
         <div class="day-preview" id="day-preview">
           <span>📅</span>
@@ -424,13 +382,9 @@ select.field-input{cursor:pointer;}
         <div>
           <div class="field-label">Time</div>
           <div class="time-row">
-            <div class="field-group">
-              <input class="field-input" id="meet-hour" type="number" min="0" max="23" placeholder="HH" oninput="updateTimePreview()"/>
-            </div>
+            <div class="field-group"><input class="field-input" id="meet-hour" type="number" min="0" max="23" placeholder="HH" oninput="updateTimePreview()"/></div>
             <span style="font-weight:700;color:var(--muted);padding-bottom:9px;">:</span>
-            <div class="field-group">
-              <input class="field-input" id="meet-min" type="number" min="0" max="59" placeholder="MM" oninput="updateTimePreview()"/>
-            </div>
+            <div class="field-group"><input class="field-input" id="meet-min" type="number" min="0" max="59" placeholder="MM" oninput="updateTimePreview()"/></div>
             <div class="time-display" id="time-preview">--:--</div>
           </div>
         </div>
@@ -439,9 +393,7 @@ select.field-input{cursor:pointer;}
         <div class="sync-status" id="sync-status"></div>
         <div class="client-section">
           <h3>All Meetings</h3>
-          <div class="client-list" id="client-list">
-            <div class="empty-clients">No meetings yet.</div>
-          </div>
+          <div class="client-list" id="client-list"><div class="empty-clients">No meetings yet.</div></div>
         </div>
       </aside>
       <main class="main">
@@ -455,15 +407,11 @@ select.field-input{cursor:pointer;}
         </div>
         <div class="meeting-detail">
           <h3 id="detail-title">🗓️ Your calendar awaits</h3>
-          <div id="detail-body">
-            <div class="no-meetings-day"><div class="big">🗓️</div>Add a client meeting to get started.</div>
-          </div>
+          <div id="detail-body"><div class="no-meetings-day"><div class="big">🗓️</div>Add a client meeting to get started.</div></div>
         </div>
       </main>
     </div>
   </div>
-
-  <!-- REPORTS TAB -->
   <div class="tab-pane" id="tab-reports">
     <div id="reports-tab">
       <div class="reports-sidebar">
@@ -477,77 +425,37 @@ select.field-input{cursor:pointer;}
     </div>
   </div>
 </div>
-
-<!-- QUICK ADD POPUP -->
+<!-- QUICK ADD -->
 <div class="overlay" id="quick-overlay">
   <div class="overlay-box">
     <h4 style="color:var(--primary);">📅 Quick Add Meeting</h4>
     <div class="overlay-label" style="background:var(--primary-light);" id="quick-date-label">Date</div>
-    <div class="overlay-field">
-      <label>Client Name</label>
-      <input type="text" id="quick-name" placeholder="e.g. John Doe"/>
-    </div>
-    <div class="overlay-field">
-      <label>Time</label>
-      <div class="overlay-time-row">
-        <input type="number" id="quick-hour" min="0" max="23" placeholder="HH"/>
-        <span>:</span>
-        <input type="number" id="quick-min" min="0" max="59" placeholder="MM"/>
-      </div>
-    </div>
-    <div class="guests-section" style="margin-bottom:14px;">
-      <div class="guests-label">Guest Names</div>
-      <div id="quick-guest-rows"></div>
-      <button class="btn-add-guest" onclick="addQuickGuestRow()">+ Add Guest</button>
-    </div>
+    <div class="overlay-field"><label>Client Name</label><input type="text" id="quick-name" placeholder="e.g. John Doe"/></div>
+    <div class="overlay-field"><label>Time</label><div class="overlay-time-row"><input type="number" id="quick-hour" min="0" max="23" placeholder="HH"/><span>:</span><input type="number" id="quick-min" min="0" max="59" placeholder="MM"/></div></div>
+    <div class="guests-section" style="margin-bottom:14px;"><div class="guests-label">Guest Names</div><div id="quick-guest-rows"></div><button class="btn-add-guest" onclick="addQuickGuestRow()">+ Add Guest</button></div>
     <div class="overlay-error" id="quick-error"></div>
-    <div class="overlay-btns">
-      <button class="btn-ov-cancel" onclick="closeQuick()">Cancel</button>
-      <button style="background:linear-gradient(135deg,var(--primary),var(--accent));color:white;" onclick="saveQuick()">Schedule</button>
-    </div>
+    <div class="overlay-btns"><button class="btn-ov-cancel" onclick="closeQuick()">Cancel</button><button style="background:linear-gradient(135deg,var(--primary),var(--accent));color:white;" onclick="saveQuick()">Schedule</button></div>
   </div>
 </div>
-
-<!-- RESCHEDULE POPUP -->
+<!-- RESCHEDULE -->
 <div class="overlay" id="reschedule-overlay">
   <div class="overlay-box">
     <h4 style="color:var(--primary);">🔄 Reschedule Meeting</h4>
     <div class="overlay-label" style="background:var(--primary-light);" id="reschedule-label">Client</div>
-    <div class="overlay-field">
-      <label>New Date</label>
+    <div class="overlay-field"><label>New Date</label>
       <div class="overlay-date-row">
         <input type="number" id="rs-date" min="1" max="31" placeholder="DD" oninput="updateOverlayDay('rs')"/>
-        <select id="rs-month" onchange="updateOverlayDay('rs')">
-          <option value="">MM</option>
-          <option value="1">Jan</option><option value="2">Feb</option><option value="3">Mar</option>
-          <option value="4">Apr</option><option value="5">May</option><option value="6">Jun</option>
-          <option value="7">Jul</option><option value="8">Aug</option><option value="9">Sep</option>
-          <option value="10">Oct</option><option value="11">Nov</option><option value="12">Dec</option>
-        </select>
+        <select id="rs-month" onchange="updateOverlayDay('rs')"><option value="">MM</option><option value="1">Jan</option><option value="2">Feb</option><option value="3">Mar</option><option value="4">Apr</option><option value="5">May</option><option value="6">Jun</option><option value="7">Jul</option><option value="8">Aug</option><option value="9">Sep</option><option value="10">Oct</option><option value="11">Nov</option><option value="12">Dec</option></select>
         <input type="number" id="rs-year" placeholder="YYYY" value="2026" oninput="updateOverlayDay('rs')"/>
       </div>
     </div>
-    <div class="overlay-day-preview" id="rs-day-preview">
-      <span>📅</span><span style="font-size:0.78rem;color:var(--muted);font-weight:600;">Falls on</span>
-      <span style="font-size:0.9rem;font-weight:800;color:var(--primary);" id="rs-day-value">—</span>
-    </div>
-    <div class="overlay-field">
-      <label>New Time</label>
-      <div class="overlay-time-row">
-        <input type="number" id="rs-hour" min="0" max="23" placeholder="HH"/>
-        <span>:</span>
-        <input type="number" id="rs-min" min="0" max="59" placeholder="MM"/>
-      </div>
-    </div>
+    <div class="overlay-day-preview" id="rs-day-preview"><span>📅</span><span style="font-size:0.78rem;color:var(--muted);font-weight:600;">Falls on</span><span style="font-size:0.9rem;font-weight:800;color:var(--primary);" id="rs-day-value">—</span></div>
+    <div class="overlay-field"><label>New Time</label><div class="overlay-time-row"><input type="number" id="rs-hour" min="0" max="23" placeholder="HH"/><span>:</span><input type="number" id="rs-min" min="0" max="59" placeholder="MM"/></div></div>
     <div class="overlay-error" id="rs-error"></div>
-    <div class="overlay-btns">
-      <button class="btn-ov-cancel" onclick="closeOverlay('reschedule-overlay')">Cancel</button>
-      <button style="background:linear-gradient(135deg,#2563eb,var(--accent));color:white;" onclick="saveReschedule()">Reschedule</button>
-    </div>
+    <div class="overlay-btns"><button class="btn-ov-cancel" onclick="closeOverlay('reschedule-overlay')">Cancel</button><button style="background:linear-gradient(135deg,#2563eb,var(--accent));color:white;" onclick="saveReschedule()">Reschedule</button></div>
   </div>
 </div>
-
-<!-- GUESTS POPUP -->
+<!-- GUESTS -->
 <div class="overlay" id="guests-overlay">
   <div class="overlay-box">
     <h4 style="color:#16a34a;">👥 Edit Guests</h4>
@@ -555,1072 +463,191 @@ select.field-input{cursor:pointer;}
     <div class="guests-label">Guest Names</div>
     <div id="guests-edit-rows"></div>
     <button class="btn-add-guest" onclick="addEditGuestRow()">+ Add Guest</button>
-    <div class="overlay-btns">
-      <button class="btn-ov-cancel" onclick="closeOverlay('guests-overlay')">Cancel</button>
-      <button style="background:linear-gradient(135deg,#16a34a,var(--accent));color:white;" onclick="saveGuests()">Save Guests</button>
-    </div>
+    <div class="overlay-btns"><button class="btn-ov-cancel" onclick="closeOverlay('guests-overlay')">Cancel</button><button style="background:linear-gradient(135deg,#16a34a,var(--accent));color:white;" onclick="saveGuests()">Save Guests</button></div>
   </div>
 </div>
-
-<!-- NOTES POPUP -->
+<!-- NOTES -->
 <div class="overlay" id="notes-overlay">
   <div class="overlay-box">
     <h4 style="color:#ca8a04;">📝 Minutes of Meeting</h4>
     <div class="overlay-label" style="background:#fefce8;" id="notes-label">Client</div>
-    <div class="overlay-field">
-      <label>Notes</label>
-      <textarea id="notes-textarea" placeholder="Write your meeting notes, decisions, action items..."></textarea>
-    </div>
+    <div class="overlay-field"><label>Notes</label><textarea id="notes-textarea" placeholder="Write your meeting notes, decisions, action items..."></textarea></div>
     <div class="char-count" id="notes-char-count">0 characters</div>
-    <div class="overlay-btns">
-      <button class="btn-ov-cancel" onclick="closeOverlay('notes-overlay')">Cancel</button>
-      <button style="background:linear-gradient(135deg,#ca8a04,#f59e0b);color:white;" onclick="saveNotes()">Save Notes</button>
-    </div>
+    <div class="overlay-btns"><button class="btn-ov-cancel" onclick="closeOverlay('notes-overlay')">Cancel</button><button style="background:linear-gradient(135deg,#ca8a04,#f59e0b);color:white;" onclick="saveNotes()">Save Notes</button></div>
   </div>
 </div>
-
-<!-- LINKS POPUP -->
+<!-- LINKS -->
 <div class="overlay" id="links-overlay">
   <div class="overlay-box">
     <h4 style="color:#7c3aed;">🔗 Meeting Links</h4>
     <div class="overlay-label" style="background:#f5f3ff;" id="links-label">Client</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:6px;margin-bottom:6px;">
-      <div style="font-size:0.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;">Label</div>
-      <div style="font-size:0.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;">URL</div>
-      <div></div>
-    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:6px;margin-bottom:6px;"><div style="font-size:0.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;">Label</div><div style="font-size:0.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;">URL</div><div></div></div>
     <div id="links-rows"></div>
     <button class="btn-add-link" onclick="addLinkRow()">+ Add Link</button>
-    <div class="overlay-btns">
-      <button class="btn-ov-cancel" onclick="closeOverlay('links-overlay')">Cancel</button>
-      <button style="background:linear-gradient(135deg,#7c3aed,var(--accent));color:white;" onclick="saveLinks()">Save Links</button>
-    </div>
+    <div class="overlay-btns"><button class="btn-ov-cancel" onclick="closeOverlay('links-overlay')">Cancel</button><button style="background:linear-gradient(135deg,#7c3aed,var(--accent));color:white;" onclick="saveLinks()">Save Links</button></div>
   </div>
 </div>
-
-<!-- DEADLINE POPUP -->
+<!-- DEADLINE -->
 <div class="overlay" id="deadline-overlay">
   <div class="overlay-box">
     <h4 style="color:#ea580c;">⏰ Add Deadline</h4>
     <div class="overlay-label" style="background:#fff7ed;" id="deadline-label">Client</div>
-    <div class="overlay-field">
-      <label>What is the deadline for?</label>
-      <input type="text" id="dl-task" placeholder="e.g. Submit proposal, Send report..."/>
-    </div>
-    <div class="overlay-field">
-      <label>Deadline Date</label>
+    <div class="overlay-field"><label>What is the deadline for?</label><input type="text" id="dl-task" placeholder="e.g. Submit proposal, Send report..."/></div>
+    <div class="overlay-field"><label>Deadline Date</label>
       <div class="overlay-date-row">
         <input type="number" id="dl-date" min="1" max="31" placeholder="DD" oninput="updateOverlayDay('dl')"/>
-        <select id="dl-month" onchange="updateOverlayDay('dl')">
-          <option value="">MM</option>
-          <option value="1">Jan</option><option value="2">Feb</option><option value="3">Mar</option>
-          <option value="4">Apr</option><option value="5">May</option><option value="6">Jun</option>
-          <option value="7">Jul</option><option value="8">Aug</option><option value="9">Sep</option>
-          <option value="10">Oct</option><option value="11">Nov</option><option value="12">Dec</option>
-        </select>
+        <select id="dl-month" onchange="updateOverlayDay('dl')"><option value="">MM</option><option value="1">Jan</option><option value="2">Feb</option><option value="3">Mar</option><option value="4">Apr</option><option value="5">May</option><option value="6">Jun</option><option value="7">Jul</option><option value="8">Aug</option><option value="9">Sep</option><option value="10">Oct</option><option value="11">Nov</option><option value="12">Dec</option></select>
         <input type="number" id="dl-year" placeholder="YYYY" value="2026" oninput="updateOverlayDay('dl')"/>
       </div>
     </div>
-    <div class="overlay-day-preview" id="dl-day-preview">
-      <span>📅</span><span style="font-size:0.78rem;color:var(--muted);font-weight:600;">Falls on</span>
-      <span style="font-size:0.9rem;font-weight:800;color:#ea580c;" id="dl-day-value">—</span>
-    </div>
+    <div class="overlay-day-preview" id="dl-day-preview"><span>📅</span><span style="font-size:0.78rem;color:var(--muted);font-weight:600;">Falls on</span><span style="font-size:0.9rem;font-weight:800;color:#ea580c;" id="dl-day-value">—</span></div>
     <div class="time-note">🕘 Time is fixed at <strong>9:00 AM</strong></div>
     <div class="overlay-error" id="dl-error"></div>
-    <div class="overlay-btns">
-      <button class="btn-ov-cancel" onclick="closeOverlay('deadline-overlay')">Cancel</button>
-      <button style="background:linear-gradient(135deg,#ea580c,#f59e0b);color:white;" onclick="saveDeadline()">Set Deadline</button>
-    </div>
+    <div class="overlay-btns"><button class="btn-ov-cancel" onclick="closeOverlay('deadline-overlay')">Cancel</button><button style="background:linear-gradient(135deg,#ea580c,#f59e0b);color:white;" onclick="saveDeadline()">Set Deadline</button></div>
   </div>
 </div>
-
 <!-- DELETE CONFIRM -->
 <div class="overlay" id="confirm-overlay">
   <div class="overlay-box" style="max-width:320px;">
     <h4>🗑️ Delete Meeting?</h4>
     <p id="confirm-text" style="font-size:0.86rem;color:var(--muted);margin:10px 0 18px;line-height:1.5;"></p>
+    <div class="overlay-btns"><button class="btn-ov-cancel" onclick="closeOverlay('confirm-overlay')">Cancel</button><button style="background:var(--danger);color:white;" onclick="confirmDelete()">Yes, Delete</button></div>
+  </div>
+</div>
+<!-- AGENDA OVERLAY -->
+<div class="overlay" id="agenda-overlay">
+  <div class="overlay-box">
+    <h4 style="color:#0891b2;">📋 Change Agenda</h4>
+    <div class="overlay-label" style="background:#ecfeff;" id="agenda-label">Client</div>
+    <div class="overlay-field">
+      <label>Agenda</label>
+      <input type="text" id="agenda-input" placeholder="e.g. Q3 review, project update..."/>
+    </div>
+    <div class="overlay-error" id="agenda-error"></div>
     <div class="overlay-btns">
-      <button class="btn-ov-cancel" onclick="closeOverlay('confirm-overlay')">Cancel</button>
-      <button style="background:var(--danger);color:white;" onclick="confirmDelete()">Yes, Delete</button>
+      <button class="btn-ov-cancel" onclick="closeOverlay('agenda-overlay')">Cancel</button>
+      <button style="background:linear-gradient(135deg,#0891b2,#06b6d4);color:white;" onclick="saveAgenda()">Save Agenda</button>
     </div>
   </div>
 </div>
 
 <div id="toast"></div>
-
 <script>
-// ── CONSTANTS ──
 const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
 const DAYS=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 const DAYS_S=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-
-// ── STATE ──
-let currentUser=null, meetings=[], calYear=new Date().getFullYear(), calMonth=new Date().getMonth(), selectedDay=null;
-let pendingId=null; // shared for all overlay actions
+let currentUser=null,meetings=[],calYear=new Date().getFullYear(),calMonth=new Date().getMonth(),selectedDay=null;
+let pendingId=null;
 let accounts=JSON.parse(localStorage.getItem('md_accounts')||'{}');
-let authMode='signin', activeReportClient=null;
-
-// ── FIREBASE ──
-function setSyncStatus(msg){
-  const el=document.getElementById('sync-status');
-  el.innerHTML=msg?'<span class="spinner"></span>'+msg:'';
-}
-async function loadMeetingsFromFirebase(email){
-  setSyncStatus('Loading meetings...');
-  try{
-    const {collection,getDocs,query,where}=window._fsLib;
-    const q=query(collection(window._db,'meetings'),where('userEmail','==',email));
-    const snap=await getDocs(q);
-    meetings=snap.docs.map(d=>d.data());
-    meetings.sort((a,b)=>cmpMeeting(a,b));
-  }catch(e){toast('Could not load meetings. Check your internet.');}
-  setSyncStatus('');
-}
-async function saveMeetingToFirebase(m){
-  setSyncStatus('Saving...');
-  try{
-    const {doc,setDoc,collection}=window._fsLib;
-    await setDoc(doc(collection(window._db,'meetings'),String(m.id)),m);
-  }catch(e){toast('Could not save. Check your internet.');}
-  setSyncStatus('');
-}
-async function deleteMeetingFromFirebase(id){
-  setSyncStatus('Deleting...');
-  try{
-    const {doc,deleteDoc,collection}=window._fsLib;
-    await deleteDoc(doc(collection(window._db,'meetings'),String(id)));
-  }catch(e){toast('Could not delete. Check your internet.');}
-  setSyncStatus('');
-}
-function cmpMeeting(a,b){
-  return new Date(a.year,a.month-1,a.date,...a.time.split(':'))-new Date(b.year,b.month-1,b.date,...b.time.split(':'));
-}
-
-// ── AUTH ──
-function switchTab(mode){
-  authMode=mode;
-  document.querySelectorAll('.auth-tab').forEach((t,i)=>t.classList.toggle('active',(mode==='signin'?0:1)===i));
-  document.getElementById('auth-btn').textContent=mode==='signin'?'Sign In':'Create Account';
-  document.getElementById('forgot-row').style.display=mode==='signin'?'':'none';
-  hideAuthError();
-}
+let authMode='signin',activeReportClient=null;
+function setSyncStatus(msg){const el=document.getElementById('sync-status');el.innerHTML=msg?'<span class="spinner"></span>'+msg:'';}
+async function loadMeetingsFromFirebase(email){setSyncStatus('Loading meetings...');try{const {collection,getDocs,query,where}=window._fsLib;const q=query(collection(window._db,'meetings'),where('userEmail','==',email));const snap=await getDocs(q);meetings=snap.docs.map(d=>d.data());meetings.sort((a,b)=>cmpMeeting(a,b));}catch(e){toast('Could not load meetings. Check your internet.');}setSyncStatus('');}
+async function saveMeetingToFirebase(m){setSyncStatus('Saving...');try{const {doc,setDoc,collection}=window._fsLib;await setDoc(doc(collection(window._db,'meetings'),String(m.id)),m);}catch(e){toast('Could not save. Check your internet.');}setSyncStatus('');}
+async function deleteMeetingFromFirebase(id){setSyncStatus('Deleting...');try{const {doc,deleteDoc,collection}=window._fsLib;await deleteDoc(doc(collection(window._db,'meetings'),String(id)));}catch(e){toast('Could not delete. Check your internet.');}setSyncStatus('');}
+function cmpMeeting(a,b){return new Date(a.year,a.month-1,a.date,...a.time.split(':'))-new Date(b.year,b.month-1,b.date,...b.time.split(':'));}
+function switchTab(mode){authMode=mode;document.querySelectorAll('.auth-tab').forEach((t,i)=>t.classList.toggle('active',(mode==='signin'?0:1)===i));document.getElementById('auth-btn').textContent=mode==='signin'?'Sign In':'Create Account';document.getElementById('forgot-row').style.display=mode==='signin'?'':'none';hideAuthError();}
 function showAuthError(msg){const e=document.getElementById('auth-error');e.textContent=msg;e.style.display='block';}
 function hideAuthError(){document.getElementById('auth-error').style.display='none';}
-function handleAuth(){
-  const email=document.getElementById('auth-email').value.trim();
-  const pw=document.getElementById('auth-password').value;
-  if(!email||!pw){showAuthError('Please enter email and password.');return;}
-  if(!email.includes('@')){showAuthError('Enter a valid email address.');return;}
-  if(authMode==='signup'){
-    if(accounts[email]){showAuthError('Account already exists. Please sign in.');return;}
-    if(pw.length<6){showAuthError('Password must be at least 6 characters.');return;}
-    accounts[email]={pw};localStorage.setItem('md_accounts',JSON.stringify(accounts));
-    loginAs(email,null);
-  }else{
-    if(!accounts[email]||accounts[email].pw!==pw){showAuthError('Invalid email or password.');return;}
-    loginAs(email,null);
-  }
-}
-function handleGoogleCredential(response){
-  try{
-    const payload=JSON.parse(atob(response.credential.split('.')[1]));
-    const email=payload.email;
-    const displayName=payload.given_name||payload.name||email.split('@')[0];
-    if(!accounts[email])accounts[email]={pw:'__google__',googleName:displayName};
-    else accounts[email].googleName=displayName;
-    localStorage.setItem('md_accounts',JSON.stringify(accounts));
-    loginAs(email,displayName);
-  }catch(e){showAuthError('Google sign-in failed. Please try again.');}
-}
-async function loginAs(email,displayName,silent){
-  currentUser=email;
-  const name=displayName||accounts[email]?.googleName||email.split('@')[0];
-  localStorage.setItem('md_session',JSON.stringify({email,displayName:name}));
-  document.getElementById('user-avatar').textContent=name[0].toUpperCase();
-  document.getElementById('user-name').textContent=name.charAt(0).toUpperCase()+name.slice(1);
-  document.getElementById('auth-screen').style.display='none';
-  const appEl=document.getElementById('app-screen');
-  appEl.style.display='flex';appEl.style.flexDirection='column';
-  renderCalendar();
-  const doLoad=async()=>{
-    await loadMeetingsFromFirebase(email);
-    renderAll();
-    if(!silent)toast('Welcome, '+name+'! 👋','success');
-  };
-  if(window._dbReady)await doLoad();
-  else window.addEventListener('firebase-ready',doLoad,{once:true});
-  // Init notifications
-  setTimeout(initNotifications, 500);
-}
-function signOut(){
-  currentUser=null;meetings=[];
-  localStorage.removeItem('md_session');localStorage.removeItem('md_calstate');
-  document.getElementById('auth-screen').style.display='flex';
-  document.getElementById('app-screen').style.display='none';
-  document.getElementById('auth-password').value='';
-}
-
-// ── TABS ──
-function switchMainTab(tab){
-  document.getElementById('tab-btn-scheduler').classList.toggle('active',tab==='scheduler');
-  document.getElementById('tab-btn-reports').classList.toggle('active',tab==='reports');
-  document.getElementById('tab-scheduler').classList.toggle('active',tab==='scheduler');
-  document.getElementById('tab-reports').classList.toggle('active',tab==='reports');
-  if(tab==='reports'){activeReportClient=null;renderReportsList();}
-}
-
-// ── FORM HELPERS ──
-function updateDayPreview(){
-  const d=parseInt(document.getElementById('meet-date').value);
-  const m=parseInt(document.getElementById('meet-month').value);
-  const y=parseInt(document.getElementById('meet-year').value);
-  const el=document.getElementById('day-preview');
-  if(d&&m&&y){const dt=new Date(y,m-1,d);if(dt.getDate()===d&&dt.getMonth()===m-1){document.getElementById('day-preview-value').textContent=DAYS[dt.getDay()];el.classList.add('visible');return;}}
-  el.classList.remove('visible');
-}
-function updateTimePreview(){
-  const h=document.getElementById('meet-hour').value;
-  const m=document.getElementById('meet-min').value;
-  document.getElementById('time-preview').textContent=(h!==''&&m!=='')?pad(parseInt(h))+':'+pad(parseInt(m)):'--:--';
-}
-function updateOverlayDay(prefix){
-  const d=parseInt(document.getElementById(prefix+'-date').value);
-  const m=parseInt(document.getElementById(prefix+'-month').value);
-  const y=parseInt(document.getElementById(prefix+'-year').value);
-  const el=document.getElementById(prefix+'-day-preview');
-  if(d&&m&&y){const dt=new Date(y,m-1,d);if(dt.getDate()===d&&dt.getMonth()===m-1){document.getElementById(prefix+'-day-value').textContent=DAYS[dt.getDay()];el.classList.add('visible');return;}}
-  el.classList.remove('visible');
-}
+function handleAuth(){const email=document.getElementById('auth-email').value.trim();const pw=document.getElementById('auth-password').value;if(!email||!pw){showAuthError('Please enter email and password.');return;}if(!email.includes('@')){showAuthError('Enter a valid email address.');return;}if(authMode==='signup'){if(accounts[email]){showAuthError('Account already exists. Please sign in.');return;}if(pw.length<6){showAuthError('Password must be at least 6 characters.');return;}accounts[email]={pw};localStorage.setItem('md_accounts',JSON.stringify(accounts));loginAs(email,null);}else{if(!accounts[email]||accounts[email].pw!==pw){showAuthError('Invalid email or password.');return;}loginAs(email,null);}}
+function handleGoogleCredential(response){try{const payload=JSON.parse(atob(response.credential.split('.')[1]));const email=payload.email;const displayName=payload.given_name||payload.name||email.split('@')[0];if(!accounts[email])accounts[email]={pw:'__google__',googleName:displayName};else accounts[email].googleName=displayName;localStorage.setItem('md_accounts',JSON.stringify(accounts));loginAs(email,displayName);}catch(e){showAuthError('Google sign-in failed. Please try again.');}}
+async function loginAs(email,displayName,silent){currentUser=email;const name=displayName||accounts[email]?.googleName||email.split('@')[0];localStorage.setItem('md_session',JSON.stringify({email,displayName:name}));document.getElementById('user-avatar').textContent=name[0].toUpperCase();document.getElementById('user-name').textContent=name.charAt(0).toUpperCase()+name.slice(1);document.getElementById('auth-screen').style.display='none';const appEl=document.getElementById('app-screen');appEl.style.display='flex';appEl.style.flexDirection='column';renderCalendar();const doLoad=async()=>{await loadMeetingsFromFirebase(email);renderAll();if(!silent)toast('Welcome, '+name+'! 👋','success');};if(window._dbReady)await doLoad();else window.addEventListener('firebase-ready',doLoad,{once:true});setTimeout(initNotifications,500);}
+function signOut(){currentUser=null;meetings=[];localStorage.removeItem('md_session');localStorage.removeItem('md_calstate');document.getElementById('auth-screen').style.display='flex';document.getElementById('app-screen').style.display='none';document.getElementById('auth-password').value='';}
+function switchMainTab(tab){document.getElementById('tab-btn-scheduler').classList.toggle('active',tab==='scheduler');document.getElementById('tab-btn-reports').classList.toggle('active',tab==='reports');document.getElementById('tab-scheduler').classList.toggle('active',tab==='scheduler');document.getElementById('tab-reports').classList.toggle('active',tab==='reports');if(tab==='reports'){activeReportClient=null;renderReportsList();}}
+function updateDayPreview(){const d=parseInt(document.getElementById('meet-date').value);const m=parseInt(document.getElementById('meet-month').value);const y=parseInt(document.getElementById('meet-year').value);const el=document.getElementById('day-preview');if(d&&m&&y){const dt=new Date(y,m-1,d);if(dt.getDate()===d&&dt.getMonth()===m-1){document.getElementById('day-preview-value').textContent=DAYS[dt.getDay()];el.classList.add('visible');return;}}el.classList.remove('visible');}
+function updateTimePreview(){const h=document.getElementById('meet-hour').value;const m=document.getElementById('meet-min').value;document.getElementById('time-preview').textContent=(h!==''&&m!=='')?pad(parseInt(h))+':'+pad(parseInt(m)):'--:--';}
+function updateOverlayDay(prefix){const d=parseInt(document.getElementById(prefix+'-date').value);const m=parseInt(document.getElementById(prefix+'-month').value);const y=parseInt(document.getElementById(prefix+'-year').value);const el=document.getElementById(prefix+'-day-preview');if(d&&m&&y){const dt=new Date(y,m-1,d);if(dt.getDate()===d&&dt.getMonth()===m-1){document.getElementById(prefix+'-day-value').textContent=DAYS[dt.getDay()];el.classList.add('visible');return;}}el.classList.remove('visible');}
 function pad(n){return String(n).padStart(2,'0');}
 function showAddError(msg){const e=document.getElementById('add-error');e.textContent=msg;e.classList.add('show');}
 function clearAddError(){const e=document.getElementById('add-error');e.textContent='';e.classList.remove('show');}
 function markField(id,err){document.getElementById(id).classList.toggle('error-field',err);}
 function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function toast(msg,type=''){const e=document.getElementById('toast');e.textContent=msg;e.className='show'+(type?' '+type:'');setTimeout(()=>e.className='',3000);}
-
-// ── GUEST HELPERS ──
-function addGuestRow(val=''){
-  const r=makeGuestRow(val,'guest-rows');document.getElementById('guest-rows').appendChild(r);r.querySelector('input').focus();
-}
-function addQuickGuestRow(val=''){
-  const r=makeGuestRow(val,'quick-guest-rows');document.getElementById('quick-guest-rows').appendChild(r);
-}
-function addEditGuestRow(val=''){
-  const r=makeGuestRow(val,'guests-edit-rows');document.getElementById('guests-edit-rows').appendChild(r);
-}
-function makeGuestRow(val,containerId){
-  const row=document.createElement('div');row.className='guest-row';
-  const inp=document.createElement('input');inp.type='text';inp.placeholder='Guest name';inp.value=val;
-  const btn=document.createElement('button');btn.className='btn-remove-guest';btn.textContent='Remove';
-  btn.onclick=function(){row.remove();};
-  row.appendChild(inp);row.appendChild(btn);return row;
-}
-function getGuests(containerId){
-  return Array.from(document.querySelectorAll('#'+containerId+' input')).map(i=>i.value.trim()).filter(Boolean);
-}
+function addGuestRow(val=''){const r=makeGuestRow(val,'guest-rows');document.getElementById('guest-rows').appendChild(r);r.querySelector('input').focus();}
+function addQuickGuestRow(val=''){const r=makeGuestRow(val,'quick-guest-rows');document.getElementById('quick-guest-rows').appendChild(r);}
+function addEditGuestRow(val=''){const r=makeGuestRow(val,'guests-edit-rows');document.getElementById('guests-edit-rows').appendChild(r);}
+function makeGuestRow(val,containerId){const row=document.createElement('div');row.className='guest-row';const inp=document.createElement('input');inp.type='text';inp.placeholder='Guest name';inp.value=val;const btn=document.createElement('button');btn.className='btn-remove-guest';btn.textContent='Remove';btn.onclick=function(){row.remove();};row.appendChild(inp);row.appendChild(btn);return row;}
+function getGuests(containerId){return Array.from(document.querySelectorAll('#'+containerId+' input')).map(i=>i.value.trim()).filter(Boolean);}
 function clearGuestRows(){document.getElementById('guest-rows').innerHTML='';}
-
-// ── ADD MEETING ──
-async function addMeeting(){
-  clearAddError();
-  ['client-name','meet-date','meet-month','meet-year','meet-hour','meet-min'].forEach(id=>markField(id,false));
-  const name=document.getElementById('client-name').value.trim();
-  const date=parseInt(document.getElementById('meet-date').value);
-  const month=parseInt(document.getElementById('meet-month').value);
-  const year=parseInt(document.getElementById('meet-year').value);
-  const hour=document.getElementById('meet-hour').value.trim();
-  const min=document.getElementById('meet-min').value.trim();
-  if(!name){markField('client-name',true);showAddError('Please enter the client name.');return;}
-  if(!document.getElementById('meet-date').value||isNaN(date)||date<1||date>31){markField('meet-date',true);showAddError('Please enter a valid date (1-31).');return;}
-  if(!document.getElementById('meet-month').value||isNaN(month)){markField('meet-month',true);showAddError('Please select a month.');return;}
-  if(!document.getElementById('meet-year').value||isNaN(year)||year<2020||year>2100){markField('meet-year',true);showAddError('Please enter a valid year.');return;}
-  const testDate=new Date(year,month-1,date);
-  if(testDate.getDate()!==date||testDate.getMonth()!==month-1){markField('meet-date',true);markField('meet-month',true);showAddError(date+' '+MONTHS[month-1]+' '+year+' is not a valid date.');return;}
-  if(hour===''){markField('meet-hour',true);showAddError('Please enter the hour (0-23).');return;}
-  if(parseInt(hour)<0||parseInt(hour)>23){markField('meet-hour',true);showAddError('Hour must be 0-23.');return;}
-  if(min===''){markField('meet-min',true);showAddError('Please enter the minutes (0-59).');return;}
-  if(parseInt(min)<0||parseInt(min)>59){markField('meet-min',true);showAddError('Minutes must be 0-59.');return;}
-  const guests=getGuests('guest-rows');
-  const meeting={id:Date.now(),userEmail:currentUser,name,day:DAYS[testDate.getDay()],date,month,year,time:pad(parseInt(hour))+':'+pad(parseInt(min)),guests,notes:'',links:[],deadlines:[]};
-  meetings.push(meeting);meetings.sort(cmpMeeting);
-  clearForm();calYear=year;calMonth=month-1;selectedDay=date;saveCalState();renderAll();
-  await saveMeetingToFirebase(meeting);
-  toast('Meeting with '+name+' scheduled!','success');
-}
-function clearForm(){
-  ['client-name','meet-date','meet-hour','meet-min'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('meet-month').value='';document.getElementById('meet-year').value='2026';
-  document.getElementById('time-preview').textContent='--:--';
-  document.getElementById('day-preview').classList.remove('visible');
-  clearGuestRows();clearAddError();
-  ['client-name','meet-date','meet-month','meet-year','meet-hour','meet-min'].forEach(id=>markField(id,false));
-}
-
-// ── RENDER ──
+async function addMeeting(){clearAddError();['client-name','meet-date','meet-month','meet-year','meet-hour','meet-min'].forEach(id=>markField(id,false));const name=document.getElementById('client-name').value.trim();const date=parseInt(document.getElementById('meet-date').value);const month=parseInt(document.getElementById('meet-month').value);const year=parseInt(document.getElementById('meet-year').value);const hour=document.getElementById('meet-hour').value.trim();const min=document.getElementById('meet-min').value.trim();if(!name){markField('client-name',true);showAddError('Please enter the client name.');return;}if(!document.getElementById('meet-date').value||isNaN(date)||date<1||date>31){markField('meet-date',true);showAddError('Please enter a valid date (1-31).');return;}if(!document.getElementById('meet-month').value||isNaN(month)){markField('meet-month',true);showAddError('Please select a month.');return;}if(!document.getElementById('meet-year').value||isNaN(year)||year<2020||year>2100){markField('meet-year',true);showAddError('Please enter a valid year.');return;}const testDate=new Date(year,month-1,date);if(testDate.getDate()!==date||testDate.getMonth()!==month-1){markField('meet-date',true);markField('meet-month',true);showAddError(date+' '+MONTHS[month-1]+' '+year+' is not a valid date.');return;}if(hour===''){markField('meet-hour',true);showAddError('Please enter the hour (0-23).');return;}if(parseInt(hour)<0||parseInt(hour)>23){markField('meet-hour',true);showAddError('Hour must be 0-23.');return;}if(min===''){markField('meet-min',true);showAddError('Please enter the minutes (0-59).');return;}if(parseInt(min)<0||parseInt(min)>59){markField('meet-min',true);showAddError('Minutes must be 0-59.');return;}const guests=getGuests('guest-rows');const agenda=document.getElementById('meet-agenda').value.trim();const meeting={id:Date.now(),userEmail:currentUser,name,day:DAYS[testDate.getDay()],date,month,year,time:pad(parseInt(hour))+':'+pad(parseInt(min)),guests,agenda:agenda||'',notes:'',links:[],deadlines:[]};meetings.push(meeting);meetings.sort(cmpMeeting);clearForm();calYear=year;calMonth=month-1;selectedDay=date;saveCalState();renderAll();await saveMeetingToFirebase(meeting);toast('Meeting with '+name+' scheduled!','success');}
+function clearForm(){['client-name','meet-agenda','meet-date','meet-hour','meet-min'].forEach(id=>document.getElementById(id).value='');document.getElementById('meet-month').value='';document.getElementById('meet-year').value='2026';document.getElementById('time-preview').textContent='--:--';document.getElementById('day-preview').classList.remove('visible');clearGuestRows();clearAddError();['client-name','meet-date','meet-month','meet-year','meet-hour','meet-min'].forEach(id=>markField(id,false));}
 function renderAll(){renderClientList();renderCalendar();renderDetail();}
-
-function renderClientList(){
-  const list=document.getElementById('client-list');
-  if(!meetings.length){list.innerHTML='<div class="empty-clients">No meetings yet.</div>';return;}
-  list.innerHTML='';
-  meetings.forEach(function(m){
-    const item=document.createElement('div');
-    item.className='client-item';
-    item.innerHTML='<div class="ci-name">'+escHtml(m.name)+'</div>'
-      +'<div class="ci-time">'+m.day+', '+m.date+' '+MONTHS[m.month-1].slice(0,3)+' '+m.year+' · '+m.time+'</div>';
-    item.addEventListener('click',function(){jumpToMeeting(m.id);});
-    list.appendChild(item);
-  });
-}
-
-function jumpToMeeting(id){
-  const m=meetings.find(x=>x.id==id);if(!m)return;
-  calYear=m.year;calMonth=m.month-1;selectedDay=m.date;
-  saveCalState();renderCalendar();renderDetail();
-  setTimeout(function(){
-    const el=document.querySelector('.meeting-detail');
-    if(el)el.scrollIntoView({behavior:'smooth',block:'start'});
-  },100);
-}
-
-function renderCalendar(){
-  document.getElementById('cal-title').textContent=MONTHS[calMonth]+' '+calYear;
-  const grid=document.getElementById('cal-grid');
-  const today=new Date();
-  const mdays=new Set(meetings.filter(m=>m.year===calYear&&m.month===calMonth+1).map(m=>m.date));
-  // Build deadline days map: date -> list of {task, meetingDate}
-  const ddMap={};
-  meetings.forEach(function(m){
-    if(!m.deadlines||!m.deadlines.length)return;
-    m.deadlines.forEach(function(dl){
-      if(dl.year===calYear&&dl.month===calMonth+1){
-        if(!ddMap[dl.date])ddMap[dl.date]=[];
-        ddMap[dl.date].push({task:dl.task,fromDate:m.date,fromMonth:m.month,fromYear:m.year,client:m.name});
-      }
-    });
-  });
-  const firstDay=new Date(calYear,calMonth,1).getDay();
-  const dim=new Date(calYear,calMonth+1,0).getDate();
-  let html=DAYS_S.map(d=>'<div class="cal-dow">'+d+'</div>').join('');
-  for(let i=0;i<firstDay;i++)html+='<div class="cal-day empty"></div>';
-  for(let d=1;d<=dim;d++){
-    const isT=d===today.getDate()&&calMonth===today.getMonth()&&calYear===today.getFullYear();
-    const hasDeadline=!!ddMap[d];
-    // Build tooltip for deadline days
-    let title='';
-    if(hasDeadline){
-      title=ddMap[d].map(function(x){return 'Deadline: '+x.task+' ('+x.client+', discussed on '+x.fromDate+' '+MONTHS[x.fromMonth-1].slice(0,3)+')';}).join(' | ');
-    }
-    const cls=['cal-day',isT?'today':'',mdays.has(d)?'has-meeting':'',hasDeadline?'has-deadline':'',d===selectedDay?'selected-day':''].filter(Boolean).join(' ');
-    html+='<div class="'+cls+'" onclick="selectDay('+d+')"'+(title?' title="'+title+'"':'')+'>'+d+'</div>';
-  }
-  grid.innerHTML=html;
-}
-
-function selectDay(d){
-  selectedDay=d;saveCalState();renderCalendar();renderDetail();
-  setTimeout(function(){openQuick(d);},50);
-}
-
-function changeMonth(dir){
-  calMonth+=dir;
-  if(calMonth<0){calMonth=11;calYear--;}
-  if(calMonth>11){calMonth=0;calYear++;}
-  selectedDay=null;saveCalState();renderCalendar();renderDetail();
-}
-
-function renderDetail(){
-  const t=document.getElementById('detail-title');
-  const b=document.getElementById('detail-body');
-  if(!selectedDay){t.textContent='🗓️ Your calendar awaits';b.innerHTML='<div class="no-meetings-day"><div class="big">🗓️</div>Add a client meeting to get started.</div>';return;}
-  const dm=meetings.filter(m=>m.year===calYear&&m.month===calMonth+1&&m.date===selectedDay);
-  const dayName=DAYS[new Date(calYear,calMonth,selectedDay).getDay()];
-  t.textContent='📅 '+dayName+', '+selectedDay+' '+MONTHS[calMonth]+' '+calYear;
-  b.innerHTML='';
-  // Show deadlines falling on this day from ANY meeting
-  const dayDeadlines=[];
-  meetings.forEach(function(m){
-    if(!m.deadlines||!m.deadlines.length)return;
-    m.deadlines.forEach(function(dl){
-      if(dl.date===selectedDay&&dl.month===calMonth+1&&dl.year===calYear){
-        dayDeadlines.push({task:dl.task,client:m.name,fromDate:m.date,fromMonth:m.month,fromYear:m.year});
-      }
-    });
-  });
-  if(dayDeadlines.length){
-    const dlBox=document.createElement('div');
-    dlBox.style.cssText='background:#fff7ed;border:1.5px solid #ea580c;border-radius:12px;padding:14px 16px;margin-bottom:14px;';
-    dlBox.innerHTML='<div style="font-size:0.78rem;font-weight:800;color:#ea580c;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;">⏰ Deadlines Due Today</div>'
-      +dayDeadlines.map(function(dl){
-        return '<div style="background:white;border-radius:8px;padding:8px 12px;margin-bottom:6px;border-left:3px solid #ea580c;">'
-          +'<div style="font-weight:700;font-size:0.88rem;color:#9a3412;">'+dl.task+'</div>'
-          +'<div style="font-size:0.78rem;color:#94a3b8;margin-top:2px;">👤 '+dl.client+' · Discussed on '+dl.fromDate+' '+MONTHS[dl.fromMonth-1].slice(0,3)+' '+dl.fromYear+'</div>'
-          +'</div>';
-      }).join('');
-    b.appendChild(dlBox);
-  }
-  if(!dm.length){
-    if(!dayDeadlines.length)b.innerHTML='<div class="no-meetings-day"><div class="big">☕</div>No meetings on this day.</div>';
-    return;
-  }
-  dm.forEach(function(m){
-    const card=document.createElement('div');
-    card.className='meeting-card';
-    // top info
-    const topHtml='<div class="meeting-card-top">'
-      +'<div class="meeting-dot"></div>'
-      +'<div class="meeting-info">'
-      +'<div class="meeting-client">'+escHtml(m.name)+'</div>'
-      +'<div class="meeting-meta">'+m.day+'</div>'
-      +(m.guests&&m.guests.length?'<div class="guests-display">'+m.guests.map(g=>'<span class="guest-tag">👤 '+escHtml(g)+'</span>').join('')+'</div>':'')
-      +(m.notes?'<div class="notes-preview">📝 '+escHtml(m.notes)+'</div>':'')
-      +(m.deadlines&&m.deadlines.length?m.deadlines.map(dl=>'<div class="deadline-preview">⏰ '+escHtml(dl.task)+' — '+dl.date+' '+MONTHS[dl.month-1].slice(0,3)+' '+dl.year+' at 9:00 AM</div>').join(''):'')
-      +(m.links&&m.links.length?'<div class="links-preview">'+m.links.map(l=>'<a class="link-chip" href="'+escHtml(l.url)+'" target="_blank">🔗 '+escHtml(l.label||l.url)+'</a>').join('')+'</div>':'')
-      +'</div>'
-      +'<div class="meeting-time-badge">🕐 '+m.time+'</div>'
-      +'</div>';
-    card.innerHTML=topHtml;
-    // action buttons
-    const actions=document.createElement('div');
-    actions.className='meeting-actions';
-    const btns=[
-      ['m-btn m-btn-reschedule','🔄 Reschedule',function(){openReschedule(m.id,m.name);}],
-      ['m-btn m-btn-guests','👥 Edit Guests',function(){openGuestsEdit(m.id,m.name);}],
-      ['m-btn m-btn-notes','📝 Minutes of Meeting',function(){openNotes(m.id,m.name);}],
-      ['m-btn m-btn-links','🔗 Meeting Links',function(){openLinks(m.id,m.name);}],
-      ['m-btn m-btn-deadline','⏰ Deadline',function(){openDeadline(m.id,m.name);}],
-      ['m-btn m-btn-delete','🗑️ Delete',function(){askDelete(m.id,m.name);}]
-    ];
-    btns.forEach(function(b){
-      const btn=document.createElement('button');
-      btn.className=b[0];btn.textContent=b[1];
-      btn.addEventListener('click',b[2]);
-      actions.appendChild(btn);
-    });
-    card.appendChild(actions);
-    b.appendChild(card);
-  });
-  attachOverlayClickOutside();
-}
-
-// ── SESSION & CAL STATE ──
+function renderClientList(){const list=document.getElementById('client-list');if(!meetings.length){list.innerHTML='<div class="empty-clients">No meetings yet.</div>';return;}list.innerHTML='';meetings.forEach(function(m){const item=document.createElement('div');item.className='client-item';item.innerHTML='<div class="ci-name">'+escHtml(m.name)+'</div><div class="ci-time">'+m.day+', '+m.date+' '+MONTHS[m.month-1].slice(0,3)+' '+m.year+' · '+m.time+'</div>';item.addEventListener('click',function(){jumpToMeeting(m.id);});list.appendChild(item);});}
+function jumpToMeeting(id){const m=meetings.find(x=>x.id==id);if(!m)return;calYear=m.year;calMonth=m.month-1;selectedDay=m.date;saveCalState();renderCalendar();renderDetail();setTimeout(function(){const el=document.querySelector('.meeting-detail');if(el)el.scrollIntoView({behavior:'smooth',block:'start'});},100);}
+function renderCalendar(){document.getElementById('cal-title').textContent=MONTHS[calMonth]+' '+calYear;const grid=document.getElementById('cal-grid');const today=new Date();const mdays=new Set(meetings.filter(m=>m.year===calYear&&m.month===calMonth+1).map(m=>m.date));const ddMap={};meetings.forEach(function(m){if(!m.deadlines||!m.deadlines.length)return;m.deadlines.forEach(function(dl){if(dl.year===calYear&&dl.month===calMonth+1){if(!ddMap[dl.date])ddMap[dl.date]=[];ddMap[dl.date].push({task:dl.task,fromDate:m.date,fromMonth:m.month,fromYear:m.year,client:m.name});}});});const firstDay=new Date(calYear,calMonth,1).getDay();const dim=new Date(calYear,calMonth+1,0).getDate();let html=DAYS_S.map(d=>'<div class="cal-dow">'+d+'</div>').join('');for(let i=0;i<firstDay;i++)html+='<div class="cal-day empty"></div>';for(let d=1;d<=dim;d++){const isT=d===today.getDate()&&calMonth===today.getMonth()&&calYear===today.getFullYear();const hasDeadline=!!ddMap[d];let title='';if(hasDeadline){title=ddMap[d].map(function(x){return 'Deadline: '+x.task+' ('+x.client+', discussed on '+x.fromDate+' '+MONTHS[x.fromMonth-1].slice(0,3)+')';}).join(' | ');}const cls=['cal-day',isT?'today':'',mdays.has(d)?'has-meeting':'',hasDeadline?'has-deadline':'',d===selectedDay?'selected-day':''].filter(Boolean).join(' ');html+='<div class="'+cls+'" onclick="selectDay('+d+')"'+(title?' title="'+title+'"':'')+'>'+d+'</div>';}grid.innerHTML=html;}
+function selectDay(d){selectedDay=d;saveCalState();renderCalendar();renderDetail();setTimeout(function(){openQuick(d);},50);}
+function changeMonth(dir){calMonth+=dir;if(calMonth<0){calMonth=11;calYear--;}if(calMonth>11){calMonth=0;calYear++;}selectedDay=null;saveCalState();renderCalendar();renderDetail();}
+function renderDetail(){const t=document.getElementById('detail-title');const b=document.getElementById('detail-body');if(!selectedDay){t.textContent='🗓️ Your calendar awaits';b.innerHTML='<div class="no-meetings-day"><div class="big">🗓️</div>Add a client meeting to get started.</div>';return;}const dm=meetings.filter(m=>m.year===calYear&&m.month===calMonth+1&&m.date===selectedDay);const dayName=DAYS[new Date(calYear,calMonth,selectedDay).getDay()];t.textContent='📅 '+dayName+', '+selectedDay+' '+MONTHS[calMonth]+' '+calYear;b.innerHTML='';const dayDeadlines=[];meetings.forEach(function(m){if(!m.deadlines||!m.deadlines.length)return;m.deadlines.forEach(function(dl){if(dl.date===selectedDay&&dl.month===calMonth+1&&dl.year===calYear){dayDeadlines.push({task:dl.task,client:m.name,fromDate:m.date,fromMonth:m.month,fromYear:m.year});}});});if(dayDeadlines.length){const dlBox=document.createElement('div');dlBox.style.cssText='background:#fff7ed;border:1.5px solid #ea580c;border-radius:12px;padding:14px 16px;margin-bottom:14px;';dlBox.innerHTML='<div style="font-size:0.78rem;font-weight:800;color:#ea580c;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;">⏰ Deadlines Due Today</div>'+dayDeadlines.map(function(dl){return '<div style="background:white;border-radius:8px;padding:8px 12px;margin-bottom:6px;border-left:3px solid #ea580c;"><div style="font-weight:700;font-size:0.88rem;color:#9a3412;">'+dl.task+'</div><div style="font-size:0.78rem;color:#94a3b8;margin-top:2px;">👤 '+dl.client+' · Discussed on '+dl.fromDate+' '+MONTHS[dl.fromMonth-1].slice(0,3)+' '+dl.fromYear+'</div></div>';}).join('');b.appendChild(dlBox);}if(!dm.length){if(!dayDeadlines.length)b.innerHTML='<div class="no-meetings-day"><div class="big">☕</div>No meetings on this day.</div>';return;}dm.forEach(function(m){const card=document.createElement('div');card.className='meeting-card';const topHtml='<div class="meeting-card-top"><div class="meeting-dot"></div><div class="meeting-info"><div class="meeting-client">'+escHtml(m.name)+'</div><div class="meeting-meta">'+m.day+'</div>'+(m.guests&&m.guests.length?'<div class="guests-display">'+m.guests.map(g=>'<span class="guest-tag">👤 '+escHtml(g)+'</span>').join('')+'</div>':'')+(m.notes?'<div class="notes-preview">📝 '+escHtml(m.notes)+'</div>':'')+(m.deadlines&&m.deadlines.length?m.deadlines.map(dl=>'<div class="deadline-preview">⏰ '+escHtml(dl.task)+' — '+dl.date+' '+MONTHS[dl.month-1].slice(0,3)+' '+dl.year+' at 9:00 AM</div>').join(''):'')+(m.links&&m.links.length?'<div class="links-preview">'+m.links.map(l=>'<a class="link-chip" href="'+escHtml(l.url)+'" target="_blank">🔗 '+escHtml(l.label||l.url)+'</a>').join('')+'</div>':'')+'</div><div class="meeting-time-badge">🕐 '+m.time+'</div></div>';card.innerHTML=topHtml;const actions=document.createElement('div');actions.className='meeting-actions';const btns=[['m-btn m-btn-reschedule','🔄 Reschedule',function(){openReschedule(m.id,m.name);}],['m-btn m-btn-agenda','📋 Change Agenda',function(){openAgenda(m.id,m.name);}],['m-btn m-btn-guests','👥 Edit Guests',function(){openGuestsEdit(m.id,m.name);}],['m-btn m-btn-notes','📝 Minutes of Meeting',function(){openNotes(m.id,m.name);}],['m-btn m-btn-links','🔗 Meeting Links',function(){openLinks(m.id,m.name);}],['m-btn m-btn-deadline','⏰ Deadline',function(){openDeadline(m.id,m.name);}],['m-btn m-btn-delete','🗑️ Delete',function(){askDelete(m.id,m.name);}]];btns.forEach(function(b){const btn=document.createElement('button');btn.className=b[0];btn.textContent=b[1];btn.addEventListener('click',b[2]);actions.appendChild(btn);});card.appendChild(actions);b.appendChild(card);});attachOverlayClickOutside();}
 function saveCalState(){localStorage.setItem('md_calstate',JSON.stringify({calYear,calMonth,selectedDay}));}
-(function restoreSession(){
-  const saved=localStorage.getItem('md_session');
-  if(saved){
-    try{
-      const s=JSON.parse(saved);
-      if(s.email&&accounts[s.email]){
-        const cs=localStorage.getItem('md_calstate');
-        if(cs){try{const c=JSON.parse(cs);calYear=c.calYear;calMonth=c.calMonth;selectedDay=c.selectedDay;}catch(e){}}
-        loginAs(s.email,s.displayName,true);return;
-      }
-    }catch(e){localStorage.removeItem('md_session');}
-  }
-  renderCalendar();
-})();
-
-// ── OVERLAYS ──
+(function restoreSession(){const saved=localStorage.getItem('md_session');if(saved){try{const s=JSON.parse(saved);if(s.email&&accounts[s.email]){const cs=localStorage.getItem('md_calstate');if(cs){try{const c=JSON.parse(cs);calYear=c.calYear;calMonth=c.calMonth;selectedDay=c.selectedDay;}catch(e){}}loginAs(s.email,s.displayName,true);return;}}catch(e){localStorage.removeItem('md_session');}}renderCalendar();})();
 function closeOverlay(id){document.getElementById(id).classList.remove('show');}
-function attachOverlayClickOutside(){
-  document.querySelectorAll('.overlay').forEach(function(el){
-    el.onclick=function(e){if(e.target===el)el.classList.remove('show');};
-  });
-}
+function attachOverlayClickOutside(){document.querySelectorAll('.overlay').forEach(function(el){el.onclick=function(e){if(e.target===el)el.classList.remove('show');};});}
 attachOverlayClickOutside();
-
-// Enter/Escape keys
-document.addEventListener('keydown',function(e){
-  if(e.key==='Escape') document.querySelectorAll('.overlay.show').forEach(el=>el.classList.remove('show'));
-  if(e.key==='Enter'){
-    if(document.getElementById('quick-overlay').classList.contains('show')) saveQuick();
-  }
-});
-
-// ── QUICK ADD ──
-function openQuick(d){
-  const dayName=DAYS[new Date(calYear,calMonth,d).getDay()];
-  document.getElementById('quick-date-label').textContent=dayName+', '+d+' '+MONTHS[calMonth]+' '+calYear;
-  document.getElementById('quick-name').value='';
-  document.getElementById('quick-hour').value='';
-  document.getElementById('quick-min').value='';
-  document.getElementById('quick-guest-rows').innerHTML='';
-  document.getElementById('quick-error').textContent='';
-  document.getElementById('quick-error').classList.remove('show');
-  ['quick-name','quick-hour','quick-min'].forEach(function(id){document.getElementById(id).classList.remove('err');});
-  document.getElementById('quick-overlay').classList.add('show');
-  setTimeout(function(){document.getElementById('quick-name').focus();},100);
-}
+document.addEventListener('keydown',function(e){if(e.key==='Escape')document.querySelectorAll('.overlay.show').forEach(el=>el.classList.remove('show'));if(e.key==='Enter'){if(document.getElementById('quick-overlay').classList.contains('show'))saveQuick();}});
+function openQuick(d){const dayName=DAYS[new Date(calYear,calMonth,d).getDay()];document.getElementById('quick-date-label').textContent=dayName+', '+d+' '+MONTHS[calMonth]+' '+calYear;document.getElementById('quick-name').value='';document.getElementById('quick-hour').value='';document.getElementById('quick-min').value='';document.getElementById('quick-guest-rows').innerHTML='';document.getElementById('quick-error').textContent='';document.getElementById('quick-error').classList.remove('show');['quick-name','quick-hour','quick-min'].forEach(function(id){document.getElementById(id).classList.remove('err');});document.getElementById('quick-overlay').classList.add('show');setTimeout(function(){document.getElementById('quick-name').focus();},100);}
 function closeQuick(){closeOverlay('quick-overlay');}
-async function saveQuick(){
-  const name=document.getElementById('quick-name').value.trim();
-  const hour=document.getElementById('quick-hour').value.trim();
-  const min=document.getElementById('quick-min').value.trim();
-  const errEl=document.getElementById('quick-error');
-  ['quick-name','quick-hour','quick-min'].forEach(function(id){document.getElementById(id).classList.remove('err');});
-  errEl.classList.remove('show');
-  if(!name){document.getElementById('quick-name').classList.add('err');errEl.textContent='Please enter client name.';errEl.classList.add('show');return;}
-  if(hour===''||parseInt(hour)<0||parseInt(hour)>23){document.getElementById('quick-hour').classList.add('err');errEl.textContent='Enter hour (0-23).';errEl.classList.add('show');return;}
-  if(min===''||parseInt(min)<0||parseInt(min)>59){document.getElementById('quick-min').classList.add('err');errEl.textContent='Enter minutes (0-59).';errEl.classList.add('show');return;}
-  const dt=new Date(calYear,calMonth,selectedDay);
-  const guests=getGuests('quick-guest-rows');
-  const meeting={id:Date.now(),userEmail:currentUser,name,day:DAYS[dt.getDay()],date:selectedDay,month:calMonth+1,year:calYear,time:pad(parseInt(hour))+':'+pad(parseInt(min)),guests,notes:'',links:[],deadlines:[]};
-  meetings.push(meeting);meetings.sort(cmpMeeting);
-  closeQuick();renderAll();
-  await saveMeetingToFirebase(meeting);
-  toast('Meeting with '+name+' scheduled!','success');
-}
-
-// ── DELETE ──
-function askDelete(id,name){
-  pendingId=id;
-  document.getElementById('confirm-text').textContent='Are you sure you want to delete the meeting with "'+name+'"? This cannot be undone.';
-  document.getElementById('confirm-overlay').classList.add('show');
-}
-async function confirmDelete(){
-  if(pendingId===null)return;
-  const id=pendingId;pendingId=null;
-  meetings=meetings.filter(m=>m.id!=id);
-  closeOverlay('confirm-overlay');renderAll();
-  await deleteMeetingFromFirebase(id);
-  toast('Meeting deleted.');
-}
-
-// ── RESCHEDULE ──
-function openReschedule(id,name){
-  pendingId=id;
-  const m=meetings.find(x=>x.id==id);if(!m)return;
-  document.getElementById('reschedule-label').textContent='Meeting with '+name;
-  document.getElementById('rs-date').value=m.date;
-  document.getElementById('rs-month').value=m.month;
-  document.getElementById('rs-year').value=m.year;
-  document.getElementById('rs-hour').value=parseInt(m.time.split(':')[0]);
-  document.getElementById('rs-min').value=parseInt(m.time.split(':')[1]);
-  document.getElementById('rs-error').classList.remove('show');
-  document.getElementById('rs-day-preview').classList.remove('visible');
-  updateOverlayDay('rs');
-  document.getElementById('reschedule-overlay').classList.add('show');
-}
-async function saveReschedule(){
-  const date=parseInt(document.getElementById('rs-date').value);
-  const month=parseInt(document.getElementById('rs-month').value);
-  const year=parseInt(document.getElementById('rs-year').value);
-  const hour=document.getElementById('rs-hour').value.trim();
-  const min=document.getElementById('rs-min').value.trim();
-  const errEl=document.getElementById('rs-error');
-  errEl.classList.remove('show');
-  if(!date||date<1||date>31){errEl.textContent='Enter a valid date.';errEl.classList.add('show');return;}
-  if(!month){errEl.textContent='Select a month.';errEl.classList.add('show');return;}
-  if(!year||year<2020||year>2100){errEl.textContent='Enter a valid year.';errEl.classList.add('show');return;}
-  const testDate=new Date(year,month-1,date);
-  if(testDate.getDate()!==date||testDate.getMonth()!==month-1){errEl.textContent='Invalid date.';errEl.classList.add('show');return;}
-  if(hour===''||parseInt(hour)<0||parseInt(hour)>23){errEl.textContent='Enter hour (0-23).';errEl.classList.add('show');return;}
-  if(min===''||parseInt(min)<0||parseInt(min)>59){errEl.textContent='Enter minutes (0-59).';errEl.classList.add('show');return;}
-  const idx=meetings.findIndex(x=>x.id==pendingId);if(idx===-1)return;
-  meetings[idx]={...meetings[idx],day:DAYS[testDate.getDay()],date,month,year,time:pad(parseInt(hour))+':'+pad(parseInt(min))};
-  calYear=year;calMonth=month-1;selectedDay=date;saveCalState();
-  closeOverlay('reschedule-overlay');renderAll();
-  await saveMeetingToFirebase(meetings[idx]);
-  toast('Meeting rescheduled!','success');
-}
-
-// ── GUESTS EDIT ──
-function openGuestsEdit(id,name){
+async function saveQuick(){const name=document.getElementById('quick-name').value.trim();const hour=document.getElementById('quick-hour').value.trim();const min=document.getElementById('quick-min').value.trim();const errEl=document.getElementById('quick-error');['quick-name','quick-hour','quick-min'].forEach(function(id){document.getElementById(id).classList.remove('err');});errEl.classList.remove('show');if(!name){document.getElementById('quick-name').classList.add('err');errEl.textContent='Please enter client name.';errEl.classList.add('show');return;}if(hour===''||parseInt(hour)<0||parseInt(hour)>23){document.getElementById('quick-hour').classList.add('err');errEl.textContent='Enter hour (0-23).';errEl.classList.add('show');return;}if(min===''||parseInt(min)<0||parseInt(min)>59){document.getElementById('quick-min').classList.add('err');errEl.textContent='Enter minutes (0-59).';errEl.classList.add('show');return;}const dt=new Date(calYear,calMonth,selectedDay);const guests=getGuests('quick-guest-rows');const meeting={id:Date.now(),userEmail:currentUser,name,day:DAYS[dt.getDay()],date:selectedDay,month:calMonth+1,year:calYear,time:pad(parseInt(hour))+':'+pad(parseInt(min)),guests,notes:'',links:[],deadlines:[]};meetings.push(meeting);meetings.sort(cmpMeeting);closeQuick();renderAll();await saveMeetingToFirebase(meeting);toast('Meeting with '+name+' scheduled!','success');}
+function askDelete(id,name){pendingId=id;document.getElementById('confirm-text').textContent='Are you sure you want to delete the meeting with "'+name+'"? This cannot be undone.';document.getElementById('confirm-overlay').classList.add('show');}
+async function confirmDelete(){if(pendingId===null)return;const id=pendingId;pendingId=null;meetings=meetings.filter(m=>m.id!=id);closeOverlay('confirm-overlay');renderAll();await deleteMeetingFromFirebase(id);toast('Meeting deleted.');}
+function openReschedule(id,name){pendingId=id;const m=meetings.find(x=>x.id==id);if(!m)return;document.getElementById('reschedule-label').textContent='Meeting with '+name;document.getElementById('rs-date').value=m.date;document.getElementById('rs-month').value=m.month;document.getElementById('rs-year').value=m.year;document.getElementById('rs-hour').value=parseInt(m.time.split(':')[0]);document.getElementById('rs-min').value=parseInt(m.time.split(':')[1]);document.getElementById('rs-error').classList.remove('show');document.getElementById('rs-day-preview').classList.remove('visible');updateOverlayDay('rs');document.getElementById('reschedule-overlay').classList.add('show');}
+async function saveReschedule(){const date=parseInt(document.getElementById('rs-date').value);const month=parseInt(document.getElementById('rs-month').value);const year=parseInt(document.getElementById('rs-year').value);const hour=document.getElementById('rs-hour').value.trim();const min=document.getElementById('rs-min').value.trim();const errEl=document.getElementById('rs-error');errEl.classList.remove('show');if(!date||date<1||date>31){errEl.textContent='Enter a valid date.';errEl.classList.add('show');return;}if(!month){errEl.textContent='Select a month.';errEl.classList.add('show');return;}if(!year||year<2020||year>2100){errEl.textContent='Enter a valid year.';errEl.classList.add('show');return;}const testDate=new Date(year,month-1,date);if(testDate.getDate()!==date||testDate.getMonth()!==month-1){errEl.textContent='Invalid date.';errEl.classList.add('show');return;}if(hour===''||parseInt(hour)<0||parseInt(hour)>23){errEl.textContent='Enter hour (0-23).';errEl.classList.add('show');return;}if(min===''||parseInt(min)<0||parseInt(min)>59){errEl.textContent='Enter minutes (0-59).';errEl.classList.add('show');return;}const idx=meetings.findIndex(x=>x.id==pendingId);if(idx===-1)return;meetings[idx]={...meetings[idx],day:DAYS[testDate.getDay()],date,month,year,time:pad(parseInt(hour))+':'+pad(parseInt(min))};calYear=year;calMonth=month-1;selectedDay=date;saveCalState();closeOverlay('reschedule-overlay');renderAll();await saveMeetingToFirebase(meetings[idx]);toast('Meeting rescheduled!','success');}
+function openGuestsEdit(id,name){pendingId=id;const m=meetings.find(x=>x.id==id);if(!m)return;document.getElementById('guests-label').textContent='Meeting with '+name;document.getElementById('guests-edit-rows').innerHTML='';if(m.guests&&m.guests.length)m.guests.forEach(function(g){addEditGuestRow(g);});document.getElementById('guests-overlay').classList.add('show');}
+async function saveGuests(){const idx=meetings.findIndex(x=>x.id==pendingId);if(idx===-1)return;meetings[idx]={...meetings[idx],guests:getGuests('guests-edit-rows')};closeOverlay('guests-overlay');renderAll();await saveMeetingToFirebase(meetings[idx]);toast('Guests updated!','success');}
+function openNotes(id,name){pendingId=id;const m=meetings.find(x=>x.id==id);if(!m)return;document.getElementById('notes-label').textContent='Meeting with '+name;const ta=document.getElementById('notes-textarea');ta.value=m.notes||'';document.getElementById('notes-char-count').textContent=(m.notes||'').length+' characters';document.getElementById('notes-overlay').classList.add('show');setTimeout(function(){ta.focus();},100);}
+document.getElementById('notes-textarea').addEventListener('input',function(){document.getElementById('notes-char-count').textContent=this.value.length+' characters';});
+async function saveNotes(){const idx=meetings.findIndex(x=>x.id==pendingId);if(idx===-1)return;meetings[idx]={...meetings[idx],notes:document.getElementById('notes-textarea').value.trim()};closeOverlay('notes-overlay');renderAll();await saveMeetingToFirebase(meetings[idx]);toast('Notes saved!','success');}
+function openLinks(id,name){pendingId=id;const m=meetings.find(x=>x.id==id);if(!m)return;document.getElementById('links-label').textContent='Meeting with '+name;document.getElementById('links-rows').innerHTML='';if(m.links&&m.links.length)m.links.forEach(function(l){addLinkRow(l.label,l.url);});document.getElementById('links-overlay').classList.add('show');}
+function addLinkRow(label,url){label=label||'';url=url||'';const row=document.createElement('div');row.className='link-row';row.innerHTML='<input type="text" placeholder="Label (e.g. Zoom)" value="'+escHtml(label)+'"/><input type="url" placeholder="https://..." value="'+escHtml(url)+'"/>';const btn=document.createElement('button');btn.className='btn-remove-link';btn.textContent='Remove';btn.onclick=function(){row.remove();};row.appendChild(btn);document.getElementById('links-rows').appendChild(row);}
+async function saveLinks(){const rows=document.querySelectorAll('#links-rows .link-row');const links=Array.from(rows).map(function(row){const inputs=row.querySelectorAll('input');return{label:inputs[0].value.trim(),url:inputs[1].value.trim()};}).filter(function(l){return l.url;});const idx=meetings.findIndex(x=>x.id==pendingId);if(idx===-1)return;meetings[idx]={...meetings[idx],links};closeOverlay('links-overlay');renderAll();await saveMeetingToFirebase(meetings[idx]);toast('Links saved!','success');}
+function openDeadline(id,name){pendingId=id;document.getElementById('deadline-label').textContent='Meeting with '+name;document.getElementById('dl-task').value='';document.getElementById('dl-date').value='';document.getElementById('dl-month').value='';document.getElementById('dl-year').value='2026';document.getElementById('dl-error').classList.remove('show');document.getElementById('dl-day-preview').classList.remove('visible');document.getElementById('deadline-overlay').classList.add('show');setTimeout(function(){document.getElementById('dl-task').focus();},100);}
+async function saveDeadline(){const task=document.getElementById('dl-task').value.trim();const date=parseInt(document.getElementById('dl-date').value);const month=parseInt(document.getElementById('dl-month').value);const year=parseInt(document.getElementById('dl-year').value);const errEl=document.getElementById('dl-error');errEl.classList.remove('show');if(!task){errEl.textContent='Please enter what the deadline is for.';errEl.classList.add('show');document.getElementById('dl-task').focus();return;}if(!date||date<1||date>31){errEl.textContent='Enter a valid date.';errEl.classList.add('show');return;}if(!month){errEl.textContent='Select a month.';errEl.classList.add('show');return;}if(!year||year<2020||year>2100){errEl.textContent='Enter a valid year.';errEl.classList.add('show');return;}const testDate=new Date(year,month-1,date);if(testDate.getDate()!==date||testDate.getMonth()!==month-1){errEl.textContent='Invalid date.';errEl.classList.add('show');return;}const idx=meetings.findIndex(x=>x.id==pendingId);if(idx===-1)return;const deadlines=meetings[idx].deadlines||[];deadlines.push({task,date,month,year,day:DAYS[testDate.getDay()],time:'09:00'});meetings[idx]={...meetings[idx],deadlines};closeOverlay('deadline-overlay');renderAll();await saveMeetingToFirebase(meetings[idx]);toast('⏰ Deadline set for '+date+' '+MONTHS[month-1]+' '+year+'!','success');}
+function renderReportsList(){const search=(document.getElementById('reports-search').value||'').trim().toLowerCase();const clientMap={};const now=new Date();meetings.forEach(function(m){const key=m.name.toLowerCase();if(!clientMap[key])clientMap[key]={name:m.name,total:0,upcoming:0,past:0};clientMap[key].total++;const mDate=new Date(m.year,m.month-1,m.date,parseInt(m.time),parseInt(m.time.split(':')[1]));if(mDate>=now)clientMap[key].upcoming++;else clientMap[key].past++;});const clients=Object.values(clientMap).filter(function(c){return !search||c.name.toLowerCase().includes(search);});clients.sort(function(a,b){return a.name.localeCompare(b.name);});const list=document.getElementById('reports-client-list');if(!clients.length){list.innerHTML='<div class="no-clients-msg">No clients found.</div>';return;}list.innerHTML='';clients.forEach(function(c){const item=document.createElement('div');const isActive=activeReportClient&&activeReportClient.toLowerCase()===c.name.toLowerCase();item.className='client-report-item'+(isActive?' active':'');item.innerHTML='<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;"><div class="cr-name">'+escHtml(c.name)+'</div><div class="cr-total-badge">'+c.total+'</div></div>';item.addEventListener('click',function(){showClientReport(c.name);});list.appendChild(item);});}
+function showClientReport(name){activeReportClient=name;renderReportsList();const todayMidnight=new Date();todayMidnight.setHours(0,0,0,0);const cm=meetings.filter(function(m){return m.name.toLowerCase()===name.toLowerCase();});cm.sort(cmpMeeting);const today=cm.filter(function(m){return new Date(m.year,m.month-1,m.date).getTime()===todayMidnight.getTime();});const upcoming=cm.filter(function(m){return new Date(m.year,m.month-1,m.date)>todayMidnight;});const past=cm.filter(function(m){return new Date(m.year,m.month-1,m.date)<todayMidnight;});
+function buildItem(m,type){const uid='rm-'+m.id;const summaryHtml='<div class="report-meeting-summary" id="sum-'+uid+'" data-uid="'+uid+'">'
+  +'<div style="display:flex;flex-direction:column;gap:4px;flex:1;">'
+  +'<div style="display:flex;align-items:center;justify-content:space-between;gap:6px;">'
+  +'<div class="rms-date">'+m.date+' '+MONTHS[m.month-1].slice(0,3)+' '+m.year+'</div>'
+  +'<div style="display:flex;align-items:center;gap:6px;"><div class="rms-time">🕐 '+m.time+'</div><span class="rms-arrow">▼</span></div>'
+  +'</div>'
+  +(m.agenda&&m.agenda.trim()?'<div style="font-size:0.78rem;color:#0891b2;background:#ecfeff;border:1px solid #a5f3fc;border-radius:20px;padding:2px 10px;width:fit-content;">📋 '+escHtml(m.agenda)+'</div>':'')
+  +'</div>'
+  +'</div>';let detail='<div class="report-meeting-detail-panel" id="panel-'+uid+'">';detail+='<div class="rmd-row"><div class="rmd-label">👤 Client</div><div class="rmd-value" style="font-weight:700;">'+escHtml(m.name)+'</div></div>';detail+='<div class="rmd-row"><div class="rmd-label">📅 Day</div><div class="rmd-value">'+m.day+'</div></div>';detail+='<div class="rmd-row"><div class="rmd-label">📋 Agenda</div><div class="rmd-value">'+(m.agenda&&m.agenda.trim()?'<span style="display:inline-block;background:#ecfeff;color:#0891b2;border:1px solid #a5f3fc;border-radius:20px;padding:3px 12px;font-size:0.82rem;font-weight:600;">'+escHtml(m.agenda)+'</span>':'<span style="color:#94a3b8;font-style:italic;font-size:0.82rem;">No agenda set</span>')+'</div></div>';detail+='<div class="rmd-row"><div class="rmd-label">📆 Date</div><div class="rmd-value">'+m.date+' '+MONTHS[m.month-1]+' '+m.year+'</div></div>';detail+='<div class="rmd-row"><div class="rmd-label">🕐 Time</div><div class="rmd-value">'+m.time+'</div></div>';if(m.guests&&m.guests.length)detail+='<div class="rmd-row"><div class="rmd-label">👥 Guests</div><div class="rmd-value">'+m.guests.map(function(g){return escHtml(g);}).join(', ')+'</div></div>';if(m.deadlines&&m.deadlines.length)detail+='<div class="rmd-row"><div class="rmd-label">⏰ Deadline</div><div class="rmd-value">'+m.deadlines.map(function(dl){return '<div style="background:#fff7ed;border-left:3px solid #ea580c;border-radius:6px;padding:5px 9px;margin-bottom:4px;"><strong>'+escHtml(dl.task)+'</strong><br/>'+dl.date+' '+MONTHS[dl.month-1]+' '+dl.year+' at 9:00 AM</div>';}).join('')+'</div></div>';detail+='<div class="rmd-row"><div class="rmd-label">📝 Notes</div>';if(m.notes&&m.notes.trim()){detail+='<div class="rmd-value" style="white-space:pre-wrap;background:#fefce8;border-left:3px solid #f59e0b;border-radius:6px;padding:7px 10px;margin-bottom:6px;font-size:0.83rem;color:#92400e;">'+escHtml(m.notes)+'</div>';}detail+='<textarea class="rmd-edit-textarea" id="notes-edit-'+uid+'" placeholder="Add or edit notes...">'+escHtml(m.notes||'')+'</textarea></div>';detail+='<div class="rmd-row"><div class="rmd-label">🔗 Links</div><div style="display:grid;grid-template-columns:1fr 1fr auto;gap:4px;margin-bottom:5px;"><div style="font-size:0.7rem;font-weight:700;color:#94a3b8;text-transform:uppercase;">Label</div><div style="font-size:0.7rem;font-weight:700;color:#94a3b8;text-transform:uppercase;">URL</div><div></div></div><div id="links-edit-'+uid+'" class="rmd-links-container" data-uid="'+uid+'">';if(m.links&&m.links.length){m.links.forEach(function(l){detail+='<div class="rmd-link-edit-row"><input type="text" placeholder="Label" value="'+escHtml(l.label||'')+'" /><input type="url" placeholder="https://..." value="'+escHtml(l.url||'')+'" /><button class="rmd-link-remove" data-action="remove-link" title="Remove">✕</button></div>';});}detail+='</div><button class="rmd-add-link" data-action="add-link" data-uid="'+uid+'">+ Add Link</button></div>';detail+='<button class="rmd-save-btn" data-mid="'+m.id+'">💾 Save Changes</button>';detail+='</div>';return'<div class="report-meeting-row '+type+'" style="padding:0;overflow:hidden;">'+summaryHtml+detail+'</div>';}
+const main=document.getElementById('reports-main');let html='<div class="report-card">';html+='<div class="report-card-header"><div class="report-client-name">👤 '+escHtml(name)+'</div><div class="report-stats"><span class="stat-badge stat-total">'+cm.length+' Total</span><span class="stat-badge stat-upcoming">'+(today.length+upcoming.length)+' Upcoming</span><span class="stat-badge stat-past">'+past.length+' Past</span></div></div>';
+html+=buildClientSummary(name);
+if(today.length){html+='<div class="report-section"><div class="report-section-title">🔴 Today</div>';today.forEach(function(m){html+=buildItem(m,'upcoming');});html+='</div>';}
+if(upcoming.length){html+='<div class="report-section"><div class="report-section-title">🟢 Upcoming</div>';upcoming.forEach(function(m){html+=buildItem(m,'upcoming');});html+='</div>';}
+if(past.length){html+='<div class="report-section"><div class="report-section-title">🕐 Past</div>';past.slice().reverse().forEach(function(m){html+=buildItem(m,'past');});html+='</div>';}
+if(!cm.length){html+='<div class="no-meetings-day" style="padding:30px;"><div class="big">📭</div>No meetings found.</div>';}
+html+='</div>';main.innerHTML=html;main.scrollTop=0;
+document.querySelectorAll('.rmd-save-btn').forEach(function(btn){btn.addEventListener('click',function(){saveReportEdits(this.dataset.mid);});});}
+function addRmdLinkRow(containerId){const container=document.getElementById(containerId);if(!container)return;const row=document.createElement('div');row.className='rmd-link-edit-row';row.innerHTML='<input type="text" placeholder="Label"/><input type="url" placeholder="https://..."/><button class="rmd-link-remove" data-action="remove-link">✕</button>';container.appendChild(row);}
+async function saveReportEdits(mid){const idx=meetings.findIndex(function(m){return String(m.id)===String(mid);});if(idx===-1)return;const uid='rm-'+mid;const notesEl=document.getElementById('notes-edit-'+uid);const linksContainer=document.getElementById('links-edit-'+uid);if(!notesEl||!linksContainer)return;const notes=notesEl.value.trim();const linkRows=linksContainer.querySelectorAll('.rmd-link-edit-row');const links=Array.from(linkRows).map(function(row){const inputs=row.querySelectorAll('input');return{label:inputs[0].value.trim(),url:inputs[1].value.trim()};}).filter(function(l){return l.url;});meetings[idx]={...meetings[idx],notes,links};const btn=document.querySelector('.rmd-save-btn[data-mid="'+mid+'"]');if(btn){btn.textContent='✅ Saved!';btn.style.background='#16a34a';setTimeout(function(){btn.textContent='💾 Save Changes';btn.style.background='';},2000);}await saveMeetingToFirebase(meetings[idx]);toast('Changes saved!','success');}
+function buildClientSummary(clientName){const cm=meetings.filter(function(m){return m.name.toLowerCase()===clientName.toLowerCase();});if(!cm.length)return'';cm.sort(cmpMeeting);const todayMidnight=new Date();todayMidnight.setHours(0,0,0,0);const upcoming=cm.filter(function(m){return new Date(m.year,m.month-1,m.date)>=todayMidnight;});const past=cm.filter(function(m){return new Date(m.year,m.month-1,m.date)<todayMidnight;});const first=cm[0];const last=cm[cm.length-1];const allDeadlines=[];cm.forEach(function(m){if(!m.deadlines||!m.deadlines.length)return;m.deadlines.forEach(function(dl){allDeadlines.push({task:dl.task,date:dl.date,month:dl.month,year:dl.year,isPast:new Date(dl.year,dl.month-1,dl.date)<todayMidnight,fromDate:m.date,fromMonth:m.month,fromYear:m.year});});});const openDeadlines=allDeadlines.filter(function(d){return !d.isPast;});const pastDeadlines=allDeadlines.filter(function(d){return d.isPast;});const guestSet=new Set();cm.forEach(function(m){if(m.guests&&m.guests.length)m.guests.forEach(function(g){if(g)guestSet.add(g);});});const allGuests=[...guestSet];let html='<div class="client-summary-box">';html+='<div class="cs-title">📋 Client Summary — '+escHtml(clientName)+'</div>';html+='<div class="cs-section"><div class="cs-section-title">📊 Overview</div><table style="width:100%;border-collapse:collapse;"><tr><td style="padding:5px 0;border-bottom:1px solid #bbf7d0;font-size:0.84rem;color:#166534;">Total Meetings</td><td style="padding:5px 0;border-bottom:1px solid #bbf7d0;font-size:0.84rem;font-weight:700;color:#14532d;text-align:right;">'+cm.length+'</td></tr><tr><td style="padding:5px 0;border-bottom:1px solid #bbf7d0;font-size:0.84rem;color:#166534;">Upcoming</td><td style="padding:5px 0;border-bottom:1px solid #bbf7d0;font-size:0.84rem;font-weight:700;color:#14532d;text-align:right;">'+upcoming.length+'</td></tr><tr><td style="padding:5px 0;border-bottom:1px solid #bbf7d0;font-size:0.84rem;color:#166534;">Past</td><td style="padding:5px 0;border-bottom:1px solid #bbf7d0;font-size:0.84rem;font-weight:700;color:#14532d;text-align:right;">'+past.length+'</td></tr><tr><td style="padding:5px 0;border-bottom:1px solid #bbf7d0;font-size:0.84rem;color:#166534;">Total Deadlines</td><td style="padding:5px 0;border-bottom:1px solid #bbf7d0;font-size:0.84rem;font-weight:700;color:#14532d;text-align:right;">'+allDeadlines.length+'</td></tr>'+(cm.length>1?'<tr><td style="padding:5px 0;border-bottom:1px solid #bbf7d0;font-size:0.84rem;color:#166534;">First Meeting</td><td style="padding:5px 0;border-bottom:1px solid #bbf7d0;font-size:0.84rem;font-weight:700;color:#14532d;text-align:right;">'+first.date+' '+MONTHS[first.month-1].slice(0,3)+' '+first.year+'</td></tr><tr><td style="padding:5px 0;font-size:0.84rem;color:#166534;">Latest Meeting</td><td style="padding:5px 0;font-size:0.84rem;font-weight:700;color:#14532d;text-align:right;">'+last.date+' '+MONTHS[last.month-1].slice(0,3)+' '+last.year+'</td></tr>':'')+'</table></div>';html+='<div class="cs-section"><div class="cs-section-title">⏰ Open Deadlines</div>'+(openDeadlines.length?openDeadlines.map(function(dl){return'<div style="padding:6px 0;border-bottom:1px solid #bbf7d0;font-size:0.84rem;color:#14532d;"><strong>'+escHtml(dl.task)+'</strong> — due '+dl.date+' '+MONTHS[dl.month-1]+' '+dl.year+'<br/><span style="font-size:0.75rem;color:#6b7280;">Discussed on '+dl.fromDate+' '+MONTHS[dl.fromMonth-1].slice(0,3)+' '+dl.fromYear+'</span></div>';}).join(''):'<p class="cs-item" style="color:#94a3b8;font-style:italic;">No open deadlines.</p>')+'</div>';if(pastDeadlines.length){html+='<div class="cs-section"><div class="cs-section-title">✅ Past Deadlines</div>'+pastDeadlines.map(function(dl){return'<div style="padding:5px 0;border-bottom:1px solid #bbf7d0;font-size:0.84rem;color:#14532d;">'+escHtml(dl.task)+' — was due '+dl.date+' '+MONTHS[dl.month-1].slice(0,3)+' '+dl.year+'</div>';}).join('')+'</div>';}if(allGuests.length){html+='<div class="cs-section"><div class="cs-section-title">👥 All Guests</div><table style="width:100%;border-collapse:collapse;">'+allGuests.map(function(g,i){return'<tr><td style="padding:5px 0;'+(i<allGuests.length-1?'border-bottom:1px solid #bbf7d0;':'')+'font-size:0.84rem;color:#14532d;">'+escHtml(g)+'</td></tr>';}).join('')+'</table></div>';}html+='</div>';return html;}
+function toggleReportRow(uid){const sum=document.getElementById('sum-'+uid);const panel=document.getElementById('panel-'+uid);if(!sum||!panel)return;const isOpen=panel.classList.contains('open');document.querySelectorAll('.report-meeting-detail-panel.open').forEach(function(p){p.classList.remove('open');});document.querySelectorAll('.report-meeting-summary.open').forEach(function(s){s.classList.remove('open');});if(!isOpen){sum.classList.add('open');panel.classList.add('open');}}
+document.addEventListener('click',function(e){const sum=e.target.closest('.report-meeting-summary');if(sum&&sum.dataset.uid){toggleReportRow(sum.dataset.uid);return;}if(e.target.dataset.action==='remove-link'){e.target.closest('.rmd-link-edit-row').remove();return;}if(e.target.dataset.action==='add-link'){addRmdLinkRow('links-edit-'+e.target.dataset.uid);return;}});
+let notifCheckInterval=null;
+function initNotifications(){const btn=document.getElementById('notif-btn');if(!btn)return;if(!('Notification' in window)){btn.textContent='🔕 Not Supported';btn.classList.add('blocked');btn.onclick=null;return;}if(Notification.permission==='granted'){btn.innerHTML='🔔 Notifications <span style="font-size:0.7rem;background:#16a34a;color:white;border-radius:20px;padding:1px 7px;margin-left:2px;">ON</span>';btn.classList.add('enabled');btn.classList.remove('blocked');btn.title='Notifications are ON';btn.onclick=null;startNotificationChecker();}else if(Notification.permission==='denied'){btn.innerHTML='🔕 Notifications <span style="font-size:0.7rem;background:#dc2626;color:white;border-radius:20px;padding:1px 7px;margin-left:2px;">BLOCKED</span>';btn.classList.add('blocked');btn.classList.remove('enabled');btn.onclick=function(){alert('To enable notifications:\n\n1. Click the lock icon in your address bar\n2. Find Notifications and set to Allow\n3. Reload the page');};}else{btn.innerHTML='🔔 Notifications <span style="font-size:0.7rem;background:#f59e0b;color:white;border-radius:20px;padding:1px 7px;margin-left:2px;">OFF</span>';btn.classList.remove('enabled','blocked');btn.onclick=requestNotifPermission;}}
+function requestNotifPermission(){Notification.requestPermission().then(function(permission){initNotifications();if(permission==='granted'){toast('✅ Notifications enabled!','success');setTimeout(function(){new Notification('MeetingDesk ✅',{body:'Notifications are working! You will be reminded at 9:00 AM on deadline days.',icon:'https://ashwin-r2006.github.io/client-calender-management/favicon.ico'});},500);}});}
+function checkDeadlinesNow(){if(Notification.permission!=='granted')return;if(!currentUser)return;const now=new Date();const todayDate=now.getDate();const todayMonth=now.getMonth()+1;const todayYear=now.getFullYear();const currentHour=now.getHours();const currentMin=now.getMinutes();if(currentHour!==9||currentMin!==0)return;meetings.forEach(function(m){if(!m.deadlines||!m.deadlines.length)return;m.deadlines.forEach(function(dl){if(dl.date===todayDate&&dl.month===todayMonth&&dl.year===todayYear){const notifKey='notified_'+m.id+'_'+dl.task+'_'+todayDate+'_'+todayMonth+'_'+todayYear;if(localStorage.getItem(notifKey))return;localStorage.setItem(notifKey,'1');new Notification('⏰ Deadline Today — MeetingDesk',{body:dl.task+'\nMeeting with '+m.name+' | Due today at 9:00 AM',icon:'https://ashwin-r2006.github.io/client-calender-management/favicon.ico',tag:notifKey,requireInteraction:true});}});});}
+function checkUpcomingDeadlines(){if(Notification.permission!=='granted')return;if(!currentUser)return;const now=new Date();const currentHour=now.getHours();const currentMin=now.getMinutes();if(currentHour!==21||currentMin!==0)return;const tomorrow=new Date(now);tomorrow.setDate(tomorrow.getDate()+1);const tDate=tomorrow.getDate();const tMonth=tomorrow.getMonth()+1;const tYear=tomorrow.getFullYear();meetings.forEach(function(m){if(!m.deadlines||!m.deadlines.length)return;m.deadlines.forEach(function(dl){if(dl.date===tDate&&dl.month===tMonth&&dl.year===tYear){const notifKey='notified_eve_'+m.id+'_'+dl.task+'_'+tDate+'_'+tMonth+'_'+tYear;if(localStorage.getItem(notifKey))return;localStorage.setItem(notifKey,'1');new Notification('📅 Deadline Tomorrow — MeetingDesk',{body:dl.task+'\nMeeting with '+m.name+' | Due tomorrow at 9:00 AM',icon:'https://ashwin-r2006.github.io/client-calender-management/favicon.ico',tag:notifKey,requireInteraction:true});}});});}
+function startNotificationChecker(){checkDeadlinesNow();checkUpcomingDeadlines();if(notifCheckInterval)clearInterval(notifCheckInterval);notifCheckInterval=setInterval(function(){checkDeadlinesNow();checkUpcomingDeadlines();},60000);}
+// ── AGENDA ──
+function openAgenda(id,name){
   pendingId=id;
   const m=meetings.find(x=>x.id==id);if(!m)return;
-  document.getElementById('guests-label').textContent='Meeting with '+name;
-  document.getElementById('guests-edit-rows').innerHTML='';
-  if(m.guests&&m.guests.length)m.guests.forEach(function(g){addEditGuestRow(g);});
-  document.getElementById('guests-overlay').classList.add('show');
+  document.getElementById('agenda-label').textContent='Meeting with '+name;
+  document.getElementById('agenda-input').value=m.agenda||'';
+  document.getElementById('agenda-error').classList.remove('show');
+  document.getElementById('agenda-overlay').classList.add('show');
+  setTimeout(function(){document.getElementById('agenda-input').focus();},100);
 }
-async function saveGuests(){
+async function saveAgenda(){
+  const val=document.getElementById('agenda-input').value.trim();
   const idx=meetings.findIndex(x=>x.id==pendingId);if(idx===-1)return;
-  meetings[idx]={...meetings[idx],guests:getGuests('guests-edit-rows')};
-  closeOverlay('guests-overlay');renderAll();
+  meetings[idx]={...meetings[idx],agenda:val};
+  closeOverlay('agenda-overlay');renderAll();
   await saveMeetingToFirebase(meetings[idx]);
-  toast('Guests updated!','success');
+  toast('Agenda updated!','success');
 }
-
-// ── NOTES ──
-function openNotes(id,name){
-  pendingId=id;
-  const m=meetings.find(x=>x.id==id);if(!m)return;
-  document.getElementById('notes-label').textContent='Meeting with '+name;
-  const ta=document.getElementById('notes-textarea');
-  ta.value=m.notes||'';
-  document.getElementById('notes-char-count').textContent=(m.notes||'').length+' characters';
-  document.getElementById('notes-overlay').classList.add('show');
-  setTimeout(function(){ta.focus();},100);
-}
-document.getElementById('notes-textarea').addEventListener('input',function(){
-  document.getElementById('notes-char-count').textContent=this.value.length+' characters';
-});
-async function saveNotes(){
-  const idx=meetings.findIndex(x=>x.id==pendingId);if(idx===-1)return;
-  meetings[idx]={...meetings[idx],notes:document.getElementById('notes-textarea').value.trim()};
-  closeOverlay('notes-overlay');renderAll();
-  await saveMeetingToFirebase(meetings[idx]);
-  toast('Notes saved!','success');
-}
-
-// ── LINKS ──
-function openLinks(id,name){
-  pendingId=id;
-  const m=meetings.find(x=>x.id==id);if(!m)return;
-  document.getElementById('links-label').textContent='Meeting with '+name;
-  document.getElementById('links-rows').innerHTML='';
-  if(m.links&&m.links.length)m.links.forEach(function(l){addLinkRow(l.label,l.url);});
-  document.getElementById('links-overlay').classList.add('show');
-}
-function addLinkRow(label,url){
-  label=label||'';url=url||'';
-  const row=document.createElement('div');row.className='link-row';
-  row.innerHTML='<input type="text" placeholder="Label (e.g. Zoom)" value="'+escHtml(label)+'"/>'
-    +'<input type="url" placeholder="https://..." value="'+escHtml(url)+'"/>';
-  const btn=document.createElement('button');btn.className='btn-remove-link';btn.textContent='Remove';
-  btn.onclick=function(){row.remove();};
-  row.appendChild(btn);
-  document.getElementById('links-rows').appendChild(row);
-}
-async function saveLinks(){
-  const rows=document.querySelectorAll('#links-rows .link-row');
-  const links=Array.from(rows).map(function(row){
-    const inputs=row.querySelectorAll('input');
-    return {label:inputs[0].value.trim(),url:inputs[1].value.trim()};
-  }).filter(function(l){return l.url;});
-  const idx=meetings.findIndex(x=>x.id==pendingId);if(idx===-1)return;
-  meetings[idx]={...meetings[idx],links};
-  closeOverlay('links-overlay');renderAll();
-  await saveMeetingToFirebase(meetings[idx]);
-  toast('Links saved!','success');
-}
-
-// ── DEADLINE ──
-function openDeadline(id,name){
-  pendingId=id;
-  document.getElementById('deadline-label').textContent='Meeting with '+name;
-  document.getElementById('dl-task').value='';
-  document.getElementById('dl-date').value='';
-  document.getElementById('dl-month').value='';
-  document.getElementById('dl-year').value='2026';
-  document.getElementById('dl-error').classList.remove('show');
-  document.getElementById('dl-day-preview').classList.remove('visible');
-  document.getElementById('deadline-overlay').classList.add('show');
-  setTimeout(function(){document.getElementById('dl-task').focus();},100);
-}
-async function saveDeadline(){
-  const task=document.getElementById('dl-task').value.trim();
-  const date=parseInt(document.getElementById('dl-date').value);
-  const month=parseInt(document.getElementById('dl-month').value);
-  const year=parseInt(document.getElementById('dl-year').value);
-  const errEl=document.getElementById('dl-error');
-  errEl.classList.remove('show');
-  if(!task){errEl.textContent='Please enter what the deadline is for.';errEl.classList.add('show');document.getElementById('dl-task').focus();return;}
-  if(!date||date<1||date>31){errEl.textContent='Enter a valid date.';errEl.classList.add('show');return;}
-  if(!month){errEl.textContent='Select a month.';errEl.classList.add('show');return;}
-  if(!year||year<2020||year>2100){errEl.textContent='Enter a valid year.';errEl.classList.add('show');return;}
-  const testDate=new Date(year,month-1,date);
-  if(testDate.getDate()!==date||testDate.getMonth()!==month-1){errEl.textContent='Invalid date.';errEl.classList.add('show');return;}
-  const idx=meetings.findIndex(x=>x.id==pendingId);if(idx===-1)return;
-  const deadlines=meetings[idx].deadlines||[];
-  deadlines.push({task,date,month,year,day:DAYS[testDate.getDay()],time:'09:00'});
-  meetings[idx]={...meetings[idx],deadlines};
-  closeOverlay('deadline-overlay');renderAll();
-  await saveMeetingToFirebase(meetings[idx]);
-  toast('⏰ Deadline set for '+date+' '+MONTHS[month-1]+' '+year+'!','success');
-}
-
-// ── CLIENT REPORTS ──
-function renderReportsList(){
-  const search=(document.getElementById('reports-search').value||'').trim().toLowerCase();
-  const clientMap={};
-  const now=new Date();
-  meetings.forEach(function(m){
-    const key=m.name.toLowerCase();
-    if(!clientMap[key])clientMap[key]={name:m.name,total:0,upcoming:0,past:0};
-    clientMap[key].total++;
-    const mDate=new Date(m.year,m.month-1,m.date,parseInt(m.time),parseInt(m.time.split(':')[1]));
-    if(mDate>=now)clientMap[key].upcoming++;else clientMap[key].past++;
-  });
-  const clients=Object.values(clientMap).filter(function(c){return !search||c.name.toLowerCase().includes(search);});
-  clients.sort(function(a,b){return a.name.localeCompare(b.name);});
-  const list=document.getElementById('reports-client-list');
-  if(!clients.length){list.innerHTML='<div class="no-clients-msg">No clients found.</div>';return;}
-  list.innerHTML='';
-  clients.forEach(function(c){
-    const item=document.createElement('div');
-    const isActive=activeReportClient&&activeReportClient.toLowerCase()===c.name.toLowerCase();
-    item.className='client-report-item'+(isActive?' active':'');
-    item.innerHTML='<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">'
-      +'<div class="cr-name">'+escHtml(c.name)+'</div>'
-      +'<div class="cr-total-badge">'+c.total+'</div>'
-      +'</div>';
-    item.addEventListener('click',function(){showClientReport(c.name);});
-    list.appendChild(item);
-  });
-}
-function showClientReport(name){
-  activeReportClient=name;
-  renderReportsList();
-  const todayMidnight=new Date(); todayMidnight.setHours(0,0,0,0);
-  const cm=meetings.filter(function(m){return m.name.toLowerCase()===name.toLowerCase();});
-  cm.sort(cmpMeeting);
-  const today=cm.filter(function(m){return new Date(m.year,m.month-1,m.date).getTime()===todayMidnight.getTime();});
-  const upcoming=cm.filter(function(m){return new Date(m.year,m.month-1,m.date)>todayMidnight;});
-  const past=cm.filter(function(m){return new Date(m.year,m.month-1,m.date)<todayMidnight;});
-
-  function buildItem(m,type){
-    const uid='rm-'+m.id;
-    const summaryHtml='<div class="report-meeting-summary" id="sum-'+uid+'" data-uid="'+uid+'">'
-      +'<div class="rms-date">'+m.date+' '+MONTHS[m.month-1].slice(0,3)+' '+m.year+'</div>'
-      +'<div style="display:flex;align-items:center;gap:6px;">'
-      +'<div class="rms-time">🕐 '+m.time+'</div>'
-      +'<span class="rms-arrow">▼</span>'
-      +'</div>'
-      +'</div>';
-    let detail='<div class="report-meeting-detail-panel" id="panel-'+uid+'">';
-    detail+='<div class="rmd-row"><div class="rmd-label">👤 Client</div><div class="rmd-value" style="font-weight:700;">'+escHtml(m.name)+'</div></div>';
-    detail+='<div class="rmd-row"><div class="rmd-label">📅 Day</div><div class="rmd-value">'+m.day+'</div></div>';
-    detail+='<div class="rmd-row"><div class="rmd-label">📆 Date</div><div class="rmd-value">'+m.date+' '+MONTHS[m.month-1]+' '+m.year+'</div></div>';
-    detail+='<div class="rmd-row"><div class="rmd-label">🕐 Time</div><div class="rmd-value">'+m.time+'</div></div>';
-    if(m.guests&&m.guests.length)detail+='<div class="rmd-row"><div class="rmd-label">👥 Guests</div><div class="rmd-value">'+m.guests.map(function(g){return escHtml(g);}).join(', ')+'</div></div>';
-    if(m.deadlines&&m.deadlines.length)detail+='<div class="rmd-row"><div class="rmd-label">⏰ Deadline</div><div class="rmd-value">'+m.deadlines.map(function(dl){return '<div style="background:#fff7ed;border-left:3px solid #ea580c;border-radius:6px;padding:5px 9px;margin-bottom:4px;"><strong>'+escHtml(dl.task)+'</strong><br/>'+dl.date+' '+MONTHS[dl.month-1]+' '+dl.year+' at 9:00 AM</div>';}).join('')+'</div></div>';
-    // Editable notes — shows existing notes as preview + editable textarea
-    detail+='<div class="rmd-row"><div class="rmd-label">📝 Notes</div>';
-    if(m.notes&&m.notes.trim()){
-      detail+='<div class="rmd-value" style="white-space:pre-wrap;background:#fefce8;border-left:3px solid #f59e0b;border-radius:6px;padding:7px 10px;margin-bottom:6px;font-size:0.83rem;color:#92400e;">'+escHtml(m.notes)+'</div>';
-    }
-    detail+='<textarea class="rmd-edit-textarea" id="notes-edit-'+uid+'" placeholder="Add or edit notes...">'+escHtml(m.notes||'')+'</textarea>'
-      +'</div>';
-    // Editable links — label header row + editable rows with remove button
-    detail+='<div class="rmd-row"><div class="rmd-label">🔗 Links</div>';
-    detail+='<div style="display:grid;grid-template-columns:1fr 1fr auto;gap:4px;margin-bottom:5px;">'
-      +'<div style="font-size:0.7rem;font-weight:700;color:#94a3b8;text-transform:uppercase;">Label</div>'
-      +'<div style="font-size:0.7rem;font-weight:700;color:#94a3b8;text-transform:uppercase;">URL</div>'
-      +'<div></div>'
-      +'</div>';
-    detail+='<div id="links-edit-'+uid+'" class="rmd-links-container" data-uid="'+uid+'">';
-    if(m.links&&m.links.length){
-      m.links.forEach(function(l){
-        detail+='<div class="rmd-link-edit-row">'
-          +'<input type="text" placeholder="Label" value="'+escHtml(l.label||'')+'" />'
-          +'<input type="url" placeholder="https://..." value="'+escHtml(l.url||'')+'" />'
-          +'<button class="rmd-link-remove" data-action="remove-link" title="Remove">✕</button>'
-          +'</div>';
-      });
-    }
-    detail+='</div>'
-      +'<button class="rmd-add-link" data-action="add-link" data-uid="'+uid+'">+ Add Link</button>'
-      +'</div>';
-    // Save button
-    detail+='<button class="rmd-save-btn" data-mid="'+m.id+'">💾 Save Changes</button>';
-    detail+='</div>';
-    return '<div class="report-meeting-row '+type+'" style="padding:0;overflow:hidden;">'+summaryHtml+detail+'</div>';
-  }
-
-  const main=document.getElementById('reports-main');
-  let html='<div class="report-card">';
-  html+='<div class="report-card-header">';
-  html+='<div class="report-client-name">👤 '+escHtml(name)+'</div>';
-  html+='<div class="report-stats">';
-  html+='<span class="stat-badge stat-total">'+cm.length+' Total</span>';
-  html+='<span class="stat-badge stat-upcoming">'+(today.length+upcoming.length)+' Upcoming</span>';
-  html+='<span class="stat-badge stat-past">'+past.length+' Past</span>';
-  html+='</div></div>';
-
-  // Instant client summary
-  html+=buildClientSummary(name);
-
-  if(today.length){html+='<div class="report-section"><div class="report-section-title">🔴 Today</div>';today.forEach(function(m){html+=buildItem(m,'upcoming');});html+='</div>';}
-  if(upcoming.length){html+='<div class="report-section"><div class="report-section-title">🟢 Upcoming</div>';upcoming.forEach(function(m){html+=buildItem(m,'upcoming');});html+='</div>';}
-  if(past.length){html+='<div class="report-section"><div class="report-section-title">🕐 Past</div>';past.slice().reverse().forEach(function(m){html+=buildItem(m,'past');});html+='</div>';}
-  if(!cm.length){html+='<div class="no-meetings-day" style="padding:30px;"><div class="big">📭</div>No meetings found.</div>';}
-  html+='</div>';
-  main.innerHTML=html;
-  main.scrollTop=0;
-
-  // Attach save button listeners
-  document.querySelectorAll('.rmd-save-btn').forEach(function(btn){
-    btn.addEventListener('click',function(){saveReportEdits(this.dataset.mid);});
-  });
-}
-
-function addRmdLinkRow(containerId){
-  const container=document.getElementById(containerId);
-  if(!container)return;
-  const row=document.createElement('div');
-  row.className='rmd-link-edit-row';
-  row.innerHTML='<input type="text" placeholder="Label"/>'
-    +'<input type="url" placeholder="https://..."/>'
-    +'<button class="rmd-link-remove" data-action="remove-link">✕</button>';
-  container.appendChild(row);
-}
-
-async function saveReportEdits(mid){
-  const idx=meetings.findIndex(function(m){return String(m.id)===String(mid);});
-  if(idx===-1)return;
-  const uid='rm-'+mid;
-  const notesEl=document.getElementById('notes-edit-'+uid);
-  const linksContainer=document.getElementById('links-edit-'+uid);
-  if(!notesEl||!linksContainer)return;
-  const notes=notesEl.value.trim();
-  const linkRows=linksContainer.querySelectorAll('.rmd-link-edit-row');
-  const links=Array.from(linkRows).map(function(row){
-    const inputs=row.querySelectorAll('input');
-    return {label:inputs[0].value.trim(),url:inputs[1].value.trim()};
-  }).filter(function(l){return l.url;});
-  meetings[idx]={...meetings[idx],notes,links};
-  const btn=document.querySelector('.rmd-save-btn[data-mid="'+mid+'"]');
-  if(btn){btn.textContent='✅ Saved!';btn.style.background='#16a34a';setTimeout(function(){btn.textContent='💾 Save Changes';btn.style.background='';},2000);}
-  await saveMeetingToFirebase(meetings[idx]);
-  toast('Changes saved!','success');
-}
-
-function buildClientSummary(clientName){
-  const cm=meetings.filter(function(m){return m.name.toLowerCase()===clientName.toLowerCase();});
-  if(!cm.length)return'';
-  cm.sort(cmpMeeting);
-  const now=new Date();
-  const todayMidnight=new Date();todayMidnight.setHours(0,0,0,0);
-
-  // Stats
-  const upcoming=cm.filter(function(m){return new Date(m.year,m.month-1,m.date)>=todayMidnight;});
-  const past=cm.filter(function(m){return new Date(m.year,m.month-1,m.date)<todayMidnight;});
-  const first=cm[0];
-  const last=cm[cm.length-1];
-
-  // Deadlines
-  const allDeadlines=[];
-  cm.forEach(function(m){
-    if(!m.deadlines||!m.deadlines.length)return;
-    m.deadlines.forEach(function(dl){
-      allDeadlines.push({task:dl.task,date:dl.date,month:dl.month,year:dl.year,
-        isPast:new Date(dl.year,dl.month-1,dl.date)<todayMidnight,
-        fromDate:m.date,fromMonth:m.month,fromYear:m.year});
-    });
-  });
-  const openDeadlines=allDeadlines.filter(function(d){return !d.isPast;});
-  const pastDeadlines=allDeadlines.filter(function(d){return d.isPast;});
-
-  // Notes
-  const allNotes=cm.filter(function(m){return m.notes&&m.notes.trim();});
-
-  // Guests — deduplicate
-  const guestSet=new Set();
-  cm.forEach(function(m){if(m.guests&&m.guests.length)m.guests.forEach(function(g){if(g)guestSet.add(g);});});
-  const allGuests=[...guestSet];
-
-  // Build HTML
-  let html='<div class="client-summary-box">';
-  html+='<div class="cs-title">📋 Client Summary — '+escHtml(clientName)+'</div>';
-
-  // Overview stats — single column rows
-  html+='<div class="cs-section">';
-  html+='<div class="cs-section-title">📊 Overview</div>';
-  html+='<table style="width:100%;border-collapse:collapse;">';
-  html+='<tr><td style="padding:5px 0;border-bottom:1px solid #bbf7d0;font-size:0.84rem;color:#166534;">Total Meetings</td><td style="padding:5px 0;border-bottom:1px solid #bbf7d0;font-size:0.84rem;font-weight:700;color:#14532d;text-align:right;">'+cm.length+'</td></tr>';
-  html+='<tr><td style="padding:5px 0;border-bottom:1px solid #bbf7d0;font-size:0.84rem;color:#166534;">Upcoming</td><td style="padding:5px 0;border-bottom:1px solid #bbf7d0;font-size:0.84rem;font-weight:700;color:#14532d;text-align:right;">'+upcoming.length+'</td></tr>';
-  html+='<tr><td style="padding:5px 0;border-bottom:1px solid #bbf7d0;font-size:0.84rem;color:#166534;">Past</td><td style="padding:5px 0;border-bottom:1px solid #bbf7d0;font-size:0.84rem;font-weight:700;color:#14532d;text-align:right;">'+past.length+'</td></tr>';
-  html+='<tr><td style="padding:5px 0;border-bottom:1px solid #bbf7d0;font-size:0.84rem;color:#166534;">Total Deadlines</td><td style="padding:5px 0;border-bottom:1px solid #bbf7d0;font-size:0.84rem;font-weight:700;color:#14532d;text-align:right;">'+allDeadlines.length+'</td></tr>';
-  if(cm.length>1){
-    html+='<tr><td style="padding:5px 0;border-bottom:1px solid #bbf7d0;font-size:0.84rem;color:#166534;">First Meeting</td><td style="padding:5px 0;border-bottom:1px solid #bbf7d0;font-size:0.84rem;font-weight:700;color:#14532d;text-align:right;">'+first.date+' '+MONTHS[first.month-1].slice(0,3)+' '+first.year+'</td></tr>';
-    html+='<tr><td style="padding:5px 0;font-size:0.84rem;color:#166534;">Latest Meeting</td><td style="padding:5px 0;font-size:0.84rem;font-weight:700;color:#14532d;text-align:right;">'+last.date+' '+MONTHS[last.month-1].slice(0,3)+' '+last.year+'</td></tr>';
-  }
-  html+='</table>';
-  html+='</div>';
-
-  // Open deadlines
-  html+='<div class="cs-section">';
-  html+='<div class="cs-section-title">⏰ Open Deadlines</div>';
-  if(openDeadlines.length){
-    openDeadlines.forEach(function(dl){
-      html+='<div style="padding:6px 0;border-bottom:1px solid #bbf7d0;font-size:0.84rem;color:#14532d;"><strong>'+escHtml(dl.task)+'</strong> — due '+dl.date+' '+MONTHS[dl.month-1]+' '+dl.year+'<br/><span style="font-size:0.75rem;color:#6b7280;">Discussed on '+dl.fromDate+' '+MONTHS[dl.fromMonth-1].slice(0,3)+' '+dl.fromYear+'</span></div>';
-    });
-  } else {
-    html+='<p class="cs-item" style="color:#94a3b8;font-style:italic;">No open deadlines.</p>';
-  }
-  html+='</div>';
-
-  // Past deadlines
-  if(pastDeadlines.length){
-    html+='<div class="cs-section">';
-    html+='<div class="cs-section-title">✅ Past Deadlines</div>';
-    pastDeadlines.forEach(function(dl){
-      html+='<div style="padding:5px 0;border-bottom:1px solid #bbf7d0;font-size:0.84rem;color:#14532d;">'+escHtml(dl.task)+' — was due '+dl.date+' '+MONTHS[dl.month-1].slice(0,3)+' '+dl.year+'</div>';
-    });
-    html+='</div>';
-  }
-
-  // All guests
-  if(allGuests.length){
-    html+='<div class="cs-section">';
-    html+='<div class="cs-section-title">👥 All Guests</div>';
-    html+='<table style="width:100%;border-collapse:collapse;">';
-    allGuests.forEach(function(g,i){
-      const border=i<allGuests.length-1?'border-bottom:1px solid #bbf7d0;':'';
-      html+='<tr><td style="padding:5px 0;'+border+'font-size:0.84rem;color:#14532d;">'+escHtml(g)+'</td></tr>';
-    });
-    html+='</table>';
-    html+='</div>';
-  }
-
-  html+='</div>';
-  return html;
-}
-
-function toggleReportRow(uid){
-  const sum=document.getElementById('sum-'+uid);
-  const panel=document.getElementById('panel-'+uid);
-  if(!sum||!panel)return;
-  const isOpen=panel.classList.contains('open');
-  document.querySelectorAll('.report-meeting-detail-panel.open').forEach(function(p){p.classList.remove('open');});
-  document.querySelectorAll('.report-meeting-summary.open').forEach(function(s){s.classList.remove('open');});
-  if(!isOpen){sum.classList.add('open');panel.classList.add('open');}
-}
-
-// Event delegation for report meeting summaries + link actions + AI summary
-document.addEventListener('click',function(e){
-  // Toggle row
-  const sum=e.target.closest('.report-meeting-summary');
-  if(sum&&sum.dataset.uid){toggleReportRow(sum.dataset.uid);return;}
-  // Remove link row
-  if(e.target.dataset.action==='remove-link'){e.target.closest('.rmd-link-edit-row').remove();return;}
-  // Add link row
-  if(e.target.dataset.action==='add-link'){addRmdLinkRow('links-edit-'+e.target.dataset.uid);return;}
-
-});
-
-// ── BROWSER NOTIFICATIONS ──
-let notifCheckInterval = null;
-
-function initNotifications(){
-  const btn = document.getElementById('notif-btn');
-  if(!btn) return;
-  if(!('Notification' in window)){
-    btn.textContent = '🔕 Not Supported';
-    btn.classList.add('blocked');
-    btn.onclick = null;
-    return;
-  }
-  if(Notification.permission === 'granted'){
-    btn.innerHTML = '🔔 Notifications <span style="font-size:0.7rem;background:#16a34a;color:white;border-radius:20px;padding:1px 7px;margin-left:2px;">ON</span>';
-    btn.classList.add('enabled');
-    btn.classList.remove('blocked');
-    btn.title = 'Notifications are ON — you will be reminded at 9AM on deadline days';
-    btn.onclick = null;
-    startNotificationChecker();
-  } else if(Notification.permission === 'denied'){
-    btn.innerHTML = '🔕 Notifications <span style="font-size:0.7rem;background:#dc2626;color:white;border-radius:20px;padding:1px 7px;margin-left:2px;">BLOCKED — Click to fix</span>';
-    btn.classList.add('blocked');
-    btn.classList.remove('enabled');
-    btn.title = 'Notifications blocked — click for instructions';
-    btn.onclick = function(){
-      alert('To enable notifications:\n\n1. Press Alt+D to go to address bar\n2. Type: chrome://settings/content/notifications\n3. Press Enter\n4. Tab to Add button under Allow section\n5. Type: ashwin-r2006.github.io\n6. Press Add\n7. Come back and press F5 to reload');
-    };
-  } else {
-    btn.innerHTML = '🔔 Notifications <span style="font-size:0.7rem;background:#f59e0b;color:white;border-radius:20px;padding:1px 7px;margin-left:2px;">OFF</span>';
-    btn.classList.remove('enabled','blocked');
-    btn.title = 'Click to enable deadline notifications';
-    btn.onclick = requestNotifPermission;
-  }
-}
-
-function requestNotifPermission(){
-  Notification.requestPermission().then(function(permission){
-    initNotifications();
-    if(permission === 'granted'){
-      toast('✅ Notifications enabled! You will be reminded at 9AM on deadline days.','success');
-      // Send a test notification
-      setTimeout(function(){
-        new Notification('MeetingDesk ✅', {
-          body: 'Notifications are working! You will be reminded at 9:00 AM on deadline days.',
-          icon: 'https://ashwin-r2006.github.io/client-calender-management/favicon.ico'
-        });
-      }, 500);
-    }
-  });
-}
-
-// startNotificationChecker defined below
-
-function checkDeadlinesNow(){
-  if(Notification.permission !== 'granted') return;
-  if(!currentUser) return;
-  const now = new Date();
-  const todayDate = now.getDate();
-  const todayMonth = now.getMonth() + 1;
-  const todayYear = now.getFullYear();
-  const currentHour = now.getHours();
-  const currentMin = now.getMinutes();
-
-  // Only fire between 9:00 and 9:01 AM
-  if(currentHour !== 9 || currentMin !== 0) return;
-
-  meetings.forEach(function(m){
-    if(!m.deadlines || !m.deadlines.length) return;
-    m.deadlines.forEach(function(dl){
-      if(dl.date === todayDate && dl.month === todayMonth && dl.year === todayYear){
-        // Check if already notified today
-        const notifKey = 'notified_' + m.id + '_' + dl.task + '_' + todayDate + '_' + todayMonth + '_' + todayYear;
-        if(localStorage.getItem(notifKey)) return;
-        localStorage.setItem(notifKey, '1');
-        new Notification('⏰ Deadline Today — MeetingDesk', {
-          body: dl.task + '\nMeeting with ' + m.name + ' | Due today at 9:00 AM',
-          icon: 'https://ashwin-r2006.github.io/client-calender-management/favicon.ico',
-          tag: notifKey,
-          requireInteraction: true
-        });
-      }
-    });
-  });
-}
-
-// Also check for upcoming deadlines (tomorrow) at 9PM the day before
-function checkUpcomingDeadlines(){
-  if(Notification.permission !== 'granted') return;
-  if(!currentUser) return;
-  const now = new Date();
-  const currentHour = now.getHours();
-  const currentMin = now.getMinutes();
-
-  // Fire reminder at 9PM the evening before
-  if(currentHour !== 21 || currentMin !== 0) return;
-
-  const tomorrow = new Date(now);
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  const tDate = tomorrow.getDate();
-  const tMonth = tomorrow.getMonth() + 1;
-  const tYear = tomorrow.getFullYear();
-
-  meetings.forEach(function(m){
-    if(!m.deadlines || !m.deadlines.length) return;
-    m.deadlines.forEach(function(dl){
-      if(dl.date === tDate && dl.month === tMonth && dl.year === tYear){
-        const notifKey = 'notified_eve_' + m.id + '_' + dl.task + '_' + tDate + '_' + tMonth + '_' + tYear;
-        if(localStorage.getItem(notifKey)) return;
-        localStorage.setItem(notifKey, '1');
-        new Notification('📅 Deadline Tomorrow — MeetingDesk', {
-          body: dl.task + '\nMeeting with ' + m.name + ' | Due tomorrow at 9:00 AM',
-          icon: 'https://ashwin-r2006.github.io/client-calender-management/favicon.ico',
-          tag: notifKey,
-          requireInteraction: true
-        });
-      }
-    });
-  });
-}
-
-// Merge both checks into one interval
-function startNotificationChecker(){
-  checkDeadlinesNow();
-  checkUpcomingDeadlines();
-  if(notifCheckInterval) clearInterval(notifCheckInterval);
-  notifCheckInterval = setInterval(function(){
-    checkDeadlinesNow();
-    checkUpcomingDeadlines();
-  }, 60000);
-}
-
 
 </script>
 </body>
