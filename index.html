@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>MeetingDesk</title>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="https://apis.google.com/js/api.js" async defer onload="gapiLoaded()"></script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, collection, doc, setDoc, deleteDoc, getDocs, query, where }
@@ -302,7 +303,26 @@ select.field-input{cursor:pointer;}
 </style>
 </head>
 <body>
-<div id="auth-screen">
+<!-- PUBLIC LANDING — visible to Google for verification -->
+<div id="landing-section" style="background:linear-gradient(135deg,#4f46e5,#06b6d4);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px;">
+  <div style="text-align:center;color:white;max-width:520px;">
+    <div style="font-size:3rem;margin-bottom:12px;">📅</div>
+    <h1 style="font-size:2rem;font-weight:800;margin-bottom:8px;">MeetingDesk</h1>
+    <p style="font-size:1rem;opacity:0.85;margin-bottom:32px;">A private client meeting scheduler. Manage meetings, agendas, deadlines, notes and links — all in one place.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-bottom:32px;">
+      <div style="background:rgba(255,255,255,0.15);border-radius:12px;padding:14px 20px;font-size:0.88rem;font-weight:600;">📋 Agenda Tracking</div>
+      <div style="background:rgba(255,255,255,0.15);border-radius:12px;padding:14px 20px;font-size:0.88rem;font-weight:600;">⏰ Deadline Reminders</div>
+      <div style="background:rgba(255,255,255,0.15);border-radius:12px;padding:14px 20px;font-size:0.88rem;font-weight:600;">📊 Client Reports</div>
+      <div style="background:rgba(255,255,255,0.15);border-radius:12px;padding:14px 20px;font-size:0.88rem;font-weight:600;">🗓️ Google Calendar Sync</div>
+    </div>
+    <button onclick="document.getElementById('landing-section').style.display='none';document.getElementById('auth-screen').style.display='flex';" style="background:white;color:#4f46e5;border:none;border-radius:12px;padding:14px 36px;font-size:1rem;font-weight:800;cursor:pointer;">Get Started →</button>
+    <div style="margin-top:20px;font-size:0.78rem;opacity:0.7;">
+      <a href="privacy-policy.html" style="color:white;">Privacy Policy</a>
+    </div>
+  </div>
+</div>
+
+<div id="auth-screen" style="display:none;">
   <div class="auth-card">
     <div class="auth-logo">
       <div class="icon">📅</div>
@@ -339,6 +359,7 @@ select.field-input{cursor:pointer;}
       <span class="username" id="user-name">User</span>
       <button class="btn-notif" id="notif-btn" onclick="requestNotifPermission()" title="Notification status">🔔 Notifications</button>
       <button class="btn-signout" onclick="signOut()">Sign Out</button>
+      <button class="btn-sync-cal" id="sync-cal-btn" onclick="openSyncModal()">🗓️ Sync Calendar</button>
     </div>
   </header>
   <div class="tab-bar">
@@ -532,6 +553,32 @@ select.field-input{cursor:pointer;}
   </div>
 </div>
 
+<!-- SYNC CALENDAR MODAL -->
+<div class="sync-modal-overlay" id="sync-modal-overlay" onclick="if(event.target===this)closeSyncModal()">
+  <div class="sync-modal">
+    <h4>🗓️ Sync Calendar</h4>
+    <p>Choose a calendar to import events from. New events will be added to MeetingDesk.</p>
+    <div class="sync-choice-btns">
+      <button class="sync-choice-btn" onclick="startGoogleSync()">
+        <span class="sc-icon">📅</span>
+        <span class="sc-info">
+          <span class="sc-title">Google Calendar</span>
+          <span class="sc-sub">Import from your Google account</span>
+        </span>
+      </button>
+      <button class="sync-choice-btn" onclick="startOutlookSync()">
+        <span class="sc-icon">📆</span>
+        <span class="sc-info">
+          <span class="sc-title">Outlook Calendar</span>
+          <span class="sc-sub">Import from Microsoft account</span>
+        </span>
+      </button>
+    </div>
+    <div class="sync-status-box" id="sync-status-box"></div>
+    <button class="sync-cancel-btn" onclick="closeSyncModal()">Cancel</button>
+  </div>
+</div>
+
 <div id="toast"></div>
 <script>
 const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
@@ -552,7 +599,7 @@ function hideAuthError(){document.getElementById('auth-error').style.display='no
 function handleAuth(){const email=document.getElementById('auth-email').value.trim();const pw=document.getElementById('auth-password').value;if(!email||!pw){showAuthError('Please enter email and password.');return;}if(!email.includes('@')){showAuthError('Enter a valid email address.');return;}if(authMode==='signup'){if(accounts[email]){showAuthError('Account already exists. Please sign in.');return;}if(pw.length<6){showAuthError('Password must be at least 6 characters.');return;}accounts[email]={pw};localStorage.setItem('md_accounts',JSON.stringify(accounts));loginAs(email,null);}else{if(!accounts[email]||accounts[email].pw!==pw){showAuthError('Invalid email or password.');return;}loginAs(email,null);}}
 function handleGoogleCredential(response){try{const payload=JSON.parse(atob(response.credential.split('.')[1]));const email=payload.email;const displayName=payload.given_name||payload.name||email.split('@')[0];if(!accounts[email])accounts[email]={pw:'__google__',googleName:displayName};else accounts[email].googleName=displayName;localStorage.setItem('md_accounts',JSON.stringify(accounts));loginAs(email,displayName);}catch(e){showAuthError('Google sign-in failed. Please try again.');}}
 async function loginAs(email,displayName,silent){currentUser=email;const name=displayName||accounts[email]?.googleName||email.split('@')[0];localStorage.setItem('md_session',JSON.stringify({email,displayName:name}));document.getElementById('user-avatar').textContent=name[0].toUpperCase();document.getElementById('user-name').textContent=name.charAt(0).toUpperCase()+name.slice(1);document.getElementById('auth-screen').style.display='none';const appEl=document.getElementById('app-screen');appEl.style.display='flex';appEl.style.flexDirection='column';renderCalendar();const doLoad=async()=>{await loadMeetingsFromFirebase(email);renderAll();if(!silent)toast('Welcome, '+name+'! 👋','success');};if(window._dbReady)await doLoad();else window.addEventListener('firebase-ready',doLoad,{once:true});setTimeout(initNotifications,500);}
-function signOut(){currentUser=null;meetings=[];localStorage.removeItem('md_session');localStorage.removeItem('md_calstate');document.getElementById('auth-screen').style.display='flex';document.getElementById('app-screen').style.display='none';document.getElementById('auth-password').value='';}
+function signOut(){currentUser=null;meetings=[];localStorage.removeItem('md_session');localStorage.removeItem('md_calstate');document.getElementById('landing-section').style.display='flex';document.getElementById('auth-screen').style.display='none';document.getElementById('app-screen').style.display='none';document.getElementById('auth-password').value='';}
 function switchMainTab(tab){document.getElementById('tab-btn-scheduler').classList.toggle('active',tab==='scheduler');document.getElementById('tab-btn-reports').classList.toggle('active',tab==='reports');document.getElementById('tab-scheduler').classList.toggle('active',tab==='scheduler');document.getElementById('tab-reports').classList.toggle('active',tab==='reports');if(tab==='reports'){activeReportClient=null;renderReportsList();}}
 function updateDayPreview(){const d=parseInt(document.getElementById('meet-date').value);const m=parseInt(document.getElementById('meet-month').value);const y=parseInt(document.getElementById('meet-year').value);const el=document.getElementById('day-preview');if(d&&m&&y){const dt=new Date(y,m-1,d);if(dt.getDate()===d&&dt.getMonth()===m-1){document.getElementById('day-preview-value').textContent=DAYS[dt.getDay()];el.classList.add('visible');return;}}el.classList.remove('visible');}
 function updateTimePreview(){const h=document.getElementById('meet-hour').value;const m=document.getElementById('meet-min').value;document.getElementById('time-preview').textContent=(h!==''&&m!=='')?pad(parseInt(h))+':'+pad(parseInt(m)):'--:--';}
@@ -651,6 +698,138 @@ async function saveAgenda(){
   toast('Agenda updated!','success');
 }
 
+// ── SYNC CALENDAR ──
+const GCAL_CLIENT_ID='922684760909-16mv3l7qoskp4eaqplcj9h4mr3ddnseh.apps.googleusercontent.com';
+const GCAL_SCOPES='https://www.googleapis.com/auth/calendar.readonly';
+let gapiReady=false, tokenClient=null;
+
+function gapiLoaded(){
+  gapi.load('client',async function(){
+    await gapi.client.init({});
+    await gapi.client.load('https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest');
+    gapiReady=true;
+  });
+}
+
+function openSyncModal(){
+  document.getElementById('sync-modal-overlay').classList.add('show');
+  document.getElementById('sync-status-box').className='sync-status-box';
+  document.getElementById('sync-status-box').innerHTML='';
+}
+function closeSyncModal(){
+  document.getElementById('sync-modal-overlay').classList.remove('show');
+}
+
+function showSyncStatus(msg,type=''){
+  const el=document.getElementById('sync-status-box');
+  el.innerHTML=msg;
+  el.className='sync-status-box show'+(type?' '+type:'');
+}
+
+async function startGoogleSync(){
+  showSyncStatus('<span class="sync-spinner"></span> Connecting to Google Calendar...');
+  try{
+    tokenClient=google.accounts.oauth2.initTokenClient({
+      client_id:GCAL_CLIENT_ID,
+      scope:GCAL_SCOPES,
+      callback:async function(resp){
+        if(resp.error){showSyncStatus('❌ Google sign-in cancelled or failed.','error');return;}
+        await fetchGoogleEvents();
+      }
+    });
+    tokenClient.requestAccessToken({prompt:'consent'});
+  }catch(e){
+    showSyncStatus('❌ Could not connect to Google. Make sure pop-ups are allowed.','error');
+  }
+}
+
+async function fetchGoogleEvents(){
+  showSyncStatus('<span class="sync-spinner"></span> Fetching all your Google Calendar events...');
+  try{
+    const past=new Date(Date.now()-5*365*24*60*60*1000).toISOString();
+    const future=new Date(Date.now()+5*365*24*60*60*1000).toISOString();
+    let allEvents=[];
+    let pageToken=null;
+    do{
+      const params={
+        calendarId:'primary',
+        timeMin:past,
+        timeMax:future,
+        maxResults:250,
+        singleEvents:true,
+        orderBy:'startTime'
+      };
+      if(pageToken)params.pageToken=pageToken;
+      const resp=await gapi.client.calendar.events.list(params);
+      const items=resp.result.items||[];
+      allEvents=allEvents.concat(items);
+      pageToken=resp.result.nextPageToken||null;
+      showSyncStatus('<span class="sync-spinner"></span> Fetching events... '+allEvents.length+' found so far');
+    }while(pageToken);
+    const events=allEvents;
+    if(!allEvents.length){showSyncStatus('✅ No events found in Google Calendar.');return;}
+    let added=0,skipped=0;
+    for(const ev of events){
+      if(!ev.start||(!ev.start.dateTime&&!ev.start.date))continue;
+      const isAllDay=!!ev.start.date;
+      const startStr=ev.start.dateTime||ev.start.date+'T09:00:00';
+      const dt=new Date(startStr);
+      const date=dt.getDate(),month=dt.getMonth()+1,year=dt.getFullYear();
+      const hour=dt.getHours(),min=dt.getMinutes();
+      const time=pad(hour)+':'+pad(min);
+      const name=ev.summary||'Google Event';
+      // Check if already exists (same name, date, time)
+      const exists=meetings.some(function(m){
+        return m.name.toLowerCase()===name.toLowerCase()&&m.date===date&&m.month===month&&m.year===year&&m.time===time;
+      });
+      if(exists){skipped++;continue;}
+      // Build guests from attendees
+      const guests=(ev.attendees||[]).map(function(a){return a.displayName||a.email||'';}).filter(Boolean);
+      // Build notes from description
+      const notes=ev.description||'';
+      // Build links from hangout/conference
+      const links=[];
+      if(ev.hangoutLink)links.push({label:'Google Meet',url:ev.hangoutLink});
+      if(ev.conferenceData&&ev.conferenceData.entryPoints){
+        ev.conferenceData.entryPoints.forEach(function(ep){
+          if(ep.uri&&!links.find(function(l){return l.url===ep.uri;}))links.push({label:ep.label||'Join',url:ep.uri});
+        });
+      }
+      const meeting={
+        id:Date.now()+Math.random(),
+        userEmail:currentUser,
+        name,
+        day:DAYS[dt.getDay()],
+        date,month,year,time,
+        guests,
+        agenda:'',
+        notes,
+        links,
+        deadlines:[],
+        fromGoogleCalendar:true
+      };
+      meetings.push(meeting);
+      await saveMeetingToFirebase(meeting);
+      added++;
+    }
+    meetings.sort(cmpMeeting);
+    renderAll();
+    if(added>0)toast(added+' event(s) imported from Google Calendar!','success');
+    showSyncStatus('✅ Done! '+added+' new event(s) added'+(skipped?' · '+skipped+' already existed':'')+'.');
+  }catch(e){
+    console.error(e);
+    showSyncStatus('❌ Failed to fetch events: '+e.message,'error');
+  }
+}
+
+function startOutlookSync(){
+  showSyncStatus('⚠️ Outlook sync requires a Microsoft Azure app registration.<br/><br/>To set it up:<br/>1. Go to <strong>portal.azure.com</strong><br/>2. Register a new app<br/>3. Add permission: <em>Calendars.Read</em><br/>4. Add redirect URI: <strong>https://ashwin-r2006.github.io/client-calender-management/</strong><br/><br/>Once done, share your Azure Client ID and I will enable it.','error');
+}
+
 </script>
+<div style="text-align:center;padding:16px;font-size:0.78rem;color:#94a3b8;border-top:1px solid #e2e8f0;background:white;margin-top:auto;">
+  <a href="privacy-policy.html" target="_blank" style="color:#4f46e5;text-decoration:none;font-weight:600;">Privacy Policy</a>
+  &nbsp;·&nbsp; © 2026 MeetingDesk by Ashwin Rajesh
+</div>
 </body>
 </html>
