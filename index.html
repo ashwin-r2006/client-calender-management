@@ -705,9 +705,14 @@ let gapiReady=false, tokenClient=null;
 
 function gapiLoaded(){
   gapi.load('client',async function(){
-    await gapi.client.init({});
-    await gapi.client.load('https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest');
-    gapiReady=true;
+    try{
+      await gapi.client.init({});
+      await gapi.client.load('https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest');
+      gapiReady=true;
+      console.log('Google API ready');
+    }catch(e){
+      console.error('gapi init error:',e);
+    }
   });
 }
 
@@ -729,17 +734,46 @@ function showSyncStatus(msg,type=''){
 async function startGoogleSync(){
   showSyncStatus('<span class="sync-spinner"></span> Connecting to Google Calendar...');
   try{
+    // Wait for gapi to be ready
+    if(!gapiReady){
+      showSyncStatus('<span class="sync-spinner"></span> Loading Google API, please wait...');
+      await new Promise(function(resolve){
+        let tries=0;
+        const interval=setInterval(function(){
+          tries++;
+          if(gapiReady){clearInterval(interval);resolve();}
+          if(tries>20){clearInterval(interval);resolve();}
+        },500);
+      });
+    }
+    if(!gapiReady){
+      // Try loading gapi manually
+      await new Promise(function(resolve,reject){
+        gapi.load('client',async function(){
+          try{
+            await gapi.client.init({});
+            await gapi.client.load('https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest');
+            gapiReady=true;
+            resolve();
+          }catch(e){reject(e);}
+        });
+      });
+    }
     tokenClient=google.accounts.oauth2.initTokenClient({
       client_id:GCAL_CLIENT_ID,
       scope:GCAL_SCOPES,
       callback:async function(resp){
-        if(resp.error){showSyncStatus('❌ Google sign-in cancelled or failed.','error');return;}
+        if(resp.error){
+          showSyncStatus('❌ Google sign-in cancelled or failed: '+resp.error,'error');
+          return;
+        }
         await fetchGoogleEvents();
       }
     });
-    tokenClient.requestAccessToken({prompt:'consent'});
+    tokenClient.requestAccessToken({prompt:''});
   }catch(e){
-    showSyncStatus('❌ Could not connect to Google. Make sure pop-ups are allowed.','error');
+    console.error('Sync error:',e);
+    showSyncStatus('❌ Could not connect to Google: '+e.message+'<br/>Make sure pop-ups are allowed.','error');
   }
 }
 
