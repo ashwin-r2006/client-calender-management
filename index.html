@@ -303,7 +303,7 @@ select.field-input{cursor:pointer;}
 </style>
 </head>
 <body>
-<!-- PUBLIC LANDING — visible to Google for verification -->
+<!-- PUBLIC LANDING -->
 <div id="landing-section" style="background:linear-gradient(135deg,#4f46e5,#06b6d4);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px;">
   <div style="text-align:center;color:white;max-width:520px;">
     <div style="font-size:3rem;margin-bottom:12px;">📅</div>
@@ -321,7 +321,6 @@ select.field-input{cursor:pointer;}
     </div>
   </div>
 </div>
-
 <div id="auth-screen" style="display:none;">
   <div class="auth-card">
     <div class="auth-logo">
@@ -598,8 +597,8 @@ function showAuthError(msg){const e=document.getElementById('auth-error');e.text
 function hideAuthError(){document.getElementById('auth-error').style.display='none';}
 function handleAuth(){const email=document.getElementById('auth-email').value.trim();const pw=document.getElementById('auth-password').value;if(!email||!pw){showAuthError('Please enter email and password.');return;}if(!email.includes('@')){showAuthError('Enter a valid email address.');return;}if(authMode==='signup'){if(accounts[email]){showAuthError('Account already exists. Please sign in.');return;}if(pw.length<6){showAuthError('Password must be at least 6 characters.');return;}accounts[email]={pw};localStorage.setItem('md_accounts',JSON.stringify(accounts));loginAs(email,null);}else{if(!accounts[email]||accounts[email].pw!==pw){showAuthError('Invalid email or password.');return;}loginAs(email,null);}}
 function handleGoogleCredential(response){try{const payload=JSON.parse(atob(response.credential.split('.')[1]));const email=payload.email;const displayName=payload.given_name||payload.name||email.split('@')[0];if(!accounts[email])accounts[email]={pw:'__google__',googleName:displayName};else accounts[email].googleName=displayName;localStorage.setItem('md_accounts',JSON.stringify(accounts));loginAs(email,displayName);}catch(e){showAuthError('Google sign-in failed. Please try again.');}}
-async function loginAs(email,displayName,silent){currentUser=email;const name=displayName||accounts[email]?.googleName||email.split('@')[0];localStorage.setItem('md_session',JSON.stringify({email,displayName:name}));document.getElementById('user-avatar').textContent=name[0].toUpperCase();document.getElementById('user-name').textContent=name.charAt(0).toUpperCase()+name.slice(1);document.getElementById('auth-screen').style.display='none';const appEl=document.getElementById('app-screen');appEl.style.display='flex';appEl.style.flexDirection='column';renderCalendar();const doLoad=async()=>{await loadMeetingsFromFirebase(email);renderAll();if(!silent)toast('Welcome, '+name+'! 👋','success');};if(window._dbReady)await doLoad();else window.addEventListener('firebase-ready',doLoad,{once:true});setTimeout(initNotifications,500);}
-function signOut(){currentUser=null;meetings=[];localStorage.removeItem('md_session');localStorage.removeItem('md_calstate');document.getElementById('landing-section').style.display='flex';document.getElementById('auth-screen').style.display='none';document.getElementById('app-screen').style.display='none';document.getElementById('auth-password').value='';}
+async function loginAs(email,displayName,silent){currentUser=email;const name=displayName||accounts[email]?.googleName||email.split('@')[0];localStorage.setItem('md_session',JSON.stringify({email,displayName:name}));document.getElementById('user-avatar').textContent=name[0].toUpperCase();document.getElementById('user-name').textContent=name.charAt(0).toUpperCase()+name.slice(1);document.getElementById('auth-screen').style.display='none';const landingEl=document.getElementById('landing-section');if(landingEl)landingEl.style.display='none';const appEl=document.getElementById('app-screen');appEl.style.display='flex';appEl.style.flexDirection='column';renderCalendar();const doLoad=async()=>{await loadMeetingsFromFirebase(email);renderAll();if(!silent)toast('Welcome, '+name+'! 👋','success');};if(window._dbReady)await doLoad();else window.addEventListener('firebase-ready',doLoad,{once:true});setTimeout(initNotifications,500);}
+function signOut(){currentUser=null;meetings=[];localStorage.removeItem('md_session');localStorage.removeItem('md_calstate');const landingEl2=document.getElementById('landing-section');if(landingEl2)landingEl2.style.display='flex';else document.getElementById('auth-screen').style.display='flex';document.getElementById('app-screen').style.display='none';document.getElementById('auth-password').value='';}
 function switchMainTab(tab){document.getElementById('tab-btn-scheduler').classList.toggle('active',tab==='scheduler');document.getElementById('tab-btn-reports').classList.toggle('active',tab==='reports');document.getElementById('tab-scheduler').classList.toggle('active',tab==='scheduler');document.getElementById('tab-reports').classList.toggle('active',tab==='reports');if(tab==='reports'){activeReportClient=null;renderReportsList();}}
 function updateDayPreview(){const d=parseInt(document.getElementById('meet-date').value);const m=parseInt(document.getElementById('meet-month').value);const y=parseInt(document.getElementById('meet-year').value);const el=document.getElementById('day-preview');if(d&&m&&y){const dt=new Date(y,m-1,d);if(dt.getDate()===d&&dt.getMonth()===m-1){document.getElementById('day-preview-value').textContent=DAYS[dt.getDay()];el.classList.add('visible');return;}}el.classList.remove('visible');}
 function updateTimePreview(){const h=document.getElementById('meet-hour').value;const m=document.getElementById('meet-min').value;document.getElementById('time-preview').textContent=(h!==''&&m!=='')?pad(parseInt(h))+':'+pad(parseInt(m)):'--:--';}
@@ -830,7 +829,7 @@ async function fetchGoogleEvents(){
         });
       }
       const meeting={
-        id:Date.now()+Math.random(),
+        id:Date.now()+Math.floor(Math.random()*1000),
         userEmail:currentUser,
         name,
         day:DAYS[dt.getDay()],
@@ -842,13 +841,16 @@ async function fetchGoogleEvents(){
         deadlines:[],
         fromGoogleCalendar:true
       };
+      console.log('Importing:',name,date,month,year,time);
       meetings.push(meeting);
       await saveMeetingToFirebase(meeting);
       added++;
     }
     meetings.sort(cmpMeeting);
     renderAll();
+    console.log('Sync done. Added:',added,'Skipped:',skipped,'Total meetings:',meetings.length);
     if(added>0)toast(added+' event(s) imported from Google Calendar!','success');
+    else if(skipped>0)toast('All '+skipped+' events already exist in MeetingDesk.','');
     showSyncStatus('✅ Done! '+added+' new event(s) added'+(skipped?' · '+skipped+' already existed':'')+'.');
   }catch(e){
     console.error(e);
